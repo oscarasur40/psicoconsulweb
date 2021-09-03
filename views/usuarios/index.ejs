@@ -1,0 +1,95 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <h3 class="breadcrumbs-title"><%= title%>
+                </h3>
+                <table id="example" class="sampleTable bordered highlight responsive-table centered">
+                    <thead class="">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Nombre de Usuario</th>
+                            <th>Menbresia Final</th>
+                            <th>Email</th>
+                            <th><i class="material-icons">settings</i></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla_usuarios">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
+<script>
+    $(document).ready(function () {
+        for (var n = 0; n < 1000; n++) {
+            var row = $("<tr>");
+            $("#example")
+            .find("thead th")
+            row.appendTo($("#example").find("tbody"));
+        }
+        $("#example").fancyTable({
+			sortColumn: 0,
+            pagination: true,
+            perPage: 5,
+            globalSearch: true
+		});
+
+
+        $('.dropdown-trigger').dropdown();
+        const url = '/api/adminsedes?limit=10000000'
+
+        $.ajax({
+            url: url,
+            success: function (response) {
+                for (let i = 0; i < response.length; i++) {
+                    const user = response[i];
+                    $('#tabla_usuarios').append(`
+                    <tr>
+                        <td> ${user.nombre} </td>
+                        <td> ${user.apellido} </td>
+                        <td> ${user.username} </td>
+                        <td> ${moment.unix(user.membresia_finaliza).format('DD/MM/YYYY')} </td>
+                        <td> ${user.email} </td>
+                        <td>
+                        <a href="/users/ver?id=${user._id}" class="waves-effect amber darken-1 waves-light btn"><i
+                                class="material-icons left">edit</i>Editar Membresía</a>
+                        </td>
+                    </tr>`)
+                }
+            }
+        });
+    })
+                            // <a href="/users/ver?id=${user._id}" class="waves-effect blue darken-1 waves-light btn"><i
+                        //         class="material-icons left">remove_red_eye</i>Ver</a>
+    function rWord(r){
+        var t,n="bcdfghjklmnpqrstvwxyz",a="aeiou",
+        e=function(r){
+            return Math.floor(Math.random()*r)},
+            o="";
+            r=parseInt(r,10),
+            n=n.split(""),
+            a=a.split("");
+            for(t=0;t<r/2;t++){
+                var l=n[e(n.length)],
+                p=a[e(a.length)];
+                o+=0===t ? l.toUpperCase() : l,
+                o+=2*t<r-1?
+                p:""
+            }
+        return o
+    }
+
+</script>
+<% include  ../view_distribution/bot2.ejs%>

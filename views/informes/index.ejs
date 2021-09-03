@@ -1,0 +1,1183 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+<section id="content">
+    <div class="row">
+        <div class="col s12">
+          <ul class="tabs">
+            <li class="tab col s5"><a class="active" href="#test1">Informes RIPS</a></li>
+            <li class="tab col s5 " ><a href="#test2">Informes administrativo</a></li>
+          </ul>
+        </div><br><br>
+        <div id="test1" class="col s12">
+            <div class="container">
+                <span style="font-size: 3rem;"> <%= title %>
+                    <a href="#" class="btn-floating waves-effect waves-light black"><i class="material-icons">description</i></a>
+                </span>
+                <div class="row card-panel">
+                    <input type="hidden" id="sede_id" value="<%= sede_id %>"></inpu>
+                    <div class="col s12 m6 l12">
+                        <table class="bordered highlight centered">
+                            <thead>
+                                <th>Nombre</th>
+                                <th>Fecha Inicial</th>
+                                <td></td>
+                                <th>Fecha Final</th>
+                                <th><i class="material-icons">description</i></th>
+                            </thead>
+                            <tbody id="tabla_usuarios">
+                            <tbody>
+                                <td>RIPS</td>
+                                <td>
+                                    <input type="text" id="num_fecha_inicio" class="datepicker">
+                                    <label for="fecha_inicio">Fecha Inicio</label>
+                                </td>
+                                <td>a</td>
+                                <td>
+                                    <input type="text" id="num_fecha_final" class="datepicker">
+                                    <label for="fecha_final">Fecha Final</label>
+                                </td>
+                                <td>
+                                    <button class="waves-effect blue darken-1 waves-light btn generarTxt" 
+                                        id="generar">Generar</button>
+                                </td>
+                            </tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        
+                
+            </div>
+
+        </div>
+        <div id="test2" class="col s12"><br>
+            <div class="card-panel">
+            <div class="col s12 m6 l12 ">
+                <table class="bordered highlight centered">
+                    <thead>
+                        <th>Nombre</th>
+                        <th>Fecha Inicial</th>
+                        <td></td>
+                        <th>Fecha Final</th>
+                        <th><i class="material-icons">description</i></th>
+                    </thead>
+                    <tbody id="tabla_usuarios">
+                    <tbody>
+                        <td>ADMINISTRATIVO</td>
+                        <td>
+                            <input type="text" id="num_fecha_inicio2" class="datepicker">
+                            <label for="num_fecha_inicio2">De La Fecha: </label>
+                        </td>
+                        <td>a</td>
+                        <td>
+                            <input type="text" id="num_fecha_final2" class="datepicker">
+                            <label for="num_fecha_final2">A La Fecha: </label>
+                        </td>
+                        <td>
+                            <button class="waves-effect blue darken-1 waves-light btn" onclick="Prueba()"
+                                id="generar">Generar</button>
+                        </td>
+                    </tbody>
+                    </tbody>
+                </table><br><br>
+            </div>
+           
+            <div class="row">
+                <div class="input-field  col s4">
+                    <select name="" id="servicios">
+                        <option value=""  selected >Elige Una opcion</option>
+                    </select>
+                    <label>Tipo De Servicio </label>
+                </div>
+                <div class="input-field col s4">
+                    <select name="" id="profesionalesGet">
+                        <option value=""  selected >Elige Una opcion</option>
+                    </select>
+                    <label>Profesional </label>
+                </div>
+                <div class="input-field col s4">
+                    <select  id="cicloVital">
+                        <option value="" selected>Elige Una opcion</option>
+                        <option value="PRIMERA INFANCIA">PRIMERA INFANCIA</option>
+                        <option value="INFANCIA">INFANCIA</option>
+                        <option value="ADOLESCENCIA">ADOLESCENCIA</option>
+                        <option value="JUVENTUD">JUVENTUD</option>
+                        <option value="ADULTEZ">ADULTEZ</option>
+                        <option value="ADULTEZ MAYOR">ADULTEZ MAYOR</option>
+                        </select>
+                    <label>Ciclo Vital </label>
+                </div>      
+            </div>
+            <div class="row">
+                <div class="input-field col s4">
+                    <select name="" id="genero">
+                        <option value="" selected>Elige Una opcion</option>
+                        <option value="Femenino">Femenino</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Intersexual">Intersexual</option>
+                    </select>
+                    <label>Genero </label>
+                </div>
+                <div class="input-field col s4">
+                    <select name="" id="isex">
+                        <option value=""  selected>Elige Una opcion</option>
+                        <option value="Heterosexual">Heterosexual</option>
+                        <option value="Homosexual">Homosexual</option>
+                        <option value="Bisexual">Bisexual</option>
+                        <option value="Asexual">Asexual</option>
+                        <option value="Pansexual">Pansexual</option>
+                        <option value="Transexual">Transexual</option>
+                        <option value="Intersexual">Intersexual</option>
+                        <option value="Cisexual">Cisexual</option>
+                        <option value="Bigénero">Bigénero</option>
+                        <option value="Demigénero">Demigénero</option>
+                        <option value="Agénero">Agénero</option>
+                        <option value="TercerSexo">Tercer Sexo</option>
+                        <option value="Génerofluido">Género fluido</option>
+                    </select>
+                    <label>Identidad Sexual </label>
+                </div>
+                <div class="input-field col s4">
+                    <select name="" id="escolaridad">
+                        <option value=""  selected>Elige Una opcion</option>
+                        <option value="Desescolarizado">Desescolarizado</option>
+                        <option value="Pre-Escolar">Pre-Escolar</option>
+                        <option value="Primaria Incompleta">Primaria Incompleta</option>
+                        <option value="Primaria en Curso">Primaria en Curso</option>
+                        <option value="Primaria Completa">Primaria Completa</option>
+                        <option value="Bachiller Bachiller Incompleto">Postgrado</option>
+                        <option value="Bachiller en Curso">Bachiller en Curso</option>
+                        <option value="Bachiller Técnico Incompleto">Bachiller Técnico Incompleto</option>
+                        <option value="Bachiller Completo">Bachiller Completo</option>
+                        <option value="Técnico en Curso">Técnico en Curso</option>
+                        <option value="Técnico">Técnico</option>
+                        <option value="Tecnólogo Incompleto">Técnico Tecnólogo Incompleto</option>
+                        <option value="Tecnólogo en Curso">Tecnólogo en Curso</option>
+                        <option value="Tecnólogo">Tecnólogo</option>
+                        <option value="Universitario Incompleto">Universitario Incompleto</option>
+                        <option value="Universitario en Curso">Universitario en Curso</option>
+                        <option value="Profesional (Título)">Profesional (Título)</option>
+                        <option value="Profesional (Título)">Profesional (Título)</option>
+                        <option value="Especialización">Especialización</option>
+                        <option value="Maestría">Maestría</option>
+                        <option value="Doctorado">Doctorado</option>
+                        <option value="PosDoctorado">PosDoctorado</option>
+                    </select>
+                    <label>Escolaridad </label>
+                </div>      
+            </div>
+          </div>
+        </div>
+      </div>
+
+</section>
+<% include  ../view_distribution/sidebar-right.ejs%>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
+<script src="https://momentjs.com/downloads/moment.js"></script>
+<% include  ../view_distribution/bot1.ejs%>
+<script>
+    $('.datepicker').on('mousedown', function (event) {
+        event.preventDefault();
+    })
+    var fecha_inicio = ""
+    var fecha_final = ""
+
+    var CT = [];
+
+    var CT_enca = [
+        "codigo_presta",
+        "fecha_remision",
+        "codigo_archivo",
+        "total_registro"
+    ]
+
+    var AF = [];
+
+    var AF_enca = [
+        "codigo_prestador",
+        "nombre_prestador",
+        "representante_identificacion_tipo_prestador",
+        "representante_identificacion_prestador",
+        "numero_factura",
+        "fecha_creado",
+        "fechaInicio",
+        "fechaFin",
+        "codigo_admin",
+        "nombre_admin",
+        "numero_contrado",
+        "Plan_beneficio",
+        "numero_poliza",
+        "copago",
+        "valor_comi",
+        "valor_descuento",
+        "valor_neto"
+    ]
+
+    var US = [];
+
+    var US_enca = [
+        "tipo_id",
+        "id_numero",
+        "eps",
+        "tipo_usuario",
+        "primer_apellido",
+        "segundo_apellido",
+        "primer_nombre",
+        "segundo_nombre",
+        "edad",
+        "unidad_medida",
+        "sexo",
+        "codigo_depa",
+        "codigo_muni",
+        "zona_urbana",
+    ];
+
+    var AC = [];
+
+    var AC_enca = [
+        "numero_factura",
+        "codigo_prestador",
+        "tipo_id",
+        "id_numero",
+        "fecha_consulta",
+        "numero_consulta",
+        "codigo_cups",
+        "finalidad_consulta",
+        "causa_externa",
+        "diagnostico_principal",
+        "diagnostico_rel_1",
+        "diagnostico_rel_2",
+        "diagnostico_rel_3",
+        "tipo_diag",
+        "valor_cita",
+        "valor_cuota",
+        "valo_pagar",
+    ]
+    var AP = [{
+        "NUMERO DE LA FACTURA": "",
+        "CODIGO DEL PRESTADOR DE SERVICIOS DE SALUD": "",
+        "TIPO DE IDENTIFICACION DEL USUARIO": "",
+        "NUMERO DE IDENTIFICACION DEL USUARIO EN EL SISTEMA": "",
+        "FECHA DEL PROCEDIMIENTO": "",
+        "NUMERO DE AUTORIZACION": "",
+        "CODIGO DEL PROCEDIMIENTO": "",
+        "AMBITO DE RERALIZACION DEL PROCEDIMIENTO": "",
+        "FINALIDAD DEL PROCEDIMIENTO": "",
+        "PERSONAL QUE ATIENDE": "",
+        "DIAGNOSTICO PRINCIPAL": "",
+        "DIAGNOSTICO RELACIONADO": "",
+        "COMPLICACION": "",
+        "FORMA DE REALIZACION DEL ACTO QUIRURGICO": "",
+        "VALOR DEL PROCEDIMIENTO": ""
+    }];
+    var AU = [{
+        "NUMERO DE LA FACTURA": "",
+        "CODIGO DEL PRESTADOR DE SERVICIOS DE SALUD": "",
+        "TIPO DE IDENTIFICACION DEL USUARIO EN EL SISTEMA": "",
+        "FECHA DE INGRESO DEL USUARIO A OBSERVACION": "",
+        "HORA DE INGRESO DEL USUARIO A OBSERVACION": "",
+        "NUMERO DE AUTORIZACION": "",
+        "CAUSA EXTERNA": "",
+        "DIAGNOSTICO DE LA SALIDA": "",
+        "DIAGNOSTICO RELACIONADO Nro 1 A LA SALIDA": "",
+        "DIAGNOSTICO RELACIONADO Nro 2 A LA SALIDA": "",
+        "DIAGNOSTICO RELACIONADO Nro 3 A LA SALIDA": "",
+        "DESTINO DEL USUARIO A LA SALIDA DE OBSERVACION": "",
+        "ESTADO A LA SALIDA": "",
+        "CAUSA BASICA DE MUERTE EN URGENCIAS": "",
+        "FECHA DE LA SALIDA DEL USUARIO EN OBSERVACION": "",
+        "HORA DE LA SALIDA DEL USUARIO EN OBSERVACION": ""
+    }];
+    var AH = [{
+        "NUMERO DE LA FACTURA": "",
+        "CODIGO DEL PRESTADOR DE SERVICIOS DE SALUD": "",
+        "TIPO DE DOCUMENTO DE IDENTIFICACION DEL USUARIO": "",
+        "NUMERO DE IDENTIFICACION DEL USUARIO EN EL SISTEMA": "",
+        "VIA DE INGRESO A LA INSTITUCION": "",
+        "FECHA DE INGRESO DEL USUARIO A LA INSTITUCION": "",
+        "HORA DE INGRESO DEL USUARIO A LA INSTITUCION": "",
+        "NUMERO DE AUTORIZACION": "",
+        "CAUSA EXTERNA": "",
+        "DIAGNOSTICO PRINCIPAL DE INGRESO": "",
+        "DIAGNOSTICO PRINCIPAL DE EGRESO": "",
+        "DIAGNOSTICO RELACIONADO Nro 1 DE EGRESO": "",
+        "DIAGNOSTICO RELACIONADO Nro 2 DE EGRESO": "",
+        "DIAGNOSTICO RELACIONADO Nro 3 DE EGRESO": "",
+        "DIAGNOSTICO DE LA COMPLICACION": "",
+        "ESTADO A LA SALIDA": "",
+        "DIAGNOSTICO DE LA CAUSA BASICA DE MUERTE": "",
+        "FECHA DE EGRESO DEL USUARIO A LA INSTITUCION": "",
+        "HORA DE EGRESO DEL USUARIO DE LA INSTITUCION": ""
+    }];
+    var AN = [{
+        "NUMERO DE LA FACTURA": "",
+        "CODIGO DEL PRESTADOR DE SERVICIOS DE SALUD": "",
+        "TIPO DE IDENTIFICACION DE LA MADRE": "",
+        "TIPO DE IDENTIFICACION DE LA MADRE EN EL SISTEMA": "",
+        "FECHA DE NACIMIENTO DEL RECIEN NACIDO": "",
+        "HORA DE NACIMIENTO": "",
+        "EDAD GESTACIONAL": "",
+        "CONTROL PRENATAL": "",
+        "SEXO": "",
+        "PESO": "",
+        "DIAGNOSTICO DEL RECIEN NACIDO": "",
+        "CAUSA BASICA DE MUERTE": "",
+        "FECHA DE MUERTE DEL RECIEN NACIDO": "",
+        "HORA DE MUERTE DEL RECIEN NACIDO": ""
+    }];
+    var AM = [{
+        "NUMERO DE LA FACTURA": "",
+        "CODIGO DEL PRESTADOR DE SERVICIOS DE SALUD": "",
+        "TIPO DE IDENTIFICACION DEL USUARIO": "",
+        "TIPO DE IDENTIFICACION DEL USUARIO EN EL SISTEMA": "",
+        "NUMERO DE AUTORIZACION": "",
+        "CODIGO DEL MEDICAMENTO": "",
+        "TIPO DEL MEDICAMENTO": "",
+        "NOMBRE GENERICO DEL MEDICAMENTO": "",
+        "FORMA FARMACEUTICA": "",
+        "CONCENTRACION DEL MEDICAMENTO": "",
+        "UNIDAD DE MEDIDA DEL MEDICAMENTO": "",
+        "NUMERO DE UNIDADES": "",
+        "VALOR UNITARIO DE MEDICAMENTO": "",
+        "VALOR TOTAL DEL MEDICAMENTO": ""
+    }];
+    var AT = [{
+        "NUMERO DE LA FACTURA": "",
+        "CODIGO DEL PRESTADOR DE SERVICIOS DE SALUD": "",
+        "TIPO DE IDENTIFICACION DEL USUARIO": "",
+        "TIPO DE IDENTIFICACION DEL USUARIO EN EL SISTEMA": "",
+        "NUMERO DE AUTORIZACION": "",
+        "TIPO DE SERVICIO": "",
+        "CODIGO DEL SERVICIO": "",
+        "NOMBRE DEL SERVICIO": "",
+        "CANTIDAD": "",
+        "VALOR UNITARIO DEL MATERIAL E INSUMO": "",
+        "VALOR TOTAL DEL MATERIAL E INSUMO": ""
+    }];
+    var pacientes = [];   
+      var pacientes_enca = [
+        "TIPO DE IDENTIFICACION DEL USUARIO",
+        "NUMERO DE IDENTIFICACION DEL USUARIO DEL SISTEMA",
+        "PRIMER APELLIDO DEL USUARIO",
+        "SEGUNDO APELLIDO DEL USUARIO",
+        "PRIMER NOMBRE DEL USUARIO",
+        "SEGUNDO NOMBRE DEL USUARIO",
+        "EDAD",
+        "GENERO DE NACIMIENTO",
+        "EPS",
+        "SERVICIO",
+        "FECHA DE INICIO",
+        "FECHA FIN"
+      ];
+
+
+
+    let sede_id = $('#sede_id').val();
+    const urlParams = new URLSearchParams(window.location.search);
+    const sede = urlParams.get('sede');
+    
+    var numero_conteo = ""
+    var id_conteo = ""
+
+    let url1 = `/api/conteos?filter[Sede]=${sede_id}&filter[tipo]=RIPS`
+    const data = {
+        "Sede": sede_id,
+        "tipo": "RIPS",
+        "valor_actual": 0,
+    };
+    console.log(url1);
+
+    $.ajax({
+        url: url1,
+        success: function (response) {
+            console.log(response);
+            if (response.length == 0) {
+                console.log('No existe, Creando registro');
+                $.ajax({
+                    url: url1,
+                    method: 'POST',
+                    data: data,
+                    success: function (response) {
+                        console.log(response);
+                        numero_conteo = response.valor_actual
+                        id_conteo = response._id
+                        console.log("numero_conteo", numero_conteo);
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus);
+                        console.log(jqXHR);
+                        console.log(errorThrown);
+                    },
+                });
+            } else {
+                console.log(response);
+                console.log('Si existe, no se crea');
+                numero_conteo = response[0].valor_actual
+                id_conteo = response[0]._id
+
+                console.log("numero_conteo", numero_conteo);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+            console.log(jqXHR);
+            console.log(errorThrown);
+            //  $.ajax({
+            //      url: url1,
+            //      method: 'POST',
+            //      data: data,
+            //      success: function (response) {
+            //          console.log(response);
+            //      },
+            //      error: function (jqXHR, textStatus, errorThrown) {
+            //          console.log(textStatus);
+            //          console.log(jqXHR);
+            //          console.log(errorThrown);
+            //      },
+            //  });
+
+        },
+    });
+    function ExportData2() {
+        var codigo_prestador = ''
+        Materialize.toast(
+            'Se encontraron '+ pacientes.length +' Pacientes',
+            4000, 'rounded blue');
+        /* 创建worksheet */
+         var w_PA = XLSX.utils.json_to_sheet(pacientes);
+        console.log(pacientes)
+        console.log(w_PA)
+
+
+
+        /* 新建空workbook，然后加入worksheet */
+        var wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, w_PA, "pacientes Encontrados");
+
+
+
+        /* 生成xlsx文件 */
+        XLSX.writeFile(wb, "Pacientes.xlsx");
+        location.reload()
+    }
+
+    function ExportData() {
+        var codigo_prestador = ''
+
+        /* 创建worksheet */
+        var w_CT = XLSX.utils.json_to_sheet(CT);
+        console.log(CT)
+        console.log(w_CT)
+        var w_AF = XLSX.utils.json_to_sheet(AF);
+        var w_US = XLSX.utils.json_to_sheet(US);
+        var w_AC = XLSX.utils.json_to_sheet(AC);
+        var w_AP = XLSX.utils.json_to_sheet(AP);
+        var w_AU = XLSX.utils.json_to_sheet(AU);
+        var w_AH = XLSX.utils.json_to_sheet(AH);
+        var w_AN = XLSX.utils.json_to_sheet(AN);
+        var w_AM = XLSX.utils.json_to_sheet(AM);
+        var w_AT = XLSX.utils.json_to_sheet(AT);
+
+
+        /* 新建空workbook，然后加入worksheet */
+        var wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, w_CT, "CT");
+        XLSX.utils.book_append_sheet(wb, w_AF, "AF");
+        XLSX.utils.book_append_sheet(wb, w_US, "US");
+        XLSX.utils.book_append_sheet(wb, w_AC, "AC");
+        XLSX.utils.book_append_sheet(wb, w_AP, "AP");
+        XLSX.utils.book_append_sheet(wb, w_AU, "AU");
+        XLSX.utils.book_append_sheet(wb, w_AH, "AH");
+        XLSX.utils.book_append_sheet(wb, w_AN, "AN");
+        XLSX.utils.book_append_sheet(wb, w_AM, "AM");
+        XLSX.utils.book_append_sheet(wb, w_AT, "AT");
+
+
+        /* 生成xlsx文件 */
+        XLSX.writeFile(wb, "reporte.xlsx");
+    }
+    function descargarArchivo(contenidoEnBlob, nombreArchivo) {
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                var save = document.createElement('a');
+                save.href = event.target.result;
+                save.target = '_blank';
+                save.download = nombreArchivo || 'archivo.dat';
+                var clicEvent = new MouseEvent('click', {
+                    'view': window,
+                        'bubbles': true,
+                        'cancelable': true
+                });
+                save.dispatchEvent(clicEvent);
+                (window.URL || window.webkitURL).revokeObjectURL(save.href);
+            };
+            reader.readAsDataURL(contenidoEnBlob);
+        };
+        function generarTextoCt(datos) {
+            var texto = [];
+            for(i=0;i<datos.length;i++){  
+            texto.push(datos[i].codigo_presta);
+            texto.push(datos[i].fecha_remision);
+            texto.push(datos[i].codigo_archivo);
+            texto.push(datos[i].total_registro);
+            texto.push('\n');
+            }
+            //El contructor de Blob requiere un Array en el primer parámetro
+            //así que no es necesario usar toString. el segundo parámetro
+            //es el tipo MIME del archivo
+            return new Blob(texto, {
+                type: 'text/plain'
+            });
+        };
+        function generarTextoAc(datos) {
+            var texto = [];
+            for(i=0;i<datos.length;i++){  
+            texto.push(datos[i].numero_factura);
+            texto.push(datos[i].codigo_prestador);
+            texto.push(datos[i].tipo_id);
+            texto.push(datos[i].id_numero);
+            texto.push(datos[i].fecha_consulta);
+            texto.push(datos[i].numero_consulta);
+            texto.push(datos[i].codigo_cups,);
+            texto.push(datos[i].finalidad_consulta);
+            texto.push(datos[i].causa_externa);
+            texto.push(datos[i].diagnostico_principal);
+            texto.push(datos[i].diagnostico_rel_1);
+            texto.push(datos[i].diagnostico_rel_2);
+            texto.push(datos[i].diagnostico_rel_3);
+            texto.push(datos[i].tipo_diag);
+            texto.push(datos[i].valor_cita);
+            texto.push(datos[i].valor_cuota);
+            texto.push(datos[i].valo_pagar);
+            texto.push('\n');
+            }
+            //El contructor de Blob requiere un Array en el primer parámetro
+            //así que no es necesario usar toString. el segundo parámetro
+            //es el tipo MIME del archivo
+            return new Blob(texto, {
+                type: 'text/plain'
+            });
+        };
+        function generarTextoUs(datos) {
+            var texto = [];
+            for(i=0;i<datos.length;i++){  
+            texto.push(datos[i].tipo_id);
+            texto.push(datos[i].id_numero);
+            texto.push(datos[i].eps);
+            texto.push(datos[i].tipo_usuario);
+            texto.push(datos[i].primer_apellido);
+            texto.push(datos[i].segundo_apellido);
+            texto.push(datos[i].primer_nombre,);
+            texto.push(datos[i].segundo_nombre);
+            texto.push(datos[i].edad);
+            texto.push(datos[i].unidad_medida);
+            texto.push(datos[i].sexo);
+            texto.push(datos[i].codigo_depa);
+            texto.push(datos[i].codigo_muni);
+            texto.push(datos[i].zona_urbana);
+            texto.push('\n');
+            }
+            //El contructor de Blob requiere un Array en el primer parámetro
+            //así que no es necesario usar toString. el segundo parámetro
+            //es el tipo MIME del archivo
+            return new Blob(texto, {
+                type: 'text/plain'
+            });
+        };
+        function generarTextoAf(datos) {
+            var texto = [];
+            for(i=0;i<datos.length;i++){
+            datos2= datos[i] 
+            console.log(datos2)   
+            texto.push(datos2.codigo_prestador);
+            texto.push(datos2.nombre_prestador);
+            texto.push(datos2.representante_identificacion_tipo_prestador);
+            texto.push(datos2.representante_identificacion_prestador);
+            texto.push(datos2.numero_factura);
+            texto.push(datos2.fecha_creado);
+            texto.push(datos2.fechaInicio,);
+            texto.push(datos2.fechaFin);
+            texto.push(datos2.codigo_admin);
+            texto.push(datos2.nombre_admin);
+            texto.push(datos2.numero_contrado);
+            texto.push(datos2.Plan_beneficio);
+            texto.push(datos2.numero_poliza);
+            texto.push(datos2.copago);
+            texto.push(datos2.valor_comi);
+            texto.push(datos2.valor_descuento);
+            texto.push(datos2.valor_neto);
+            texto.push('\n');
+            }
+            //El contructor de Blob requiere un Array en el primer parámetro
+            //así que no es necesario usar toString. el segundo parámetro
+            //es el tipo MIME del archivo
+            return new Blob(texto, {
+                type: 'text/plain'
+            });
+        };
+        $('.generarTxt').click(function(){
+             obtenerDatos();
+        })
+
+    var total_registros_af = ""
+
+    function obtenerDatos() {
+        AF = []
+        var dia_inicio = moment(String($('#num_fecha_inicio').val())).format()
+        var dia_final = moment(String($('#num_fecha_final').val())).format()
+        fecha_inicio = (moment(dia_inicio).utc().unix());
+        fecha_final = (moment(dia_final).utc().unix());
+
+        let url1 =
+            `/api/citas?&filter[Sede]=${sede_id}&limit=1000&filter[creado_timestamp][$gt]=${fecha_inicio}&filter[creado_timestamp][$lt]=${fecha_final}`
+        Materialize.toast(
+            'Consiguiendo datos AF',
+            4000, 'rounded blue');
+
+        $.ajax({
+            url: url1,
+            success: function (response) {
+                //   console.log(response);
+                for (let i = 0; i < response.length; i++) {
+                    const citas = response[i];
+                    //console.log(citas);
+
+                    let nuevo_af = {}
+                    codigo_prestador = citas.Sede.codigo
+                    nombre_prestador = citas.Sede.nombre
+                    representante_identificacion_tipo_prestador = citas.Sede
+                        .representante_identificacion_tipo
+                    representante_identificacion_prestador = citas.Sede.representante_identificacion
+
+                    if (citas.Factura != null) {
+                        numero_factura = citas.Factura._id
+                        fecha_creado = moment.unix(citas.Factura.creado_timestamp).format('DD/MM/YYYY');
+                    } else {
+                        numero_factura = "",
+                            fecha_creado = ""
+                    }
+                    valor_cita = citas.valor_cita
+
+                    nuevo_af[AF_enca[0]] = codigo_prestador + ",";
+                    nuevo_af[AF_enca[1]] = nombre_prestador + ",";
+                    nuevo_af[AF_enca[2]] = representante_identificacion_tipo_prestador + ",";
+                    nuevo_af[AF_enca[3]] = representante_identificacion_prestador + ",";
+                    nuevo_af[AF_enca[4]] = numero_factura + ",";
+                    nuevo_af[AF_enca[5]] = fecha_creado + ",";
+                    nuevo_af[AF_enca[6]] = moment(dia_inicio).format('DD/MM/YYYY') + ",";
+                    nuevo_af[AF_enca[7]] = moment(dia_final).format('DD/MM/YYYY') + ",";
+                    nuevo_af[AF_enca[8]] = ",";
+                    nuevo_af[AF_enca[9]] = ",";
+                    nuevo_af[AF_enca[10]] = ",";
+                    nuevo_af[AF_enca[11]] = ",";
+                    nuevo_af[AF_enca[12]] = ",";
+                    nuevo_af[AF_enca[13]] = valor_cita + ",";
+                    nuevo_af[AF_enca[14]] = "0" + ",";
+                    nuevo_af[AF_enca[15]] = "0" + ",";
+                    nuevo_af[AF_enca[16]] = valor_cita;
+                    AF.push(nuevo_af)
+                    total_registros_af++
+
+                    // console.log(nuevo_af);
+                    //   console.log(codigo_prestador);
+                }
+                var datos = AF
+                descargarArchivo(generarTextoAf(datos), 'AF.txt');
+                func_US()
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                Materialize.toast('Hubo un error en conseguir los datos AF', 4000, 'rounded red');
+
+                console.log(textStatus);
+                console.log(jqXHR);
+                console.log(errorThrown);
+            },
+        });
+    }
+    var total_registros_us = ""
+
+    function func_US() {
+        US = []
+        var bruto_inicio = moment(String($('#num_fecha_inicio').val())).format()
+        var bruto_final = moment(String($('#num_fecha_final').val())).format()
+        fecha_inicio = (moment(bruto_inicio).utc().unix());
+        fecha_final = (moment(bruto_final).utc().unix());
+
+        let url1 =
+            `/api/citas?&filter[Sede]=${sede_id}&limit=1000&filter[creado_timestamp][$gt]=${fecha_inicio}&filter[creado_timestamp][$lt]=${fecha_final}`
+
+        Materialize.toast(
+            'Consiguiendo datos US',
+            4000, 'rounded blue');
+        $.ajax({
+            url: url1,
+            success: function (response) {
+                //   console.log(response);
+                for (let i = 0; i < response.length; i++) {
+                    const paciente = response[i];
+                    // console.log(paciente);
+
+                    tipo_id = paciente.Paciente[0].tipo_id
+                    id_numero = paciente.Paciente[0].username
+                    sede_id = paciente.Sede.codigo
+                    tipo_usuario = paciente.Paciente[0].regimen_salud
+                    primer_apellido = paciente.Paciente[0].primer_apellido
+                    segundo_apellido = paciente.Paciente[0].segundo_apellido
+
+                    var str = paciente.Paciente[0].nombre;
+                    var primer_nombre = str.split(" ")[0];
+                    var segundo_nombre = str.split(" ")[1];
+
+                    var cumpleaños = moment(moment.unix(paciente.Paciente[0].ts_nacimiento), 'YYYY');
+                    var hoy = moment(new Date(), 'DD/MM/YYYY');
+                    var edad = hoy.diff(cumpleaños, 'y');
+
+                    if (paciente.Paciente[0].genero_nacimiento = "Masculino") {
+                        genero_nacimiento = "M"
+                    } else {
+                        genero_nacimiento = "F"
+                    }
+
+                    codigo_departamento = paciente.Paciente[0].departamento
+                    codigo_municipio = paciente.Paciente[0].municipio
+
+                    if (paciente.Paciente[0].zona = "urbana") {
+                        residencia_actual = "U"
+                    } else {
+                        residencia_actual = "R"
+                    }
+
+
+                    let nuevo_us = {}
+                    nuevo_us[US_enca[0]] = tipo_id + ",";
+                    nuevo_us[US_enca[1]] = id_numero + ",";
+                    nuevo_us[US_enca[2]] = ",";
+                    nuevo_us[US_enca[3]] = tipo_usuario + ",";
+                    nuevo_us[US_enca[4]] = primer_apellido + ",";
+                    nuevo_us[US_enca[5]] = segundo_apellido + ",";
+                    nuevo_us[US_enca[6]] = primer_nombre + ",";
+                    nuevo_us[US_enca[7]] = segundo_nombre + ",";
+                    nuevo_us[US_enca[8]] = edad + ",";
+                    nuevo_us[US_enca[9]] = 1 + ",";
+                    nuevo_us[US_enca[10]] = genero_nacimiento + ",";
+                    nuevo_us[US_enca[11]] = codigo_departamento + ",";
+                    nuevo_us[US_enca[12]] = codigo_municipio + ",";
+                    nuevo_us[US_enca[13]] = residencia_actual + ",";
+                    US.push(nuevo_us)
+
+
+                    total_registros_us++
+                    // console.log(nuevo_us);
+                    console.log(tipo_usuario);
+
+                }
+                datos = US
+               
+                descargarArchivo(generarTextoUs(datos), 'US.txt');
+                func_AC()
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                Materialize.toast('Hubo un error en conseguir los datos US', 4000, 'rounded red');
+                console.log(textStatus);
+                console.log(jqXHR);
+                console.log(errorThrown);
+            },
+        });
+    }
+
+    var total_registros_ac = ""
+
+    function func_AC() {
+        AC = []
+        var bruto_inicio = moment(String($('#num_fecha_inicio').val())).format()
+        var bruto_final = moment(String($('#num_fecha_final').val())).format()
+        fecha_inicio = (moment(bruto_inicio).utc().unix());
+        fecha_final = (moment(bruto_final).utc().unix());
+
+        let url1 =
+            `/api/historias-clinicas?filter[Sede]=${sede}&limit=1000&filter[cita_cerrada_timestamp][$gt]=${fecha_inicio}&filter[cita_cerrada_timestamp][$lt]=${fecha_final}`
+
+        Materialize.toast(
+            'Consiguiendo datos AC',
+            4000, 'rounded blue');
+
+        $.ajax({
+            url: url1,
+            success: function (response) {
+                // console.log(response);
+                //   console.log(response);
+                for (let i = 0; i < response.length; i++) {
+                    const citas = response[i].Cita;
+                    const pacientes = response[i];
+                    console.log(citas);
+                    console.log(pacientes);
+
+                    let nuevo_ac = {}
+
+                    if (citas.Factura != null) {
+                        numero_factura = citas.Factura._id
+                    } else {
+                        numero_factura = ""
+                    }
+
+                    codigo_prestador = citas.Sede.codigo
+                    tipo_id = citas.Paciente[0].tipo_id
+                    id_numero = citas.Paciente[0].username
+                    fecha_consulta = moment(citas.start).format('DD/MM/YYYY');
+
+                    if (citas.Servicio != null) {
+                        codigo_cups = citas.Servicio.cups_codigo
+                    } else {
+                        codigo_cups = ""
+
+                    }
+
+                    if (pacientes.datos_formulario == null) {
+                        finalidad_consulta = ""
+                        finalidad_consulta = ""
+                        causa_externa = ""
+                        diagnostico_principal = ""
+                        diagnostico_rel_1 = ""
+                        diagnostico_rel_2 = ""
+                        diagnostico_rel_3 = ""
+                        tipo_diagnostico = ""
+                    } else {
+                        finalidad_consulta = pacientes.datos_formulario.finalidad_de_la_consulta
+                        causa_externa = pacientes.datos_formulario.causa_externa
+                        diagnostico_principal = pacientes.datos_formulario.diagnostico_principal_
+                        diagnostico_rel_1 = pacientes.datos_formulario.diagnostico_secundario
+                        diagnostico_rel_2 = pacientes.datos_formulario.texto
+                        diagnostico_rel_3 = pacientes.datos_formulario.texto
+                        tipo_de_diagnostico = pacientes.datos_formulario.tipo_de_diagnostico
+                    }
+
+                    if (tipo_de_diagnostico == "Hipótesis diagnóstica") {
+                        tipo_diagnostico = 1
+                    } else if (tipo_de_diagnostico == "Diagnóstico confirmado") {
+                        tipo_diagnostico = 2
+                    } else {
+                        tipo_diagnostico = 3
+                    }
+
+
+                    nuevo_ac[AC_enca[0]] = numero_factura + ",";
+                    nuevo_ac[AC_enca[1]] = codigo_prestador + ",";
+                    nuevo_ac[AC_enca[2]] = tipo_id + ",";
+                    nuevo_ac[AC_enca[3]] = id_numero + ",";
+                    nuevo_ac[AC_enca[4]] = fecha_consulta + ",";
+                    nuevo_ac[AC_enca[5]] = "" + ",";
+                    nuevo_ac[AC_enca[6]] = codigo_cups + ",";
+                    nuevo_ac[AC_enca[7]] = finalidad_consulta + ","; //finalidad consulta
+                    nuevo_ac[AC_enca[8]] = causa_externa + ","; //causa externa
+                    nuevo_ac[AC_enca[9]] = diagnostico_principal + ","; //codigo del diagnostico principal
+                    nuevo_ac[AC_enca[10]] = diagnostico_rel_1 + ","; //codigo del diagnostico relacionado no.1
+                    nuevo_ac[AC_enca[11]] = "" + ","; //codigo del diagnostico relacionado no.2
+                    nuevo_ac[AC_enca[12]] = "" + ","; //codigo del diagnostico relacionado no.3
+                    nuevo_ac[AC_enca[13]] = "" + ","; //tipo de diagnostico princpal
+                    nuevo_ac[AC_enca[14]] = valor_cita + ","; //valor de la consulta
+                    nuevo_ac[AC_enca[15]] = "0" + ","; //valor de la cuota moderadora
+                    nuevo_ac[AC_enca[16]] = valor_cita ; //valor neto a pagar
+
+                    total_registros_ac++
+                    AC.push(nuevo_ac)
+                    // console.log(citas.creado_timestamp);
+                }
+                datos = AC
+                descargarArchivo(generarTextoAc(datos), 'AC.txt');
+
+                func_CT()
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                Materialize.toast('Hubo un error en conseguir los datos AC', 4000, 'rounded red');
+
+                console.log(textStatus);
+                console.log(jqXHR);
+                console.log(errorThrown);
+            },
+        });
+    }
+
+    function func_CT() {
+        CT = []
+        var dia_inicio = moment(String($('#num_fecha_inicio').val())).format()
+        var dia_final = moment(String($('#num_fecha_final').val())).format()
+        fecha_inicio = (moment(dia_inicio).utc().unix());
+        fecha_final = (moment(dia_final).utc().unix());
+
+        const url = `/api/pacientes?filter[sede]=${sede}&limit=1000000`
+        Materialize.toast(
+            'Consiguiendo datos CT',
+            4000, 'rounded blue');
+
+        let datos = [
+            AF,
+            US,
+            AC
+        ]
+
+        $.ajax({
+            url: url,
+            success: function (response_user) {
+                console.log('El texto que debo escribir ', response_user);
+                let url2 = `/api/conteos/${id_conteo}/inc`
+
+                $.ajax({
+                    url: url2,
+                    method: 'PATCH',
+                    success: function (response) {
+                        console.log(response);
+                        numero_conteo = response.valor_actual
+                        console.log("numero_conteo", numero_conteo);
+
+
+                        let registro = [];
+
+                        for (let i = 0; i < (6 - String(numero_conteo).length); i++) {
+                            registro.push("0")
+                        }
+                        registro.push(String(numero_conteo));
+                        console.log(registro);
+                        console.log(registro.join(''));
+
+
+                        let datos_enca = [
+                            "AF",
+                            "US",
+                            "AC"
+                        ]
+
+                        for (let e = 0; e < datos.length; e++) {
+                            const element = datos[e];
+                            const user = response_user[0];
+                            const nuevo_ct = {}
+                            nuevo_ct[CT_enca[0]] = codigo_prestador + ",";
+                            nuevo_ct[CT_enca[1]] = moment(dia_final).format('DD/MM/YYYY') + ",";
+                            nuevo_ct[CT_enca[2]] = `${datos_enca[e]}${registro.join('')}` + ",";
+                            nuevo_ct[CT_enca[3]] = element.length;
+                            CT.push(nuevo_ct);
+                            console.log(element.length);
+                        }
+                        // ExportData()
+                        datos = CT
+                        descargarArchivo(generarTextoCt(datos), 'CT.txt');
+                        
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus);
+                        console.log(jqXHR);
+                        console.log(errorThrown);
+                    },
+                });
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                Materialize.toast('Hubo un error en conseguir los datos CT', 4000, 'rounded red');
+                console.log(textStatus);
+                console.log(jqXHR);
+                console.log(errorThrown);
+            },
+        });
+    }
+
+    
+    $(document).on("click", ".select-wrapper", function (event) {
+        event.stopPropagation();
+    });
+
+    /*Traemos Los profesionales*/
+    $.ajax({
+          method: 'GET',
+          url: `/api/profesionales?sede=${sede}`,
+          success: function (r) {
+              console.log(">>>> terapeuta: ", r)
+              for (let i = 0; i < r.length; i++) {
+                  const profesionales = r[i];
+                  $('#profesionalesGet').append(
+                      `<option value="${profesionales._id}">${profesionales.nombre} ${profesionales.apellido}</option>`)
+              }
+              $('#profesionalesGet').material_select();
+              
+              
+          }
+      })
+             /* Obtener Asignar Servicio y Valor de Consulta y Profesionales del Servicio. */
+             $.ajax({
+            method: 'GET',
+            url: `/api/servicios?filter[Sede]=${sede_id}&limit=1000000&projection=valor_consulta+nombre+Profesionales+cups_codigo`,
+            success: function (r) {
+
+                for (let s = 0; s < r.length; s++) {
+                    const servicio = r[s];
+                    $('#servicios').append(
+                        `<option value="${servicio._id}">${s} | ${servicio.nombre}</option>`)
+                }
+                $('#servicios').material_select();
+            }
+        })
+
+      
+      
+      function Prueba(){
+      let url1 = `/api/citas/informe?filter[Sede]=${sede_id}&limit=1000&skip=0`    
+      pacientes = []   
+      var Profesional = $('#profesionalesGet').val()
+      var isex = $('#isex').val()
+      var genero = $('#genero').val()
+      var servicio = $('#servicios').val()
+      var escolaridad = $('#escolaridad').val()
+      var cicloVital = $("#cicloVital").val()
+      if(!Profesional == ""){
+        url1 += `&filter[Profesional]=${Profesional}`
+      }
+      if(!isex == ""){
+          url1 += `&filter2[identidad_sexual]=${isex}`
+      }
+      if(!genero == ""){
+          url1 += `&limit=1000&filter2[genero_nacimiento]=${genero}`
+      }
+      if(!escolaridad == ""){
+          url1 += `&limit=1000&filter2[escolaridad]=${escolaridad}`
+      }
+      if(!servicio == ""){
+          url1 += `&limit=1000&filter[Servicio]=${servicio}`
+      }
+      if(!cicloVital == ""){
+          url1 += `&limit=1000&filter2[rango_edad]=${cicloVital}`
+      }
+
+      
+      console.log(url1)
+
+        
+
+        Materialize.toast(
+            'Consiguiendo datos del paciente',
+            4000, 'rounded blue');
+        $.ajax({
+            url: url1,
+            success: function (response) {
+                //   console.log(response);
+
+            if(response.length<=0){
+                return
+            }
+                for (let i = 0; i < response.length; i++) {
+                    const pacienteEcontrado = response[i];
+                     //console.log(pacienteEcontrado);
+                     if(!pacienteEcontrado.Paciente[0]){
+                         console.log("Si entro")
+                        tipo_id="N/A",
+                        id_numero="N/A"
+                        tipo_usuario="N/A"
+                        primer_apellido="N/A";
+                        segundo_apellido="N/A";
+                        primer_nombre="N/A";
+                        segundo_nombre="N/A";
+                        edad="N/A";
+                        genero_nacimiento="N/A";
+                        codigo_departamento="N/A";
+                        codigo_municipio="N/A";
+                        residencia_actual="N/A";
+
+                     }else{
+                    var end = moment(pacienteEcontrado.end).format("YYYY-MM-DD")
+                    var fechaI = moment(new Date($("#num_fecha_inicio2").val())).format("YYYY-MM-DD")
+                    var fechaf = moment(new Date($("#num_fecha_final2").val())).format("YYYY-MM-DD")
+                    if(end >= fechaI && end <= fechaf ){
+                        
+                    tipo_id = pacienteEcontrado.Paciente[0].tipo_id
+                    id_numero = pacienteEcontrado.Paciente[0].username
+                    sede_id = pacienteEcontrado.Sede.codigo
+                    tipo_usuario = pacienteEcontrado.Paciente[0].regimen_salud
+                    primer_apellido = pacienteEcontrado.Paciente[0].primer_apellido
+                    segundo_apellido = pacienteEcontrado.Paciente[0].segundo_apellido
+                    eps = pacienteEcontrado.Paciente[0].eps
+
+                    var str = pacienteEcontrado.Paciente[0].nombre  || "";
+                    var primer_nombre = str.split(" ")[0];
+                    var segundo_nombre = str.split(" ")[1];
+
+                    var cumpleaños = moment(moment.unix(pacienteEcontrado.Paciente[0].ts_nacimiento), 'YYYY')  || "";
+                    var hoy = moment(new Date(), 'DD/MM/YYYY');
+                    var edad = hoy.diff(cumpleaños, 'y');
+
+                    if (pacienteEcontrado.Paciente[0].genero_nacimiento === "Masculino") {
+                        genero_nacimiento = "M"
+                    } else if(pacienteEcontrado.Paciente[0].genero_nacimiento === "Femenino") {
+                        genero_nacimiento = "F"
+                    }else if(pacienteEcontrado.Paciente[0].genero_nacimiento === "Intersexual"){
+                        genero_nacimiento = "I"
+                    }else{
+                        genero_nacimiento = ""
+                    }
+
+                    codigo_departamento = pacienteEcontrado.Paciente[0].departamento || "";
+                    codigo_municipio = pacienteEcontrado.Paciente[0].municipio || "";
+         
+                    var options = {weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "numeric", hour12:"false", minute: "numeric"};
+                    var fechaInico = new Date(pacienteEcontrado.start)
+                    fechaInico =  fechaInico.toLocaleString ("es-ES", options) 
+                    var fechaFin = new Date(pacienteEcontrado.end)
+                    fechaFin =  fechaInico.toLocaleString ("es-ES", options) 
+
+                    if (pacienteEcontrado.Paciente[0].zona = "urbana") {
+                        residencia_actual = "U"
+                    } else {
+                        residencia_actual = "R"
+                    }
+                    var tipoServicio = pacienteEcontrado.Servicio.nombre
+
+
+                   
+
+                    let nuevo_paciente = {}
+                    nuevo_paciente[pacientes_enca[0]] = tipo_id;
+                    nuevo_paciente[pacientes_enca[1]] = id_numero;
+                    nuevo_paciente[pacientes_enca[2]] = primer_apellido;
+                    nuevo_paciente[pacientes_enca[3]] = segundo_apellido;
+                    nuevo_paciente[pacientes_enca[4]] = primer_nombre;
+                    nuevo_paciente[pacientes_enca[5]] = segundo_nombre;
+                    nuevo_paciente[pacientes_enca[6]] = edad;
+                    nuevo_paciente[pacientes_enca[7]] = genero_nacimiento;
+                    nuevo_paciente[pacientes_enca[8]] = eps ;
+                    nuevo_paciente[pacientes_enca[9]] = tipoServicio;
+                    nuevo_paciente[pacientes_enca[10]] = fechaInico;
+                    nuevo_paciente[pacientes_enca[11]] = fechaFin;
+                    pacientes.push(nuevo_paciente)
+
+
+                    
+                    //console.log(nuevo_paciente);
+                    //console.log(tipo_usuario);
+
+                    }
+
+                   }
+
+
+                    
+                  
+                }
+                ExportData2()
+                
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                Materialize.toast('Hubo un error en conseguir los datos ', 4000, 'rounded red');
+                console.log(textStatus);
+                console.log(jqXHR);
+                console.log(errorThrown);
+            },
+            
+        });
+
+      
+      }
+
+
+
+
+</script>
+<% include  ../view_distribution/bot2.ejs%>

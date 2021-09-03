@@ -1,0 +1,1616 @@
+<% include  ../view_distribution/top1.ejs%>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css">
+<style>
+    .fc-content td:hover {
+        background: #adf4fa;
+    }
+
+    /* UL padding override - see https://github.com/Dogfalo/materialize/issues/2786#issuecomment-234809753  */
+ul { padding-left: 20px; }
+.btn { font-size: .8em; }
+/* not sure why this is needed... */
+.material-icons { vertical-align: bottom; }
+
+</style>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="static/css/magicsuggest-min.css" rel="stylesheet">
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="row">
+                    <div class="col s12 m6 l3">
+                        <h3 class="breadcrumbs-title"><%= title%></h3>
+                    </div>
+                    <% const sedeProfesional = [];
+                        for(let i = 0; i < sede_id.length; i++){
+                            sedeProfesional.push(sede_id[i]._id)
+                        }
+                    
+                    const found = sedeProfesional.find(element => element == '60049afed00d9b43a49e4da7'); 
+                    if (found != "60049afed00d9b43a49e4da7") { %>
+                            <div class="col s12 m6 l3">
+                                Profesionales
+                                <select id="sProfesional" class="validate select browse-select">
+                                    <option value="" disabled selected>Elige una opción</option>
+                                </select>
+                            </div>
+                    <% } else{ 
+                        if(user.roles == 'SP' ){%>
+                            <div class="col s12 m6 l3">
+                                Practicante
+                                <select id="UniProfesional" class="validate select browse-select">
+                                    <option value="" disabled selected>Elige una opción</option>
+                                </select>
+                            </div>
+                            <% } %>
+                   <% } %>
+                </div>
+                
+                <div class="container">
+                    <div class="row">
+                        <div class="col m3 s12">
+                            <div class="card-panel" style="background-color: #0790d2; color: white;">Programada
+                            </div>
+                        </div>
+                        <div class="col m3 s12">
+                            <div class="card-panel" style="background-color: #0bb305; color: white;">Atendida
+                            </div>
+                        </div>
+                        <div class="col m3 s12">
+                            <div class="card-panel" style="background-color: #d21807; color: white;">Cancelada
+                            </div>
+                        </div>
+                        <div class="col m3 s12">
+                            <div class="card-panel" style="background-color: #d28407; color: white;">Reprogramada
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id='calendar'></div>
+                <br>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_crear_cita" class="modal " style="max-width: 100% !important;
+    max-height: 80% !important;">
+        <div class="modal-content">
+            <h4>Crear Cita</h4>
+            <p>Ingrese los siguientes datos para programar una cita.</p>
+            <div class="row">
+
+                <% let historia = 0
+                for (let h = 0; h < user.Sedes.length; h++) {
+                    historia = user.Sedes[h].nombre === '2020' ? 1 : 0  %>
+                <% } %>
+                <% if(historia === 1) { %>
+                    <div class="input-field col  s12">
+                      <select name="" id="pacientes" style="width: 440px;" placeholder="Pacientes En Espera">
+                      <option value="" selected disabled>Pacientes En Espera</option>
+                      </select>
+                        </div>
+                    <div class=" col l6 m12 s12"><br>
+                        <label for="start_date">De la fecha </label>
+                        <input type="date" id="start_date_U">
+                    </div>
+                    <div class=" col l6 m12 s12"><br>
+                        <label for="end_date">A la fecha</label>
+                        <input type="date" id="end_date_u">
+                    </div>
+                    <div>
+                        <table id="example" 
+                            class="table table-striped sampleTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Fecha</th>
+                                    <th>Horario</th>
+                                    <th>Nombre Profesional</th>
+                                    <th>Consultorio</th>
+                                    <th>Nivel</th>
+                                    <th>Frecuencia</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table_profesional">
+                            </tbody>
+                        </table>
+                    </div>
+                <%} else { %>
+                    <div class="input-field col l9 m12 s12">                                   
+                        <select id="servicios" class="validate select browse-select">
+                            <option value="" disabled>Elige una opción</option>
+                        </select>
+                        <!-- <input type="text" id="servicios" autocomplete="off" class="autocomplete input-cita"> -->
+                        <label for="servicios">Servicios</label>
+                    </div>
+                    <div class="input-field col l3 m12 s12">
+                        <input id="valor_cita" type="number" class="validate input-cita" value="0">
+                        <label for="valor_cita" class="">Valor de la Cita</label>
+                    </div>
+                    <!-- <div class="input-field col l12 m12 s12">
+                        <input type="text" id="pacientes" autocomplete="off" class="autocomplete input-cita">
+                        <label for="pacientes">Pacientes</label>
+                        </div> -->
+                   
+                        
+                    <div class="input-field col l9 m12 s12" >
+                        <fieldset>    
+                        <legend>Pacientes</legend>
+                        <div id="magicsuggest"></div>
+                    </fieldset>
+                    </div>
+                
+                    <!-- <div class="input-field col l12 m12 s12">
+                        <select name="pact[]" multiple="multiple" id="example_select_id" class="js-example-basic-single" style="width:510px">
+                        </select>
+                        <label for="example_select_id">Pacientes</label>
+                    </div> -->
+                    <div class="input-field col l12 m12 s12">
+                        <select id="profesional" class="validate select browse-select" >
+                            <option value="" disabled>Elige una opción</option>
+                        </select>
+                        <label for="profesional">Profesional</label>
+                    </div>
+                    <div class="input-field col l12 m12 s12">
+                        <input type="text" id="motiveConsulta" class="input-cita">
+                        <label for="motiveConsulta">Motivo Consulta</label>
+                    </div>
+                    <div class="input-field col l12 m12 s12">
+                        <select  id="consultorioNumber" autocomplete="off" class="autocomplete input-cita">
+                            <option value="" disabled selected>Elige una opción</option>
+                        </select>
+                        <label for="consultorioNumber">Consultorio</label>
+                    </div>
+                    <input type="hidden" id="time_cita">
+                    <div class=" col l6 m12 s12">
+                        <label for="start_date">Inicio de la Cita</label>
+                        <input type="datetime-local" id="start_date">
+                    </div>
+                    <div class=" col l6 m12 s12">
+                        <label for="end_date">Fin de la Cita</label>
+                        <input type="datetime-local" id="end_date">
+                    </div>
+                    <div class="input-field col l6 m12 s12">
+                        <input id="link_pago" type="text" class="validate input-cita">
+                        <label for="link_pago">Link de Pago</label>
+                    </div>
+                    <div class="input-field col l6 m12 s12">
+                        <input id="link_chat" type="text" class="validate input-cita">
+                        <label for="link_chat">Link de Consulta en Línea</label>
+                    </div>
+                <% } %> 
+            </div>
+        </div>
+        <% if(historia === 1) { %>
+            <div class="modal-footer">
+                <a id="crear_cita_universidad" class="modal-action input_dissable_cita waves-effect waves-green btn">Crear</a>
+            </div>
+        <%} else { %>
+            <div class="modal-footer">
+                <a id="crear_cita" class="modal-action input_dissable_cita waves-effect waves-green btn">Crear</a>
+            </div>
+        
+        <% } %> 
+    </div>
+    <div id="modal_editar_cita" class="modal "style="max-width: 50% 
+    max-height: 50% ">
+        <div class="modal-content">
+            <h4>Editar Cita</h4>
+            <p>Ingrese los siguientes datos para programar una cita.</p>
+            <div class="row">
+                <input type="hidden" id=editar_id value="__">
+                <input type="hidden" name="" id="ClosePrimeraVez" value="">
+                <div class="input-field col l9 m12 s12">                    
+                    <!-- <select id="servicios" class="validate select browse-select">
+                        <option value="" disabled>Elige una opción</option>
+                    </select> -->
+                    <input type="text" id="editar_servicios" value="__" autocomplete="off"
+                        class="autocomplete input-cita" disabled>
+                    <label for="editar_servicios">Servicios</label>
+                </div>
+                <div class="input-field col l3 m12 s12">
+                    <input id="editar_valor_cita" type="number" value="0" class="validate input-cita" value="0"
+                        disabled>
+                    <label for="editar_valor_cita" class="">Valor de la Cita</label>
+                </div>
+                <div class="input-field col l12 m12 s12">
+                    <input type="text" id="editar_pacientes" value="__" autocomplete="off"
+                        class="autocomplete input-cita" disabled>
+                    <label for="editar_pacientes">Pacientes</label>
+                </div>
+                <div class="input-field col l12 m12 s12">
+                    <input type="text" id="editar_profesional" value="__" autocomplete="off"
+                        class="autocomplete input-cita" disabled>
+                    <label for="editar_profesional">Profesional</label>
+                </div>
+                <div class="input-field col l12 m12 s12">
+                    <input type="text" id="editar_motiveConsulta" value="__" autocomplete="off"
+                        class="autocomplete input-cita" disabled >
+                    <label for="editar_motiveConsulta">Motivo Consulta</label>
+                </div>
+                <div class="input-field col l12 m12 s12">
+                    <input type="text" id="editar_consultorioNumber" value="__" autocomplete="off"
+                        class="autocomplete input-cita" disabled>
+                    <label for="editar_consultorioNumber">Consultorio</label>
+                </div>
+                <div class=" col l6 m12 s12">
+                    <label for="editar_start_date">Inicio de la Cita</label>
+                    <input type="datetime-local" id="editar_start_date" class="input_editar_cita">
+                </div>
+                <div class=" col l6 m12 s12">
+                    <label for="editar_end_date">Fin de la Cita</label>
+                    <input type="datetime-local" id="editar_end_date" class="input_editar_cita">
+                </div>
+                <div class="input-field col l6 m12 s12">
+                    <input id="editar_link_pago" type="text" value="__" class="input_editar_cita validate input-cita">
+                    <label for="editar_link_pago">Link de Pago</label>
+                </div>
+                <div class="input-field col l6 m12 s12">
+                    <input id="editar_link_chat" type="text" value="__" class="input_editar_cita validate input-cita">
+                    <label for="editar_link_chat">Link de Consulta en Línea</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer center-align">
+            <button id="cancelar_cita" class="actions_editar_cita modal-action waves-effect waves-red red btn">Cancelar
+                Cita</button>
+            <button id="reprogramar_cita"
+                class="actions_editar_cita modal-action waves-effect waves-orange orange btn">Reprogramar</button>
+            <button id="atender_cita"
+                class="actions_editar_cita modal-action waves-effect waves-green green btn">Atender</button>
+        </div>
+    </div>
+    <div id="modal_google" class="modal">
+        <div class="row">
+            <div class="col s8">
+                <p style="font-family: Arial, Helvetica, sans-serif;">¿Quieres añadir este evento al google calendar?</p>
+            </div>
+        </div>
+        <div class="modal-footer center-align">
+            <button id="atender_cita" onclick="authenticate().then(loadClient)"
+            class=" modal-action waves-effect waves-green green btn">Si quiero añadir</button>
+            <button id="close_modal_google" 
+            class=" modal-action waves-effect waves-green red btn">No quiero añadir</button>
+        </div>     
+    </div>
+
+</section>
+
+
+<% include  ../view_distribution/bot1.ejs%>
+<% include  ../view_distribution/bot2.ejs%>
+<script
+    src="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.3.0,npm/fullcalendar@5.3.0/locales-all.min.js,npm/moment@2.27.0/min/moment-with-locales.min.js">
+</script>
+<script src="static/js/magicsuggest-min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script src="https://apis.google.com/js/api.js"></script>
+<script>
+    
+    const sede_id = new URLSearchParams(window.location.search).get('sede');
+    var nuevaCita = Object({})
+    var editarCita = Object({})
+    var creadaCita = []
+    var AJAXServicios = []
+    var AJAXPacientes = []
+    var AJAXProfesionales = []
+    var ServiciosToAutoComplete = Object({})
+    var PacientesToAutoComplete = Object({})
+    var ProfesionalesToAutoComplete = Object({})
+    var ProfesionalesAdmitidos = Object([])
+    var objetosUsados = Object({})
+
+    var EditarServiciosToAutoComplete = Object({})
+    var EditarPacientesToAutoComplete = Object({})
+    var EditarProfesionalesToAutoComplete = Object({})
+    var EditarProfesionalesAdmitidos = Object([])
+    var EditarobjetosUsados = Object({})
+    $.ajax({
+        method: 'GET',
+          url: `/api/adminDatos/getTime/${sede_id}`,
+          success: function (response) {
+            $("#time_cita").val(response[0].time)
+        }
+    })
+    function setInitialDates() {
+        var start_value = new Date($('#start_date').val());
+        $.ajax({
+        url: `/api/adminDatos/buscarDias/${sede_id}/${moment(start_value).format('YYYY-MM-DD')}`,
+        method: 'GET',
+        success: function (response) {
+            if(response == false){
+                alert("Dia no laboral");
+                start_value = moment(new Date()).format().slice(0, 16);
+                $('#start_date').val(start_value)
+                return;
+            }
+        }
+        })
+        if (moment(start_value).isBefore(moment(new Date()))) {
+            start_value = moment(new Date()).format().slice(0, 16);
+            $('#start_date').val(start_value)
+        }
+        var time_cita_sede = $("#time_cita").val() || 30
+        var end_value = moment(start_value).add(time_cita_sede, 'minutes').format().slice(0, 16);
+        $("#end_date").val(end_value);
+    }
+
+    function setEditarInitialDates() {
+        console.log('Initial Editar');
+        // var start_value = new Date($('#editar_start_date').val());
+        // if (moment(start_value).isBefore(moment(new Date()))) {
+        //     start_value = moment(new Date()).format().slice(0, 16);
+        //     $('#editar_start_date').val(start_value)
+        // }
+        // var end_value = moment(start_value).add(30, 'minutes').format().slice(0, 16);
+        // $("#editar_end_date").val(end_value);
+    }
+    var calendar;
+    /* Configuración del calendario */
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        var calendarEl = document.getElementById('calendar');
+        if(sede_id=='60049afed00d9b43a49e4da7'){
+            calendar = new FullCalendar.Calendar(calendarEl, {
+            navLinks: true,
+            initialView: 'dayGridMonth',
+            height: 'auto',
+            locale: 'es',
+            headerToolbar: {
+                left: 'title',
+                right: 'prev,next'
+            },
+            footerToolbar: {
+                left: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+                right: 'prev,next'
+            },
+            dateClick: function (info) {
+                var valuecomp = moment(info.date).add(1, 'days').fromNow()
+                if (valuecomp.slice(0, 2) === 'in') {
+                    $('#modal_crear_cita').modal('open');
+                    $('#start_date').val(moment(info.date).format().slice(0, 16))
+                    setInitialDates();
+                   
+                } else {
+                    alert('No puedes crear una cita en una fecha pasada.')
+                }
+            },
+            eventClick: function (info) {
+                // $('#start_date').val(moment(info.date).format().slice(0, 16))
+                var citaEvento = info.event._def.extendedProps
+                console.log(citaEvento)
+                let nombre = ""
+                for(let i = 0; i < citaEvento.Paciente.length; i++){
+                    nombre += `${citaEvento.Paciente[i].nombre} ${citaEvento.Paciente[i].apellido}, `
+                }
+                $('#ClosePrimeraVez').val(citaEvento.closePrimeraVez)
+                $('#editar_id').val(citaEvento._id)
+                $('#editar_servicios').val(citaEvento.Servicio.nombre)  
+                $('#editar_valor_cita').val(citaEvento.valor_cita)
+                $('#editar_pacientes').val(nombre.substring(0, nombre.length - 2))
+                $('#editar_profesional').val(
+                    `${citaEvento.Profesional.nombre} ${citaEvento.Profesional.apellido}`)
+                $('#editar_start_date').val(moment.unix(citaEvento.cita_start_timestamp).format()
+                    .slice(0, 16))
+                $('#editar_end_date').val(moment.unix(citaEvento.cita_end_timestamp).format().slice(
+                    0, 16))
+                $('#editar_link_pago').val(citaEvento.link_pago)
+                $('#editar_link_chat').val(citaEvento.link_chat)
+                $('#editar_motiveConsulta').val(citaEvento.motiveConsulta)
+                $('#editar_consultorioNumber').val(citaEvento.consultorioNumber)
+                $('#modal_editar_cita').modal('open');
+                if (citaEvento.estado == 'Cancelada') {
+                    $('.actions_editar_cita').hide();
+                    $('.input_editar_cita').attr('disabled', true)
+                } else if (citaEvento.estado == 'Atendida') {
+                    $('.actions_editar_cita').hide();
+                    $('#atender_cita').html('Ver Historia Clínica')
+                    $('#atender_cita').on('click', function(){
+                        document.location.href = `/citas/atender?cita=${citaEvento._id}`
+                        return;
+                    })
+                    $('#atender_cita').show()
+                } else {
+                    $('.actions_editar_cita').show();
+                    $('#atender_cita').html('Atender')
+                    $('.input_editar_cita').removeAttr('disabled')
+                }
+            },
+            events: {
+                url: '/api/citas/sedeUni',
+                method: 'GET',
+                extraParams: {
+                    sede: sede_id,
+                    projection: '-Sede -creador'
+                },
+                failure: function () {
+                    alert('Hubo un error al conseguir la citas. Vuelve a intentarlo.');
+                },
+                color: '#0790d2', // Color predeterminado de fondo de las citas
+                textColor: 'white' // Color de texto predeterminado de las citas
+            },
+        });
+        calendar.render();
+
+        }else{
+            calendar = new FullCalendar.Calendar(calendarEl, {
+            navLinks: true,
+            initialView: 'dayGridMonth',
+            height: 'auto',
+            locale: 'es',
+            headerToolbar: {
+                left: 'title',
+                right: 'prev,next'
+            },
+            footerToolbar: {
+                left: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+                right: 'prev,next'
+            },
+            dateClick: function (info) {
+                var valuecomp = moment(info.date).add(1, 'days').fromNow()
+                if (valuecomp.slice(0, 2) === 'in') {
+                    var date = moment(info.date).format('YYYY-MM-DD')
+                    $.ajax({
+                    url: `/api/adminDatos/buscarDias/${sede_id}/${date}`,
+                    method: 'GET',
+                    success: function (response) {
+                        if(response == false){
+                            alert("Dia no laboral");
+                            return;
+                        }else{
+                        $('#modal_crear_cita').modal('open');
+                        $('#start_date').val(moment(info.date).format().slice(0, 16))
+                        setInitialDates();
+                        }
+                    }
+                    })
+                } else {
+                    alert('No puedes crear una cita en una fecha pasada.')
+                }
+            },
+            eventClick: function (info) {
+                console.log(info);
+                // $('#start_date').val(moment(info.date).format().slice(0, 16))
+                var citaEvento = info.event._def.extendedProps
+                console.log(citaEvento);
+                $('#editar_id').val(citaEvento._id)
+                $('#editar_servicios').val(citaEvento.Servicio.nombre)
+                $('#editar_valor_cita').val(citaEvento.valor_cita)
+                $('#editar_pacientes').val(
+                    `${citaEvento.Paciente[0].nombre} ${citaEvento.Paciente[0].apellido}`)
+                $('#editar_profesional').val(
+                    `${citaEvento.Profesional.nombre} ${citaEvento.Profesional.apellido}`)
+                $('#editar_start_date').val(moment.unix(citaEvento.cita_start_timestamp).format()
+                    .slice(0, 16))
+                $('#editar_end_date').val(moment.unix(citaEvento.cita_end_timestamp).format().slice(
+                    0, 16))
+                $('#editar_link_pago').val(citaEvento.link_pago)
+                $('#editar_link_chat').val(citaEvento.link_chat)
+                $('#editar_motiveConsulta').val(citaEvento.motiveConsulta)
+                $('#editar_consultorioNumber').val(citaEvento.consultorioNumber)
+                $('#modal_editar_cita').modal('open');
+                if (citaEvento.estado == 'Cancelada') {
+                    $('.actions_editar_cita').hide();
+                    $('.input_editar_cita').attr('disabled', true)
+                } else if (citaEvento.estado == 'Atendida') {
+                    $('.actions_editar_cita').hide();
+                    $('#atender_cita').html('Ver Historia Clínica')
+                    $('#atender_cita').on('click', function(){
+                        document.location.href = `/citas/atender?cita=${citaEvento._id}`
+                        return;
+                    })
+                    $('#atender_cita').show()
+                } else {
+                    $('.actions_editar_cita').show();
+                    $('#atender_cita').html('Atender')
+                    $('.input_editar_cita').removeAttr('disabled')
+                }
+            },
+            events: {
+                url: '/api/citas/sede',
+                method: 'GET',
+                extraParams: {
+                    sede: sede_id,
+                    projection: '-Sede -creador'
+                },
+                failure: function () {
+                    alert('Hubo un error al conseguir la citas. Vuelve a intentarlo.');
+                },
+                color: '#0790d2', // Color predeterminado de fondo de las citas
+                textColor: 'white' // Color de texto predeterminado de las citas
+            },
+        });
+        calendar.render();
+
+        }
+
+    });
+
+
+    $('.coc').on('mousedown', function (event) {
+        event.preventDefault();
+    })
+    $(document).ready(function () {
+        $("#pacientes").select2()
+        $('#pacientes').material_select();
+
+        $('.modal').modal();
+        $('#servicios').val('')
+        $('#motiveConsulta').val('')
+        $('#start_date').attr('min', moment(new Date()).format().slice(0, 16))
+        $('#end_date').attr('min', moment(new Date()).format().slice(0, 16))
+        $('#start_date').change(setInitialDates);
+        $('#editar_start_date').change(function () {
+            var start_value = new Date($('#editar_start_date').val());
+            if (moment(start_value).isBefore(moment(new Date()))) {
+                start_value = moment(new Date()).format().slice(0, 16);
+                $('#editar_start_date').val(start_value)
+            }
+            var end_value = moment(start_value).add(30, 'minutes').format().slice(0, 16);
+            $("#editar_end_date").val(end_value);
+        });
+        /*** Comportamientos de los datos de Nueva Cita.*/
+        /* Obtener Profesionales */
+        
+        $.ajax({
+            method: 'GET',
+            url: `/api/profesionales?filter[sede]=${sede_id}&limit=1000000&projection=nombre+apellido+username+LDiurno+LInicialTimeDiurno+LFinalTimeDiurno+MaDiruno+MaInicialTimeDiurno+MaFinalTimeDiurno+MiDiruno+MiInicialTimeDiurno+MiFinalTimeDiurno+JDiruno+  JInicialTimeDiurno+JFinalTimeDiurno+VDiruno+VInicialTimeDiurno+VFinalTimeDiurno+SDiruno+SInicialTimeDiurno+SFinalTimeDiurno+DoDiruno+DoInicialTimeDiurno+  DoFinalTimeDiurno+LTarde+LInicialTimeTarde+LFinalTimeTarde+MaTarde+MaInicialTimeTarde+MaFinalTimeTarde+MiTarde+MiInicialTimeTarde+MiFinalTimeTarde+JTarde+JInicialTimeTarde+  JFinalTimeTarde+VTarde+VInicialTimeTarde+VFinalTimeTarde+STarde+SInicialTimeTarde+SFinalTimeTarde+DoTarde+DoInicialTimeTarde+DoFinalTimeTarde+-Sedes+-Encargados+-SedeUserInfos`,
+            success: function (r) {
+                AJAXProfesionales = r;
+                for (let i = 0; i < r.length; i++) {
+                  const formulario = r[i];
+                  $('#sProfesional').append(
+                      `<option value="${formulario._id}">${formulario.nombre} ${formulario.apellido}</option>`)
+              }
+              $('#sProfesional').material_select();
+            }
+        })
+        /*Obtenemos Profe uni*/
+        var supervisorAsign_id = <%- JSON.stringify(user._id) %>;
+        console.log(supervisorAsign_id)
+        $.ajax({
+            method: 'GET',
+            url: `/api/profesionales/getAllProfesionalesSuper/${sede_id}/${supervisorAsign_id}`,
+            success: function (r) {
+                for (let i = 0; i < r.length; i++) {
+                  const formulario = r[i];
+                  $('#UniProfesional').append(
+                      `<option value="${formulario._id}">${formulario.nombre} ${formulario.apellido}</option>`)
+              }
+              $('#UniProfesional').material_select();
+            }
+        })
+         /*Obtenemos consulturio*/
+         $.ajax({
+            method: 'GET',
+            url: `/api/adminDatos/${sede_id}`,
+            success: function (r) {
+                if(r.length<=0){
+                    $('#consultorioNumber').append(
+                      `<option value="enviar">No tienes consultorios, haga click para crear uno</option>`) 
+                      $('#consultorioNumber').change(function(){
+                        window.open(`/adminDatos?sede=${sede_id}`,'_blank');
+                      })    
+                }
+                for (let i = 0; i < r.length; i++) {
+                  const formulario = r[i];
+                  $('#consultorioNumber').append(
+                      `<option value="${formulario.Consultorio}">${formulario.Consultorio}</option>`)
+              }
+              $('#consultorioNumber').material_select();
+            }
+        })
+        /*
+            DataTable
+        */
+        for (var n = 0; n < 1000; n++) {
+            var row = $("<tr>");
+            $("#example")
+            .find("thead th")
+            row.appendTo($("#example").find("tbody"));
+        }
+        $("#example").fancyTable({
+            /* Column number for initial sorting*/ 
+            sortColumn:0, 
+            /* Setting pagination or enabling */ 
+            pagination: true, 
+            /* Rows per page kept for display */ 
+            perPage:5, 
+            globalSearch:true,
+            inputPlaceholder: 'Buscar...'     
+        });
+        /*Obtenemos Los Pacientes En espera*/
+        $.ajax({
+            method: 'GET',
+            url: `/api/pacientes/EnEsperaGet/${sede_id}`,
+            success: function (r) {
+                for (let i = 0; i < r.length; i++) {
+                  const formulario = r[i];
+                  $('#pacientes').append(
+                      `<option value="${formulario._id}">${formulario.nombre} ${formulario.apellido}</option>`)
+              }
+            }
+        })
+        
+        $.ajax({
+            method: 'GET',
+            url: `/api/pacientes?filter[sede]=${sede_id}&limit=1000000&projection=nombre+apellido+username+-Sedes+-Encargados+-SedeUserInfos`,
+            success: function (r) {
+                let dataProfesional = []
+                AJAXPacientes = r;
+                PacientesToAutoComplete = Object({})
+                for (let s = 0; s < AJAXPacientes.length; s++) {
+                    const paciente = AJAXPacientes[s];
+                    dataProfesional.push({id: AJAXPacientes[s]._id, name: `${s} | ${paciente.username} | ${paciente.nombre} ${paciente.apellido}`})
+                }
+                
+                $('#magicsuggest').magicSuggest({
+                    data: dataProfesional,
+                    ajaxConfig: {
+                        xhrFields: {
+                        withCredentials: true,
+                        }
+                    },
+                    value: [],
+                    placeholder: "Selecione Un Paciente"
+                });
+            }
+        });
+        
+        /* Obtener Pacientes */
+        // $.ajax({
+        //     method: 'GET',
+        //     url: `/api/pacientes?filter[sede]=${sede_id}&limit=1000000&projection=nombre+apellido+username+-Sedes+-Encargados+-SedeUserInfos`,
+        //     success: function (r) {
+        //         //console.log(r)
+        //         AJAXPacientes = r;
+        //         PacientesToAutoComplete = Object({})
+        //         for (let s = 0; s < AJAXPacientes.length; s++) {
+        //             const paciente = AJAXPacientes[s];
+        //             PacientesToAutoComplete[
+        //                 `${s} | ${paciente.username} | ${paciente.nombre} ${paciente.apellido}`
+        //             ] = null
+        //         }
+                
+        //         $('#pacientes').autocomplete({
+        //             data: PacientesToAutoComplete,
+        //             limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+        //             onAutocomplete: function (val) {
+        //                 const sPos = Number(val.split(' | ')[0])
+        //                 nuevaCita.Paciente = [AJAXPacientes[sPos]._id]
+        //                 objetosUsados.paciente = AJAXPacientes[sPos]
+        //             },
+        //             minLength: 2, // The minimum length of the input for the autocomplete to start. Default: 1.
+        //         });
+        //     }
+        // })
+        // $('#pacientes').change(function(){
+        //     const sPos = Number($(this).split(' | ')[0])
+        //     nuevaCita.Paciente = [AJAXPacientes[sPos]._id]
+        //     objetosUsados.paciente = AJAXPacientes[sPos]
+        // })
+        // $('#profesional').change(function(){
+        //     const sPos = Number($(this).split(' | ')[0])
+        //     nuevaCita.Profesional = ProfesionalesAdmitidos[sPos]._id
+        //     objetosUsados.profesional = ProfesionalesAdmitidos[sPos]
+        // })
+        // $('#profesional').change(function(){
+        //     const sPos = Number(val.split(' | ')[0])
+        //     nuevaCita.Servicio = AJAXServicios[sPos]._id
+        //     objetosUsados.servicio = AJAXServicios[sPos]
+        //     $('#valor_cita').val(Number(AJAXServicios[sPos].valor_consulta))
+        // })
+
+        $('#servicios').change(function(){
+            $('#profesional').empty()
+            $('#profesional').append(
+                    `<option value="" disabled>Elige una opción</option>`)
+            $('#profesional').val('')
+
+
+            const sPos = Number($(this).val().split(' | ')[0])
+            nuevaCita.Servicio = AJAXServicios[sPos]._id
+            objetosUsados.servicio = AJAXServicios[sPos]
+            $('#valor_cita').val(Number(AJAXServicios[sPos].valor_consulta))
+            nuevaCita.valor_cita = Number(AJAXServicios[sPos]
+                    .valor_consulta)
+            ProfesionalesToAutoComplete = Object({})
+            const ProfesionalesServicio = AJAXServicios[sPos].Profesionales
+            ProfesionalesAdmitidos = Object([])
+            for (let p = 0; p < AJAXProfesionales.length; p++) {
+                const profesional = AJAXProfesionales[p];
+                if (ProfesionalesServicio.includes(profesional._id)) {
+                    ProfesionalesAdmitidos.push(profesional)
+                }
+            }
+            if(sede_id === "60049afed00d9b43a49e4da7"){
+                //addProfesional();
+            } else{
+
+                ProfesionalesToAutoComplete = Object({})
+
+                for (let p = 0; p < ProfesionalesAdmitidos.length; p++) {
+                    const profesional = ProfesionalesAdmitidos[p];
+                    ProfesionalesToAutoComplete[
+                        `${p} | ${profesional.username} | ${profesional.nombre} ${profesional.apellido}`
+                    ] = null
+                    
+                    //calendarProfesional(profesional)
+                    $('#profesional').append(
+                        `<option value="${ProfesionalesAdmitidos[p]._id}">${p} | ${profesional.username} | ${profesional.nombre} ${profesional.apellido}</option>`)
+                            
+                }
+                
+                $('#profesional').material_select();
+            }
+        })
+        /* Obtener Asignar Servicio y Valor de Consulta y Profesionales del Servicio. */
+        $.ajax({
+            method: 'GET',
+            url: `/api/servicios?filter[Sede]=${sede_id}&limit=1000000&projection=valor_consulta+nombre+Profesionales+cups_codigo`,
+            success: function (r) {
+                //console.log(189, r)
+                AJAXServicios = r;
+                for (let s = 0; s < AJAXServicios.length; s++) {
+                    const servicio = AJAXServicios[s];
+                    ServiciosToAutoComplete[`${s} | ${servicio.nombre}`] = null
+                    $('#servicios').append(
+                        `<option value="${s}">${s} | ${servicio.nombre}</option>`)
+                }
+                $('#servicios').material_select();
+            }
+        })
+
+        $(document).on("click", ".select-wrapper", function (event) {
+            event.stopPropagation();
+        });
+
+        $('#sProfesional').change(function(e){
+            
+            const item = $(this).val()
+            $.ajax({
+                url: `/api/citas/sede_profesional/${sede_id}/${item}`,
+                method: 'GET',
+                success: function (response) {
+                    
+                    // remove original source
+                    var orgSource = calendar.getEventSources();
+                    orgSource[0].remove();
+                    
+                    // add new source
+                    // new events will be immediately fetched from this source 
+                    // and placed on the calendar.
+                    calendar.addEventSource(response);
+ 
+                },
+                error: function () {
+                    alert('Hubo un error al conseguir la citas. Vuelve a intentarlo.');
+                }
+            })
+        })
+        $('#UniProfesional').change(function(e){
+            
+            const item = $(this).val()
+            $.ajax({
+                url: `/api/citas/sede_profesional/${sede_id}/${item}`,
+                method: 'GET',
+                success: function (response) {
+                    
+                    // remove original source
+                    var orgSource = calendar.getEventSources();
+                    orgSource[0].remove();
+                    
+                    // add new source
+                    // new events will be immediately fetched from this source 
+                    // and placed on the calendar.
+                    calendar.addEventSource(response);
+ 
+                },
+                error: function () {
+                    alert('Hubo un error al conseguir la citas. Vuelve a intentarlo.');
+                }
+            })
+        })
+        $('#profesional').change(function() {
+            nuevaCita.Profesional = $(this).val()
+            for(let i = 0; i < ProfesionalesAdmitidos.length; i++){
+                if(ProfesionalesAdmitidos[i].id === nuevaCita.Profesional){
+                    
+                    objetosUsados.profesional = ProfesionalesAdmitidos[i]
+                }
+            }            
+        });
+        $('#close_modal_google').click(function (){
+            $('#modal_google').modal('close')
+        })
+        // $('#crear_cita_universidad').click(function () {
+            
+        //     $('.input_dissable_cita').attr('disabled', true)
+        //     var itemSelect = $('#magicsuggest').magicSuggest({
+        //         allowFreeEntries: true,
+        //         value: []
+        //     });
+
+        //     var values = {};
+        //     let data
+            
+        //     nuevaCita.Paciente = itemSelect.getValue()
+
+        //     let name = " "
+        //     $('#example').find('input[type=radio]').each(function(i) {
+        //         var checkbox = $(this);
+        //         if(checkbox.is(':checked')){
+                    
+        //             values[i] = [];
+        //             values[i].push($(this).attr('id'));
+        //             data = values[i]
+        //         }
+        //     });
+
+        //     data = data[0].split(' | ')
+            
+        //     for(let i = 0; i< AJAXPacientes.length; i++){
+        //         for(let j = 0; j < nuevaCita.Paciente.length; j++){
+        //             if(AJAXPacientes[i].id === nuevaCita.Paciente[j]){
+                        
+        //                 objetosUsados.paciente = AJAXPacientes[i]
+                        
+        //                 if(j === nuevaCita.Paciente.length)
+        //                     name += `${objetosUsados.paciente.nombre} ${objetosUsados.paciente.apellido}`
+        //                 else
+        //                     name += `${objetosUsados.paciente.nombre} ${objetosUsados.paciente.apellido}, `
+        //             }
+        //         }
+        //     }
+            
+        //     nuevaCita.Sede = sede_id
+        //     nuevaCita.Profesional = data[0]
+        //     nuevaCita.title =
+        //         `${objetosUsados.paciente.nombre} ${objetosUsados.paciente.apellido}| ${objetosUsados.servicio.nombre} | ${data[1]}`
+        //     nuevaCita.valor_cita = Number($('#valor_cita').val())
+        //     nuevaCita.link_chat = String($('#link_chat').val())
+        //     nuevaCita.link_pago = String($('#link_pago').val())
+        //     nuevaCita.start = moment(String($('#start_date').val())).format()
+        //     nuevaCita.end = moment(String($('#end_date').val())).format()
+        //     nuevaCita.cita_start_timestamp = moment(nuevaCita.start).utc().unix()
+        //     nuevaCita.cita_end_timestamp = moment(nuevaCita.end).utc().unix()
+        //     nuevaCita.motiveConsulta = String($('#motiveConsulta').val())
+        //     nuevaCita.consultorioNumber = String(data[2])
+        //     console.log(nuevaCita);
+            
+            
+        //     $.ajax({
+        //         url: '/api/citas',
+        //         method: 'POST',
+        //         dataType: 'json',
+        //         contentType: 'application/json',
+        //         data: JSON.stringify(nuevaCita),
+        //         success: function () {
+        //             Materialize.toast('Cita creada con éxito.', 4000, 'rounded green')
+        //             calendar.refetchEvents()
+        //             $('#modal_crear_cita').modal('close');
+        //             $('.input-cita').val('');
+        //             $('.input_dissable_cita').removeAttr('disabled')
+        //         },
+        //         error: function (a, b, c) {
+        //             console.log(a, b, c);
+        //             $('.input_dissable_cita').attr('disabled', false)
+        //             Materialize.toast(
+        //                 'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+        //                 4000, 'rounded red');
+        //         }
+        //     })
+            
+        // })
+        
+        $('#crear_cita').click(function () {
+
+            try
+            {
+                var itemSelect = $('#magicsuggest').magicSuggest({
+                allowFreeEntries: true,
+                value: []
+            });
+                let status = validarTimeProfesionalComercial(objetosUsados.profesional)
+                console.log(status)
+                // if(status == false){
+                //     alert("No Puedes crear Cita a esa hora"); return;
+                // } 
+
+                
+                let pacient = String($('#example_select_id').val())
+                $('.input_dissable_cita').attr('disabled', true)
+                nuevaCita.Paciente = itemSelect.getValue()
+
+                let name = " "
+                for(let i = 0; i< AJAXPacientes.length; i++){
+                    for(let j = 0; j < nuevaCita.Paciente.length; j++){
+                        if(AJAXPacientes[i].id === nuevaCita.Paciente[j]){
+                            
+                            objetosUsados.paciente = AJAXPacientes[i]
+                            if(j === nuevaCita.Paciente.length)
+                                name += `${objetosUsados.paciente.nombre} ${objetosUsados.paciente.apellido}`
+                            else
+                                name += `${objetosUsados.paciente.nombre} ${objetosUsados.paciente.apellido}, `
+                        }
+                    }
+                }
+                
+                nuevaCita.Sede = sede_id
+                nuevaCita.profesional = $("#profesional").val()
+                nuevaCita.title =
+                `${name} | ${objetosUsados.servicio.nombre} | ${objetosUsados.profesional.username}`
+                nuevaCita.valor_cita = Number($('#valor_cita').val())
+                nuevaCita.link_chat = String($('#link_chat').val())
+                nuevaCita.link_pago = String($('#link_pago').val())
+                nuevaCita.start = moment(String($('#start_date').val())).format()
+                nuevaCita.end = moment(String($('#end_date').val())).format()
+                nuevaCita.cita_start_timestamp = moment(nuevaCita.start).utc().unix()
+                nuevaCita.cita_end_timestamp = moment(nuevaCita.end).utc().unix()
+                nuevaCita.motiveConsulta = String($('#motiveConsulta').val())
+                nuevaCita.consultorioNumber = String($('#consultorioNumber').val())
+                console.log(nuevaCita);
+ 
+                
+                $.ajax({
+                    url: '/api/citas',
+                    method: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(nuevaCita),
+                    success: function (response) {
+                        Materialize.toast('Cita creada con éxito.', 4000, 'rounded green')
+                        Materialize.toast('Revise su correo en el apartado spam.', 4000, 'rounded green')
+                        calendar.refetchEvents()
+                        $('#modal_crear_cita').modal('close');
+                        $('.input-cita').val('');
+                        $('.input_dissable_cita').removeAttr('disabled');
+                        $('#modal_google').modal('open');
+                        creadaCita.push(response)   
+                    },
+                    error: function (a, b, c) {
+                        console.log(a, b, c);
+                        
+                        $('.input_dissable_cita').attr('disabled', false)
+                        Materialize.toast(
+                            'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                            4000, 'rounded red');
+                    }
+                })
+
+            }catch(e){
+                console.error("", e)
+                Materialize.toast(
+                    'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                    4000, 'rounded red');
+                $('.input_dissable_cita').removeAttr('disabled')
+
+            }
+        })
+        $('#reprogramar_cita').click(function () {
+            const cita_id = $('#editar_id').val();
+            editarCita.valor_cita = Number($('#editar_valor_cita').val());
+            editarCita.link_chat = String($('#editar_link_chat').val());
+            editarCita.link_pago = String($('#editar_link_pago').val());
+            editarCita.start = moment(String($('#editar_start_date').val())).format();
+            editarCita.end = moment(String($('#editar_end_date').val())).format();
+            editarCita.cita_start_timestamp = moment(editarCita.start).utc().unix();
+            editarCita.cita_end_timestamp = moment(editarCita.end).utc().unix();
+            editarCita.estado = 'Reprogramada'
+            editarCita.color = '#d28407'
+            const urlEnvio = `/api/citas/${cita_id}`
+            const methodEnvio = 'PATCH'
+            $.ajax({
+                url: urlEnvio,
+                method: methodEnvio,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(editarCita),
+                success: function () {
+                    Materialize.toast('Cita reprogramada con éxito.', 4000, 'rounded green')
+                    calendar.refetchEvents()
+                    $('#modal_editar_cita').modal('close');
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                    Materialize.toast(
+                        'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                        4000, 'rounded red');
+                }
+            })
+        })
+        $('#cancelar_cita').click(function () {
+            const cita_id = $('#editar_id').val();
+            const urlEnvio = `/api/citas/${cita_id}`
+            const methodEnvio = 'PATCH'
+            editarCita = {
+                estado: 'Cancelada',
+                color: '#d21807'
+            }
+            $.ajax({
+                url: urlEnvio,
+                method: methodEnvio,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(editarCita),
+                success: function () {
+                    Materialize.toast('Cita cancelada con éxito.', 4000, 'rounded green')
+                    calendar.refetchEvents()
+                    $('#modal_editar_cita').modal('close');
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                    Materialize.toast(
+                        'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                        4000, 'rounded red');
+                }
+            })
+        })
+        $('#atender_cita').click(function () {
+            let servicios = $('#editar_servicios').val();
+            let a = new Date($('#editar_end_date').val()).getDate()
+            let b = new Date().getDate()
+            let arraySede = ''
+            
+            $.ajax({
+                url: `/api/sedes/${sede_id}`,
+                method: 'GET',
+                success: function (r) {
+                    
+                    if(r.nombre === '2020'){
+                        if("prueba 1" === servicios){
+                            const cita_id = $('#editar_id').val();
+                            let closePrimera = String($('#ClosePrimeraVez').val())
+                            console.log(closePrimera)
+                            if(closePrimera === 'true'){
+                            const urlEnvio = `/citas/atender?cita=${cita_id}`
+                            location.href = urlEnvio;
+                            }else{
+                            const urlEnvio = `/citas/formularioPrimeraVez?cita=${cita_id}`
+                            location.href = urlEnvio;
+                            }
+                        } else if ("prueba 2" === servicios){
+                            const cita_id = $('#editar_id').val();
+                            let closePrimera = String($('#ClosePrimeraVez').val())
+                            if(closePrimera === 'true'){
+                            const urlEnvio = `/citas/atender?cita=${cita_id}`
+                            location.href = urlEnvio;
+                            }else {
+                            const urlEnvio = `/citas/sessionU?cita=${cita_id}`
+                            location.href = urlEnvio;   
+                            }                         
+                        }
+                    } else if(a === b){
+                        const cita_id = $('#editar_id').val();
+                        const urlEnvio = `/citas/atender?cita=${cita_id}`
+                        location.href = urlEnvio;
+                    } else{
+                        Materialize.toast(
+                            'No se atienden Citas futuras.',
+                            4000, 'rounded red');
+                    }
+                    
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                    Materialize.toast(
+                        'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                        4000, 'rounded red');
+                }
+            })
+        })
+    })
+ 
+        
+        
+        function authenticate() {
+        return gapi.auth2.getAuthInstance()
+            .signIn({ scope: "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events" })
+            .then(function () { console.log("Sign-in successful"); },
+                function (err) { console.error("Error signing in", err);Materialize.toast('Hubo un error al momento de agregar al calendario, Vuelva a intentarlo',4000, 'rounded red'); return; });
+        }
+    function loadClient() {
+        gapi.client.setApiKey("AIzaSyDdKg3fQXKolbmr0I8b-EBwzTihM6aQ_GM");
+        return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/calendar/v3/rest")
+        .then(function () { console.log("GAPI client loaded for API"); execute() },
+        function (err) { console.error("Error loading GAPI client for API", err);Materialize.toast('Hubo un error al momento de agregar al calendario.',4000, 'rounded red'); });
+    }
+    // Make sure the client is loaded and sign-in is complete before calling this method.
+    
+    function execute() {
+        console.log(creadaCita[0].Profesional.email, creadaCita[0].Paciente[0].email)
+        var participantes = [{email: creadaCita[0].Profesional.email },{email: creadaCita[0].Paciente[0].email}]
+        var event = {
+            'summary': creadaCita[0].Servicio.nombre,
+            'location': creadaCita[0].Sede.direccion,
+            'description': creadaCita[0].motiveConsulta,
+            'start': {
+                'dateTime': creadaCita[0].start,
+                'timeZone': 'America/Bogota'
+            },
+            'end': {
+                'dateTime': creadaCita[0].end,
+                'timeZone': 'America/Bogota'
+            },
+            'recurrence': [
+                'RRULE:FREQ=DAILY;COUNT=1'
+            ],
+            'attendees': [],
+            'reminders': {
+                'useDefault': false,
+                'overrides': [
+                    { 'method': 'email', 'minutes': 24 * 60 },
+                    { 'method': 'popup', 'minutes': 120 }
+                ]
+            }
+        };
+        participantes.forEach(el => event.attendees.push(el));
+
+        var request = gapi.client.calendar.events.insert({
+            'calendarId': 'primary',
+            'resource': event
+        });
+
+        return request.execute(function (event) {
+            $('#modal_google').modal('close');
+            Materialize.toast('Cita agregada al calendario.',4000, 'rounded green');
+            appendPre('Event created: ' + event.htmlLink);
+        });
+        
+    }
+    gapi.load("client:auth2", function () {
+        gapi.auth2.init({ client_id: "893806594156-7cimjkjfi831jhfn167u6dqpuivit3pt.apps.googleusercontent.com" });
+    });
+    
+
+    function validarTimeProfesionalComercial(profesional) {
+        console.log(profesional)
+        let day = moment().format('dddd')
+        let hours = moment(String($('#start_date').val())).format("HH"+":00")
+        let d = moment(String($('#start_date').val())).format('dddd')
+        console.log(hours)
+        switch (d) {
+            case "Monday":
+                if(profesional.LDiurno == 1 && hours<'12:00'){
+                    if(profesional.LInicialTimeDiurno <= hours && profesional.LFinalTimeDiurno >= hours){
+                        return true
+                    }else {
+                        return false
+                    } 
+                }else if(profesional.LTarde == 1 && hours>='12:00'){
+                    if(profesional.LInicialTimeTarde <= hours && profesional.LFinalTimeTarde >= hours){
+                        return true
+                    }else {
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            case "Tuesday":
+                if(profesional.MaDiruno == 1 && hours<'12:00'){
+                    if(profesional.MaInicialTimeDiurno <= hours && profesional.MaFinalTimeDiurno >= hours){
+                        return true
+                    }else {
+                        return false
+                    } 
+                }else if(profesional.MaTarde == 1 && hours>='12:00'){
+                    if(profesional.MaInicialTimeTarde <= hours && profesional.MaFinalTimeTarde >= hours){
+                        return true
+                    }else {
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            case "Wednesday":
+                if(profesional.MiDiruno == 1 && hours<'12:00' ){
+                    if(profesional.MiInicialTimeDiurno <= hours && profesional.MiFinalTimeDiurno >= hours){
+                        return true
+                    }else {
+ 
+                        return false
+                    } 
+                }else if(profesional.MiTarde == 1 && hours>='12:00'){
+                    if(profesional.MiInicialTimeTarde<= hours && profesional.MiFinalTimeTarde >= hours){
+                    }else {
+ 
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            case "Thursday":
+                if(profesional.JDiruno == 1 && hours<'12:00'){
+                    if(profesional.JInicialTimeDiurno <= hours && profesional.JFinalTimeDiurno >= hours){
+                        return true
+                    }else {
+  
+                         return false
+                    } 
+                }else if(profesional.JTarde == 1 && hours>='12:00'){
+                    if(profesional.JInicialTimeTarde <= hours && profesional.JFinalTimeTarde >= hours){
+                    }else {
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            case "Friday":
+                if(profesional.VDiruno == 1 && hours<'12:00'){
+                    if(profesional.VInicialTimeDiurno <= hours && profesional.VFinalTimeDiurno >= hours){
+                            return true 
+                    }else {
+                        return false
+                    } 
+                }else if(profesional.VTarde == 1 && hours>='12:00'){
+                    if(profesional.VInicialTimeTarde <= hours && profesional.VFinalTimeTarde >= hours){
+                        return true
+                    }else {
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            case "Saturday":
+                if(profesional.SDiruno == 1 && hours<'12:00'){
+                    if(profesional.SInicialTimeDiurno <= hours && profesional.SFinalTimeDiurno >= hours){
+                        return true
+                    }else {
+                        return false
+                    } 
+                }else if(profesional.VTarde == 1 && hours>='12:00'){
+                    if(profesional.SInicialTimeTarde <= hours && profesional.SFinalTimeTarde >= hours){
+                        return true
+                    }else {
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            case "Sunday":
+                if(profesional.DoDiruno == 1 && hours<'12:00'){
+                    if(profesional.DoInicialTimeDiurno <= hours && profesional.DoFinalTimeDiurno >= hours){
+                        return true
+                    }else {
+                        return false
+                    } 
+                }else if(profesional.DoTarde == 1 && hours>='12:00'){
+                    if(profesional.DoInicialTimeTarde <= hours && profesional.DoFinalTimeTarde >= hours){
+                        return true
+                    }else {
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    $("#start_date_U").change(function (){
+        console.log($(this).val())
+        var date = $(this).val()
+        $.ajax({
+            url: `/api/adminDatos/buscarDias/${sede_id}/${date}`,
+            method: 'GET',
+            success: function (response) {
+                if(response == false){
+                    alert("Dia no laboral");
+                    return;
+                }else{
+                    $("#table_profesional tr").remove();
+        $.ajax({
+                url: `/api/disponibilidad/getDisponibilidad/${sede_id}/${date}`,
+                method: 'GET',
+                success: function (response) {
+                    for (let i = 0; i < response.length; i++) {
+                        const items = response[i];
+                        if(items.calendario == undefined || items.calendario == null){
+                        }else {
+                            for(let j = 0; j < items.calendario.length; j++){
+                                let fechaProfesiona = moment(items.calendario[j].fecha)
+                                let getFech = $('#start_date_U').val().split("T")
+                                if(moment(getFech[0]).isSame(fechaProfesiona))
+                                {
+                                    console.log(items.Profesional._id, items.Profesional.username, items.calendario[j].consultorio)
+                                    $("#table_profesional").append(`
+                                        <tr>
+                                            <td> 
+                                                <input id="${items._id} | ${items.Profesional.username} | ${items.calendario[j].consultorio}" name="group_1" type="radio" value="${items._id}" id="Dispo${j}"/>  
+                                                <label for="${items._id} | ${items.Profesional.username} | ${items.calendario[j].consultorio}"></label>
+                                            </td>
+                                            <td> <p>${items.calendario[j].fecha} </p></td>
+                                            <td> <p> ${items.calendario[j].hora} </p></td>
+                                            <td> <p> ${items.Profesional.nombre} ${items.Profesional.apellido} </p></td>
+                                            <td> <p> ${items.calendario[j].consultorio} </p></td>
+                                            <td> <p> ${items.Profesional.tipoRoles == 'PG_PG' ? 'Pregrado' : 'Maestria'}</p></td>
+                                            <td> <p> ${items.calendario[j].tipoSem}</p></td>
+                                        </tr>
+                                        `);  
+                                }
+                            }
+                        }
+                    }
+                    $('#crear_cita_universidad').click(function () {
+                        $('#crear_cita_universidad').attr('disabled', true)
+                        var dipoEscogida = $('input:radio[name = group_1]:checked').val()
+                       validarTimeProfesional(dipoEscogida)
+                       
+                    })
+                  
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                    Materialize.toast(
+                        'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                        4000, 'rounded red');
+                }
+                
+            })
+                }
+            }
+        })
+    })
+    function validarTimeProfesional(dipoEscogida) {
+        var citaCreada = []
+        console.log(dipoEscogida)
+        var pacient =  $("#pacientes").val()      
+        $.ajax({
+            method: 'GET',
+            url: `/api/pacientes?filter[sede]=${sede_id}&limit=1000000&projection=nombre+apellido+username+-Sedes+-Encargados+-SedeUserInfos`,
+            success: function (r) {
+                for(p=0;p<r.length;p++){
+                   if(pacient == r[p]._id){
+                    var paciente = r[p]
+                   }
+                }
+                var creado_timestamp
+        $.ajax({
+                url: `/api/disponibilidad/getAllId/${sede_id}/${dipoEscogida}`,
+                method: 'GET',
+                success: function (response) {
+                    let contador = 0
+                    console.log(response)
+                    var profesional_id = response[0].Profesional.id
+                    for (let i = 0; i < response.length; i++) {
+                        var disponi = response[i];
+                        var profe = response[i].Profesional; 
+                            for(j=0; j< disponi.calendario.length;j++){
+                                let fechaProfesiona = moment(disponi.calendario[j].fecha)
+                                let getFech = $('#start_date_U').val().split("T")
+                                if(moment(getFech[0]) < (fechaProfesiona))
+                                {
+                                    citaCreada.push({
+                                    Profesional : profe._id,
+                                    Paciente: $("#pacientes").val(),
+                                    Servicio : "6021805d2e97fb000748ee44",
+                                    title :
+                                   `${paciente.nombre} ${paciente.apellido}| Session U | ${profe.username}`,                  
+                                    start : moment(String(disponi.calendario[j].fecha + "T" + disponi.calendario[j].hora + "-05:00")).format(),
+                                    end : moment(String(disponi.calendario[j].fecha + "T" + disponi.calendario[j].hora + "-05:00")).format(),
+                                    cita_start_timestamp : moment(String(disponi.calendario[j].fecha + "T" + disponi.calendario[j].hora + "-05:00")).utc().unix(),
+                                    cita_end_timestamp : moment(String(disponi.calendario[j].fecha + "T" + disponi.calendario[j].hora + "-05:00")).utc().unix(),
+                                    Sede : sede_id,
+                                    valor_cita : Number(0),
+                                    link_chat : String($('#link_chat').val()),
+                                    link_pago : String($('#link_pago').val()),
+                                    motiveConsulta : String($('#motiveConsulta').val()),
+                                    consultorioNumber : disponi.calendario[0].consultorio,
+                                    creado_timestamp : moment(new Date()).utc().unix()
+
+
+                                        
+                                    })
+                                }
+                                else if(moment(getFech[0]) > (fechaProfesiona))
+                                {
+                                    console.log("Gracias por participar")
+
+                                }else{
+                                    citaCreada.push({
+                                    Profesional : profe._id,
+                                    Paciente: paciente._id,
+                                    Servicio : "602180262e97fb000748ee43",
+                                    title :
+                                   `${paciente.nombre} ${paciente.apellido}| Primera vez | ${profe.username}`,                  
+                                    start : moment(String(disponi.calendario[j].fecha + "T" + disponi.calendario[j].hora + "-05:00")).format(),
+                                    end : moment(String(disponi.calendario[j].fecha + "T" + disponi.calendario[j].hora + "-05:00")).format(),
+                                    cita_start_timestamp : moment(String(disponi.calendario[j].fecha + "T" + disponi.calendario[j].hora + "-05:00")).utc().unix(),
+                                    cita_end_timestamp : moment(String(disponi.calendario[j].fecha + "T" + disponi.calendario[j].hora + "-05:00")).utc().unix(),
+                                    Sede : sede_id,
+                                    valor_cita : Number(0),
+                                    link_chat : String($('#link_chat').val()),
+                                    link_pago : String($('#link_pago').val()),
+                                    motiveConsulta : String($('#motiveConsulta').val()),
+                                    consultorioNumber : disponi.calendario[0].consultorio,
+                                    creado_timestamp : moment(new Date()).utc().unix()
+                                        
+                                    })
+                                }
+                                
+
+                            }
+
+
+                        
+                    }
+                    console.log(citaCreada)
+                    $.ajax({
+                        url: '/api/citas/citasAutomatica',
+                        method: 'POST',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(citaCreada),
+                        success: function () {
+                            Materialize.toast('Citas creada con éxito.', 4000, 'rounded green')
+                            calendar.refetchEvents()
+                            $('#modal_crear_cita').modal('close');
+                            $('.input-cita').val('');
+                            $('.input_dissable_cita').removeAttr('disabled')
+                            validarDispo(dipoEscogida)
+                            ValidarFechaProfesional(profesional_id)
+                        },
+                        error: function (a, b, c) {
+                            console.log(a, b, c);
+                            Materialize.toast(
+                                'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                                4000, 'rounded red');
+                        }
+                    })
+                   
+                }
+                
+        })
+            }      
+
+         })
+
+
+        
+
+ 
+    }
+    function ValidarFechaProfesional(profesional){
+        console.log(profesional)
+        $.ajax({
+                url: `/api/profesionales/getProfesionalSede/${sede_id}`,
+                method: 'GET',
+                success: function (response) {
+                    for (let i = 0; i < response.length; i++) {
+                        const profe = response[i];
+                        if(profe.id== profesional){
+                            console.log("Te encontre", profe)
+                            var idProfesional = profe.id
+                            var user_id =  $("#pacientes").val()
+                            var body = {
+                                user_id,
+                                idProfesional
+                            } 
+                            $.ajax({
+                                method: 'PATCH',
+                                url: '/api/pacientes/upDateIdprofe',
+                                data: body,
+                                success: function (response) {
+                                    console.log(response);
+                                    Materialize.toast('OK, El paciente quedo con el profesional', 3000, 'rounded green')
+                                    location.href= `/citas?sede=${sede_id}`
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    const errors = jqXHR.responseJSON.error.errors;
+                                    let htmlErrors = "";
+                                    for (const err in errors) {
+                                        if (errors.hasOwnProperty(err)) {
+                                            const error = errors[err];
+                                            htmlErrors += `<br>${error.message}`
+                                        }
+                                    }
+                                    console.log(textStatus);
+                                    console.log(errorThrown);
+                                    Materialize.toast(
+                                        `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                                        10000, 'rounded red');
+                                }
+                            })
+                        }
+
+                    }
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                    Materialize.toast(
+                        'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                        4000, 'rounded red');
+                }
+            })
+          
+
+  }
+  function validarDispo (dipoEscogida){
+      var id = dipoEscogida
+      var activo = false
+      var data ={
+        id,
+        activo
+      }
+      $.ajax({
+                                method: 'PATCH',
+                                url: '/api/disponibilidad',
+                                data: data,
+                                success: function (response) {
+                                    console.log(response);
+                                    EnEspera ()
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    const errors = jqXHR.responseJSON.error.errors;
+                                    let htmlErrors = "";
+                                    for (const err in errors) {
+                                        if (errors.hasOwnProperty(err)) {
+                                            const error = errors[err];
+                                            htmlErrors += `<br>${error.message}`
+                                        }
+                                    }
+                                    console.log(textStatus);
+                                    console.log(errorThrown);
+                                    Materialize.toast(
+                                        `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                                        10000, 'rounded red');
+                                }
+                            })
+
+    
+
+  }
+  function EnEspera (){
+            let paciente = $("#pacientes").val()
+            let EnEspera = false
+            var body = {
+                paciente,
+                EnEspera
+            }
+            $.ajax({
+                                method: 'PATCH',
+                                url: '/api/pacientes/EnEsperaUp',
+                                data: body,
+                                success: function (response) {
+                                    console.log(response);
+                                  
+                                  
+
+                                    
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    const errors = jqXHR.responseJSON.error.errors;
+                                    let htmlErrors = "";
+                                    for (const err in errors) {
+                                        if (errors.hasOwnProperty(err)) {
+                                            const error = errors[err];
+                                            htmlErrors += `<br>${error.message}`
+                                        }
+                                    }
+                                    console.log(textStatus);
+                                    console.log(errorThrown);
+                                    Materialize.toast(
+                                        `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                                        10000, 'rounded red');
+                                }
+                            })
+        }
+    
+    function rWord(r){var t,n="bcdfghjklmnpqrstvwxyz",a="aeiou",e=function(r){return Math.floor(Math.random()*r)},o="";r=parseInt(r,10),n=n.split(""),a=a.split("");for(t=0;t<r/2;t++){var l=n[e(n.length)],p=a[e(a.length)];o+=0===t?l.toUpperCase():l,o+=2*t<r-1?p:""}return o}
+    
+
+
+</script>

@@ -1,0 +1,268 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <h3 class="breadcrumbs-title"><%= title%> <%= user.nombre %> </h3>
+                <ul class="collapsible popout" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i>Cargue Documentos</div>
+                        <div class="collapsible-body">
+                          <div class="row">
+                            <div class="col s12 m4 l2"></div>
+                            <div class="col s12 m4 l8"></div>
+                            <div class="col s12 m4 l2">
+                              <a id="addTable" class="waves-effect btn-flat col m12 s12 btn waves-effect primary waves-light">
+                                <i class="material-icons">add_circle</i>
+                                <span style="position: relative; bottom: 4px;"> Agregar Documento</span>
+                              </a>
+                            </div>
+                            <input id="sedesRecepcion" type="hidden" value="<%= user.Sedes[0]._id %>" />
+                            <table class="bordered highlight responsive-table centered">
+                              <thead class="">
+                                <tr>
+                                  <th>Tipo Documento</th>
+                                  <th>Descripcion</th>
+                                  <th>Seleccionar Archivo</th>
+                                  <th>Cargar/Descargar</th>
+                                </tr>
+                              </thead>
+                              <tbody id="table_documentPacient" style="display: contents">
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+
+<script>
+
+  $(document).ready(function () {
+      $('.modal').modal();
+      $(document).on("click", ".select-wrapper", function (event) {
+          event.stopPropagation();
+      });
+
+      let sedeData = $("#sedesRecepcion").val();
+      const idUser = <%- JSON.stringify(user._id) %>;
+      
+      /* Obtener Documentos */
+      $.ajax({
+          method: 'GET',
+          url: `/api/carguedocumento/getDocumentos/${sedeData}/${idUser}`,
+          success: function (r) {
+              console.log(">>>> terapeuta: ", r)    
+              for(let j = 0; j < r.length; j++){
+                $("#table_documentPacient").append(`
+                          <tr class='tabrow closed'>
+                              <td>
+                                <select disabled id="tipDocumentAdd_${j}" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="FC"${r[j].tipoDocumento == 'Fotocopia de cédula (de los integrantes)' ? 'selected' : ''}>Fotocopia de cédula (de los integrantes)</option>
+                                        <option value="CYA"${r[j].tipoDocumento == 'CONSENTIMIENTO Y/O ASENTIMIENTO' ? 'selected' : '' }>CONSENTIMIENTO Y/O ASENTIMIENTO</option>
+                                        <option value="RDP"${r[j].tipoDocumento == 'RECIBO DE PAGO' ? 'selected' : '' }>RECIBO DE PAGO</option>
+                                        <option value="HCE"${r[j].tipoDocumento == 'HISTORIA CLINICA EXTERNA' ? 'selected' : '' }>HISTORIA CLINICA EXTERNA</option>
+                                        <option value="RCT"${r[j].tipoDocumento == 'REGISTRO CIVIL Y TARJETA PARA MENORES DE EDAD' ? 'selected' : '' }>REGISTRO CIVIL Y TARJETA PARA MENORES DE EDAD</option>
+                                        <option value="DCC"${r[j].tipoDocumento == 'DOCUMENTO DE CUSTODIA O DECLARACIÓN EXTRAJUICIO.' ? 'selected' : '' }>DOCUMENTO DE CUSTODIA O DECLARACIÓN EXTRAJUICIO.</option>
+                                        <option value="DIU"${r[j].tipoDocumento == 'DOCUMENTO INCRUSTADO (ESTABLECER LOS DOCUMENTOS A CARGAR DE MANERA COMPILADA EN UN SOLO ARCHIVO) ' ? 'selected' : '' }>DOCUMENTO INCRUSTADO (ESTABLECER LOS DOCUMENTOS A CARGAR DE MANERA COMPILADA EN UN SOLO ARCHIVO) </option>
+                                    </select>
+                                    <label for='tipDocumentAdd_${j}'>tipo documento</label>
+                              </td> 
+                              <td>
+                                <input disabled class="note" id="descripcionAdd_${j}" type="text" class="validate" value="${r[j].descripcionDocumento}">
+                                <label for="descripcionAdd_${j}"></label>
+                              </td>
+                              <td>
+                              </td>
+                              <td>
+                                <button data-target="modal_${j}" class="btn edit_data modal-trigger waves-effect btn-flat col m12 m12 s12 btn waves-effect primary waves-light">Abrir</button>
+                                <div id="modal_${j}" class="modal modal-fixed-footer">
+                                  <div class="modal-content">
+                                    <img src="${r[j].urlDocumento}"
+                                        alt="" class="materialboxed"
+                                        style="width:100%">
+                                  </div>
+                                <div class="modal-footer">
+                                  <a class="modal-action edit_close modal-close waves-effect waves-green btn-flat ">Close</a>
+                                </div>
+                              </td>
+                          </tr>`)
+                  $(`#tipDocumentAdd_${j}`).material_select();
+                  
+                  $(document).on('click', '.edit_data', function () {
+                    $('.modal').modal();
+                    $(`#modal_${j}`).openModal;
+                  });
+                  $(document).on('click', '.edit_close', function () {
+                    $('.modal').modal();
+                    $(`#modal_${j}`).close;
+                  });
+              }
+          }
+      })
+  })
+  
+
+
+   $("#addTable").click(function() {
+        console.log(">>>> Dato agregado")
+        const tr = $("#table_documentPacient tr").length;
+        $("#table_documentPacient").append(`
+                              <tr class='tabrow closed'>
+                                  <td>
+                                    <select id="tipDocumentAdd_${tr}" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="FC">Fotocopia de cédula (de los integrantes)</option>
+                                        <option value="CYA">CONSENTIMIENTO Y/O ASENTIMIENTO</option>
+                                        <option value="RDP">RECIBO DE PAGO</option>
+                                        <option value="HCE">HISTORIA CLINICA EXTERNA</option>
+                                        <option value="RCT">REGISTRO CIVIL Y TARJETA PARA MENORES DE EDAD</option>
+                                        <option value="DCC">DOCUMENTO DE CUSTODIA O DECLARACIÓN EXTRAJUICIO.</option>
+                                        <option value="DIU">DOCUMENTO INCRUSTADO (ESTABLECER LOS DOCUMENTOS A CARGAR DE MANERA COMPILADA EN UN SOLO ARCHIVO) </option>
+                                    </select>
+                                    <label for='tipDocumentAdd_${tr}'>tipo documento</label>
+                                  </td> 
+                                  <td>
+                                    <input class="note" id="descripcionAdd_${tr}" type="text" class="validate">
+                                    <label for="descripcionAdd_${tr}"></label>
+                                  </td>
+                                  <td>
+                                    <input type="file" class="campo_imagen1" id="filedocument_${tr}"
+                                            accept="image/*, application/pdf">
+                                  </td>
+                                  <td>
+                                    <a id="saveData_${tr}" class="saveRow waves-effect btn-flat col m12 m12 s12 btn waves-effect red waves-light">
+                                      <i class="material-icons">cloud_upload</i>
+                                      <span style="position: relative; bottom: 4px;"> Cargar </span>
+                                    </a>
+                                  </td>
+                              </tr>`)
+        $(`#tipDocumentAdd_${tr}`).material_select();
+      });
+
+      
+      $("body").on("click",".saveRow", function(ev){
+        var formData = new FormData();
+        var tr = $('table').closest('tr');
+        var fup = $('tr').find("input[type='file']");
+        var totalFiles = fup.length;    
+        let sede = $("#sedesRecepcion").val();
+        for (var i = 0; i < totalFiles; i++) {
+            var file = fup[i].files[0];//Exception will not occur here
+            if(file == undefined){
+              alert('Debe selecionar un archivo para cargar');
+              return;
+            }else if(fup[i].files[0].size / 1024 / 1024 > 5){              
+              alert('La imagen es demaisado grande. (Tamaño Máximo: 5 MB)');
+              return;
+            }
+            const campo_id = 'cargue_documento';
+            const tipo = 'cargue_de_documento';
+            const Paciente = <%- JSON.stringify(user._id) %>;
+            formData.append("archivo", file);
+            const urlEnvio = `/api/archivos?sede=${sede}&tipo=${tipo}&tipo_id=${Paciente}&campo_id=${campo_id}`
+            var row = $(this).parents(".tabrow");
+            let count = 0, tipoDocumento = "", descripcionDocumento = "";
+            // update the cells
+            row.find("td").each(function(){
+              var newVal = $(this).find("input").val();
+              switch (count) {
+                case 0:
+                  tipoDocumento = newVal;
+                  break;
+                case 1:
+                  descripcionDocumento = newVal;
+                  break;
+              
+                default:
+                  break;
+              }
+              count++;
+            });
+            console.log(">>>>", tipoDocumento, descripcionDocumento)
+            if(tipoDocumento == ""){
+              Materialize.toast('Seleccione una opcion en el Tipo Documento', 2000, 'rounded red')
+              return;
+            }
+            if(descripcionDocumento == ""){
+              Materialize.toast('Escribir una descripcion.', 2000, 'rounded red')
+              return;
+            }
+            //var creado_timestamp = new Date.now();
+
+            Materialize.toast('Subiendo Imagen.', 2000, 'rounded blue')
+            console.log('Imagen Aceptada');
+            $.ajax({
+                    url: urlEnvio,
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // tell jQuery not to process the data
+                    contentType: false, // tell jQuery not to set contentType
+                    enctype: 'multipart/form-data',
+                    success: function (data) {
+                        Materialize.toast('Imagen subida con éxito.', 2000, 'rounded green')
+                        /** TODO Probrar el guardado junto con el de paciente 
+                         en la tabla nueva CargueDocumentoSchema 
+                        */
+                      const urlDocumento = data.data.location
+                      console.log(">>>> urlDocumento: ", urlDocumento)
+                      const body = {
+                        sede,
+                        Paciente,
+                        tipoDocumento,
+                        descripcionDocumento,
+                        urlDocumento
+                      }
+
+                        $.ajax({
+                          method: "POST",
+                          url: '/api/carguedocumento/create',
+                          data: body,
+                          success: function (response) {
+                              console.log(response);
+                              Materialize.toast('Archivo(s) cargados.', 3000, 'rounded green')
+                              const id = urlParams.get('id')
+                              setTimeout(function () {
+                                  location.reload();
+                              }, 2000);
+                          },
+                          error: function (jqXHR, textStatus, errorThrown) {
+                              const errors = jqXHR.responseJSON.error.errors;
+                              let htmlErrors = "";
+                              for (const err in errors) {
+                                  if (errors.hasOwnProperty(err)) {
+                                      const error = errors[err];
+                                      htmlErrors += `<br>${error.message}`
+                                  }
+                              }
+                              console.log(textStatus);
+                              console.log(errorThrown);
+                              Materialize.toast(
+                                  `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                                  10000, 'rounded red');
+                          }
+                        })
+                    },
+                    error: function (a, b, c) {
+                        Materialize.toast('Hubo un error al subir el archivo.', 4000,
+                            'rounded blue')
+                        console.error(a, b, c)
+                    }
+            });
+        }
+         console.log(">>>>>>> Funciona") 
+      });
+
+
+</script>

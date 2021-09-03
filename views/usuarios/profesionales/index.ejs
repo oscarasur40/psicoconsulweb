@@ -1,0 +1,261 @@
+<% include  ../../view_distribution/top1.ejs%>
+<% include  ../../view_distribution/top2.ejs%>
+<% include  ../../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <h3 class="breadcrumbs-title"><%= title%> - <%= sede.nombre%>
+                    <a href="/profesionales/crear?sede=<%= sede._id %>" class="btn-floating btn-large waves-effect waves-light red right"><i class="material-icons">add</i></a>
+                </h3>
+                <!-- <%= user.Sedes[0].nombre %> -->
+                <% if(sede.nombre === '2020') { %>
+                    <div class="col s12">
+                        <ul class="tabs">
+                          <li class="tab col s4"><a class="active" href="#test1">Supervisores</a></li>
+                          <li class="tab col s4 " ><a href="#test2">Practicante</a></li>
+                          <li class="tab col s3 " ><a href="#test3">Otros</a></li>
+                        </ul>
+                      </div><br><br>
+                      <div id="test1" class="col s12">
+                        <div class="container">
+                            <table id="example" class="sampleTable bordered highlight responsive-table centered">
+                                <thead class="">
+                                    <tr>
+                                        <th>Identificación</th>
+                                        <th>Nombre</th>
+                                        <th>Apellido</th>
+                                        <th>Nombre de Usuario</th>
+                                        <th>Rol</th>
+                                        <th><i class="material-icons">settings</i></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_super">
+                                </tbody>
+                            </table>
+                        </div>
+                      </div>
+                      <div id="test2" class="col s12">
+                        <div class="container">
+                            <table id="example2" class="sampleTable bordered highlight responsive-table centered">
+                                <thead class="">
+                                    <tr>
+                                        <th>Identificación</th>
+                                        <th>Nombre</th>
+                                        <th>Apellido</th>
+                                        <th>Nombre de Usuario</th>
+                                        <th>Rol</th>
+                                        <th><i class="material-icons">settings</i></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_practi">
+                                </tbody>
+                            </table>
+                        </div>
+                      </div>
+                      <div id="test3" class="col s12">
+                        <div class="container">
+                            <table id="example3" class="sampleTable bordered highlight responsive-table centered">
+                                <thead class="">
+                                    <tr>
+                                        <th>Identificación</th>
+                                        <th>Nombre</th>
+                                        <th>Apellido</th>
+                                        <th>Nombre de Usuario</th>
+                                        <th>Rol</th>
+                                        <th><i class="material-icons">settings</i></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_otros">
+                                </tbody>
+                            </table>
+                        </div>
+                      </div>
+                <%} else {%>
+                <table id="example" class="sampleTable bordered highlight responsive-table centered">
+                    <thead class="">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Nombre de Usuario</th>
+                            <th>Email</th>
+                            <th><i class="material-icons">settings</i></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla_usuarios">
+                    </tbody>
+                </table>
+                <%}%>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<% include  ../../view_distribution/sidebar-right.ejs%>
+<% include  ../../view_distribution/bot1.ejs%>
+
+<script>
+    $(document).ready(function () {
+        for (var n = 0; n < 1000; n++) {
+            var row = $("<tr>");
+            $("#example")
+            .find("thead th")
+            row.appendTo($("#example").find("tbody"));
+        }
+        $("#example").fancyTable({
+			sortColumn: 0,
+            pagination: true,
+            perPage: 5,
+            globalSearch: true
+		});
+        for (var n = 0; n < 1000; n++) {
+            var row = $("<tr>");
+            $("#example2")
+            .find("thead th")
+            row.appendTo($("#example2").find("tbody"));
+        }
+        $("#example2").fancyTable({
+			sortColumn: 0,
+            pagination: true,
+            perPage: 5,
+            globalSearch: true
+		});
+        for (var n = 0; n < 1000; n++) {
+            var row = $("<tr>");
+            $("#example3")
+            .find("thead th")
+            row.appendTo($("#example3").find("tbody"));
+        }
+        $("#example3").fancyTable({
+			sortColumn: 0,
+            pagination: true,
+            perPage: 5,
+            globalSearch: true
+		});
+
+
+        console.log('Profesionales de Sede');
+        const urlParams = new URLSearchParams(window.location.search);
+        const sede = urlParams.get('sede');
+        var Profe = <%- JSON.stringify(user) %>;
+        $('.dropdown-trigger').dropdown();
+        console.log(sede)
+        if(sede === "60049afed00d9b43a49e4da7"){
+            if(Profe.tipo == 'adminsede'){
+            var url = `/api/profesionales?sede=${sede}&projection=nombre+apellido+username+email+-Sedes+roles+usuario+-SedeUserInfos+-Encargados`
+           }else{
+            var url = `/api/profesionales/practicante/${sede}/${Profe._id}`
+           }
+        }else{
+            var url = `/api/profesionales?sede=${sede}&projection=nombre+apellido+username+email+-Sedes+roles+usuario+-SedeUserInfos+-Encargados`
+
+        }
+
+      
+        $.ajax({
+            url: url,
+            success: function (response) {
+                for (let i = 0; i < response.length; i++) {
+                    const user = response[i];
+                    const sedeName = <%-JSON.stringify(sede.nombre) || "{}" %>;
+                    console.log(user);
+                    let rolName = "";
+                    if(sedeName === "2020"){
+                        switch (user.roles) {
+                            case "SC":
+                                rolName = "SECRETARIA"
+                                break;
+                            case "AU":
+                                rolName = "AUDITOR"
+                                break;
+                            case "PG":
+                                rolName = "PRACTICANTE"
+                                break;
+                            case "SP":
+                                rolName = "SUPERVISOR"
+                                break;
+                            default:
+                                rolName = "Sin Rol"
+                                break;
+                        }
+                        if(user.roles=="SP"){
+                            $('#tabla_super').append(`
+                        <tr>
+                            <td> ${user.username} </td>
+                            <td> ${user.nombre} </td>
+                            <td> ${user.apellido} </td>
+                            <td style="text-transform: lowercase;"> ${user.usuario} </td>
+                            <td> ${rolName} </td>
+                            <td>
+                                <a href="/profesionales/ver?id=${user._id}" class="waves-effect blue darken-1 waves-light btn"><i
+                                    class="material-icons left">remove_red_eye</i>Ver</a>
+                            </td>
+                        </tr>`)
+                        }else if(user.roles=="PG"){
+                            $('#tabla_practi').append(`
+                        <tr>
+                            <td> ${user.username} </td>
+                            <td> ${user.nombre} </td>
+                            <td> ${user.apellido} </td>
+                            <td style="text-transform: lowercase;"> ${user.usuario} </td>
+                            <td> ${rolName} </td>
+                            <td>
+                            <a href="/profesionales/ver?id=${user._id}" class="waves-effect blue darken-1 waves-light btn"><i
+                                    class="material-icons left">remove_red_eye</i>Ver</a>
+                            </td>
+                        </tr>`)
+                        }else{
+                            $('#tabla_otros').append(`
+                        <tr>
+                            <td> ${user.username} </td>
+                            <td> ${user.nombre} </td>
+                            <td> ${user.apellido} </td>
+                            <td style="text-transform: lowercase;"> ${user.usuario} </td>
+                            <td> ${rolName} </td>
+                            <td>
+                            <a href="/profesionales/ver?id=${user._id}" class="waves-effect blue darken-1 waves-light btn"><i
+                                    class="material-icons left">remove_red_eye</i>Ver</a>
+                            </td>
+                        </tr>`) 
+                        }
+                    }else {
+                        $('#tabla_usuarios').append(`
+                        <tr>
+                            <td> ${user.nombre} </td>
+                            <td> ${user.apellido} </td>
+                            <td> ${user.username} </td>
+                            <td> ${user.email} </td>
+                            <td>
+                            <a href="/profesionales/ver?id=${user._id}" class="waves-effect blue darken-1 waves-light btn"><i
+                                    class="material-icons left">remove_red_eye</i>Ver</a>
+                            </td>
+                        </tr>`)
+                    }
+                }
+            }
+        });
+
+        function rWord(r){
+            var t,n="bcdfghjklmnpqrstvwxyz",a="aeiou",
+            e=function(r){
+                return Math.floor(Math.random()*r)},
+                o="";
+                r=parseInt(r,10),
+                n=n.split(""),
+                a=a.split("");
+                for(t=0;t<r/2;t++){
+                    var l=n[e(n.length)],
+                    p=a[e(a.length)];
+                    o+=0===t ? l.toUpperCase() : l,
+                    o+=2*t<r-1?
+                    p:""
+                }
+            return o
+        }
+
+        
+    })
+</script>
+<% include  ../../view_distribution/bot2.ejs%>

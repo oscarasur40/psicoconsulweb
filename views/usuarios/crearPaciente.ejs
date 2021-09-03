@@ -1,0 +1,1291 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <h4 class=""><%= title %></h4>
+                <h5><small><span style="color:red">*</span> = Campo Obligatorio</small></h5>
+                <ul class="collapsible popout" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i> Datos Personales
+                        </div>
+                        <div class="collapsible-body">
+                            
+                            <div class="row">
+                                <div class="input-field col m4 s12">
+                                    <select id="tipo_id" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="CC">Cédula De Ciudadanía</option>
+                                        <option value="CE">Cédula De Extranjería</option>
+                                        <option value="CD">Carné Diplomático</option>
+                                        <option value="PA">Pasaporte</option>
+                                        <option value="PE">Permiso Especial De Permanencia</option>
+                                        <option value="RC">Registro Civil</option>
+                                        <option value="TI">Tarjeta De Identidad</option>
+                                        <option value="CN">Certificado De Nacido Vivo</option>
+                                        <option value="AS">Adulto Sin Identificar</option>
+                                        <option value="MS">Menor Sin Identificar</option>
+                                    </select>
+                                    <label>Tipo de Identifiación: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input id="identificacion" type="text" class="validate">
+                                    <label for="identificacion">Número de Identificación <span style="color:red">*</span></label>
+                                </div>
+                                  
+                                    <div class="input-field col m4 s12">
+                                        <legend for="isex" style="color: #999">Contraseña</legend>
+                                    <input disabled id="password" type="password" class="validate" >
+                                    
+                                  
+                
+                                </div>
+                               
+                            </div>
+                            <div class="row">
+                                <input id="user_id" type="hidden" value="<%= user._id%>" class="validate">
+
+                                <div class="input-field col m6 s12">
+                                    <input id="primer_nombre" type="text" class="validate">
+                                    <label for="primer_nombre">Primer Nombre <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <input id="segundo_nombre" type="text" class="validate">
+                                    <label for="segundo_nombre">Segundo Nombre</label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <input id="primer_apellido" type="text" class="validate">
+                                    <label for="primer_apellido">Primer Apellido <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <input id="segundo_apellido" type="text" class="validate">
+                                    <label for="segundo_apellido">Segundo Apellido <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col m3 s12">
+                                    <input type="text" id="fecha_nacimiento" class="datepicker">
+                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <input id="edad" type="text" class="validate" value="0 años" disabled>
+                                    <label for="edad">Edad</label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input id="tipEdad" type="text" class="validate" value="Ciclo Vital" disabled>
+                                    <label for="tipEdad">Rango Edad</label>
+                                </div>
+                               
+                                
+                                <div class="input-field col m2 s12">    
+                                    <legend for="genero" style="color: #999">Género</legend>                               
+                                    <select id="genero" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="Femenino">Femenino</option>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Intersexual">Intersexual</option>
+
+                                    </select>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <legend for="isex" style="color: #999">Identidad Sexual</legend>
+                                    <select name="sexo" id='isex' class='mi-selector'>
+                                        <option value="" disabled selected>Elige una opción Identidad Sexual</option>
+                                        <option value="Heterosexual">Heterosexual</option>
+                                        <option value="Homosexual">Homosexual</option>
+                                        <option value="Bisexual">Bisexual</option>
+                                        <option value="Asexual">Asexual</option>
+                                        <option value="Pansexual">Pansexual</option>
+                                        <option value="Transexual">Transexual</option>
+                                        <option value="Intersexual">Intersexual</option>
+                                        <option value="Cisexual">Cisexual</option>
+                                        <option value="Bigénero">Bigénero</option>
+                                        <option value="Demigénero">Demigénero</option>
+                                        <option value="Agénero">Agénero</option>
+                                        <option value="TercerSexo">Tercer Sexo</option>
+                                        <option value="Génerofluido">Género fluido</option>
+                                    </select>                          
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <legend for="escolaridad" style="color: #999">Escolaridad</legend>
+                                    <select id="escolaridad" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción Escolaridad</option>
+                                        <option value="Desescolarizado">Desescolarizado</option>
+                                        <option value="Pre-Escolar">Pre-Escolar</option>
+                                        <option value="Primaria Incompleta">Primaria Incompleta</option>
+                                        <option value="Primaria en Curso">Primaria en Curso</option>
+                                        <option value="Primaria Completa">Primaria Completa</option>
+                                        <option value="Bachiller Bachiller Incompleto">Postgrado</option>
+                                        <option value="Bachiller en Curso">Bachiller en Curso</option>
+                                        <option value="Bachiller Técnico Incompleto">Bachiller Técnico Incompleto</option>
+                                        <option value="Bachiller Completo">Bachiller Completo</option>
+                                        <option value="Técnico en Curso">Técnico en Curso</option>
+                                        <option value="Técnico">Técnico</option>
+                                        <option value="Tecnólogo Incompleto">Técnico Tecnólogo Incompleto</option>
+                                        <option value="Tecnólogo en Curso">Tecnólogo en Curso</option>
+                                        <option value="Tecnólogo">Tecnólogo</option>
+                                        <option value="Universitario Incompleto">Universitario Incompleto</option>
+                                        <option value="Universitario en Curso">Universitario en Curso</option>
+                                        <option value="Profesional (Título)">Profesional (Título)</option>
+                                        <option value="Profesional (Título)">Profesional (Título)</option>
+                                        <option value="Especialización">Especialización</option>
+                                        <option value="Maestría">Maestría</option>
+                                        <option value="Doctorado">Doctorado</option>
+                                        <option value="PosDoctorado">PosDoctorado</option>
+                                    </select>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <legend for="ocupacion" style="color: #999">Ocupación</legend>
+                                     <select id="ocupacion" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción Ocupación</option>
+                                        <option value="Desempleado(a)">Desempleado(a)</option>
+                                        <option value="Trabajador(a) Informal">Trabajador(a) Informal</option>
+                                        <option value="Ama(o) de Casa">Ama(o) de Casa</option>
+                                        <option value="Trabajador(a) Independiente">Trabajador(a) Independiente</option>
+                                        <option value="Empleado(a)">Empleado(a)</option>
+                                        <option value=" Empleado(a) USTA"> Empleado(a) USTA</option>
+                                        <option value="Funcionario(a) Público(a)">Funcionario(a) Público(a)</option>
+                                        <option value="Pensionado(a)">Pensionado(a)</option>
+                                        <option value="Estudiante">Estudiante</option>
+                                        <option value="Estudiante USTA">Estudiante USTA</option>
+                                    </select>
+                                </div>
+                            
+                                <div class="input-field col m3 s12">
+                                    <legend for="estado_civil" style="color: #999">Estado Civil</legend>
+                                    <select id="estado_civil" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción Estado Civil</option>
+                                        <option value="soltero">Soltero(a)</option>
+                                        <option value="casado">Casado(a)</option>
+                                        <option value="union_libre">Unión libre</option>
+                                        <option value="separado">Separado(a)</option>
+                                        <option value="divorciado">Divorciado(a)</option>
+                                        <option value="viudo">Viudo(a)</option>
+                                    </select>
+                                </div>
+                            </div><br>
+                            <div class="row">
+                                <div class="input-field col m4 s12">
+                                    <input id="email" type="email" class="validate">
+                                    <label for="email">Email <span style="color:red">*</span></label>
+                                </div>
+
+                                <div class="input-field col m4 s12">
+                                    <input id="phone" name="phone" type="tel">
+                                    <!-- <label for="phone">Teléfono: </label> -->
+                                </div>
+
+                                <div class="input-field col m4 s12">
+                                    <input id="cell" name="cell" type="tel">
+                                    <!-- <label for="cell">Celular: </label> -->
+                                </div>
+                           
+                            </div>
+                            
+                        </div>
+                    </li> 
+                    
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i> Dirección
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                
+                                
+                                <div class="input-field col m3 s12">
+                                      <select id="pais"
+                                        class="validate select browse-select membresia_precio_calc ">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <% 
+                                       
+                                        for (let i = 0; i < paises.length; i++) {
+                                            const pais = paises[i]; %>
+                                            <option value="<%= pais.name %>"><%= pais.name %></option>
+                                        <% } %>
+                                    </select>
+                                    <label for="pais">Pais <span style="color:red">*</span></label>
+                                </div>
+                             
+                                <div class="input-field col m3 s12">
+                                    
+                                    <select id="departamento2"
+                                        class="validate select browse-select membresia_precio_calc departamentosSelect1">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                       
+                                    </select>
+
+                                    <select id="departamento"
+                                        class="validate select browse-select membresia_precio_calc departamentosSelect2 departamento0">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <% 
+                                        departamentos.sort(function (a, b) {
+                                            if (a.Nombre > b.Nombre) {
+                                                return 1
+                                            } else if (a.Nombre < b.Nombre) {
+                                                return -1
+                                            } else {
+                                                return 0
+                                            }
+                                        })
+                                        for (let i = 0; i < departamentos.length; i++) {
+                                            const depa = departamentos[i]; %>
+                                            <option value="<%= depa.Codigo %>"><%= depa.Nombre %></option>
+                                        <% } %>
+                                    </select>
+                                    
+                                    <input id="departamento" type="text" value="" placeholder="Digite su Departamento/Estado" disabled class="validate departamentosInput departamento1">
+                                   <label for="departamento" id="departamento_remove" >Departamento <span style="color:red">*</span></label>                               
+                                <div class="provincia">
+                                    <select  id="provincia">
+                                        
+                                        <option value="" disabled selected>Elige una opción </option>
+                                        <%
+                                        provincia.sort(function (a, b) {
+                                            if (a.Nombre > b.Nombre) {
+                                                return 1
+                                            } else if (a.Nombre < b.Nombre) {
+                                                return -1
+                                            } else {
+                                                return 0
+                                            }
+                                        })
+                                        for (let i = 0; i < provincia.length; i++){
+                                            const prov = provincia[i]; %>
+                                            <option value="<%= prov.Codigo %>"><%= prov.Nombre %></option>
+
+                                        <% } %> 
+                                        
+                                    </select>
+                                </div> 
+                            </div>
+                                <div class="input-field col m3 s12">
+                                   
+                                    <select id="municipio"
+                                        class="validate select browse-select membresia_precio_calc municipiosSelect2 municipio0">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                    </select>
+                                 
+
+                                    <input id="municipio"  type="text" value="" placeholder="Digite su Ciudad/Municipio" disabled class="validate municipiosInput municipio1">
+                                    <label for="municipio" id="municipio_remove">Municipio <span style="color:red">*</span></label>
+                                    <div id="canton_select">
+                                    <select class="" id="canton">
+                                    <option value="" disabled selected>Elige una opción</option>
+                                        
+<!--                                             
+                                        <option value="" disabled selected>Elige una opción </option>
+                                        <%
+                                        for (let i = 0; i < canton.length; i++){
+                                            const can = canton[i]; %>
+                                            <option value="<%= can.Codigo_cat %>"><%= can.canton_name %></option>
+    
+                                        <% } %>  -->
+                                        
+                                    </select>
+                                    </div>
+                                
+                                </div>                                  
+                                <div class="input-field col m3 s12">
+                                    <input id="localidad" type="text" class="validate localidad1">
+                                    <select id="localidad"
+                                        class="validate select browse-select membresia_precio_calc localidadSelect2 localidad0">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="Usaquén">Usaquén</option>
+                                        <option value="Chapinero">Chapinero</option>
+                                        <option value="Santafé">Santafé</option>
+                                        <option value="San Cristobal">San Cristobal</option>
+                                        <option value="Usme">Usme</option>
+                                        <option value="Tunjuelito">Tunjuelito</option>
+                                        <option value="Bosa">Bosa</option>
+                                        <option value="Kennedy">Kennedy</option>
+                                        <option value="Fontibón">Fontibón</option>
+                                        <option value="Engativá">Engativá</option>
+                                        <option value="Suba">Suba</option>
+                                        <option value="Barrios Unidos">Barrios Unidos</option>
+                                        <option value="Teusaquillo">Teusaquillo</option>
+                                        <option value="Los Mártires">Los Mártires</option>
+                                        <option value="Antonio Nariño">Antonio Nariño</option>
+                                        <option value="Puente Aranda">Puente Aranda</option>
+                                        <option value="La Candelaria">La Candelaria</option>
+                                        <option value="Rafael Uribe Uribe">Rafael Uribe Uribe</option>
+                                        <option value="Ciudad Bolivar">Ciudad Bolivar</option>
+                                        <option value="Sumapaz">Sumapaz</option>
+                                        <option value="Municipios">Municipios</option>
+                                    </select>
+                                    <label for="localidad">Localidad</label>
+                                </div>
+                                <div class="input-field col m7 s11 ">
+                                    <textarea id="direccion" class="materialize-textarea" data-length="120" maxlength="120"></textarea>
+                                    <label for="direccion">Dirección</label>
+                                </div>
+                                <div class="input-field col m2 s12" style="    margin-top: 51px;">
+                                    <select id="zona" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="rural">Rural</option>
+                                        <option value="urbana">Urbana</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                    <label>Zona</label>
+                                </div>
+                                <div class="input-field col m2 s12" style="    margin-top: 51px;" id="estrato_remove"> 
+                                    <select id="estrato" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                    </select>
+                                    <label>Estrato</label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li id="ocultar_datos_afi">
+                        <div class="collapsible-header active"  ><i class="material-icons" >dehaze</i>Datos de afiliación</div>
+                        <div class="collapsible-body">
+                            <div class="row"  >
+                                <div class="input-field col m6 s12" >
+                                    <legend style="color: #999">RH</legend>
+                                    <select id="rh"   class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                    </select>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <legend style="color: #999">Régimen de Salud</legend>
+                                    <select id="regimen_salud" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="1">Contributivo</option>
+                                        <option value="2">Subsidiado</option>
+                                        <option value="3">Vinculado</option>
+                                        <option value="4">Particular</option>
+                                        <option value="5">Otro</option>
+                                        <option value="6">Víctima con afiliación al Régimen Contributivo</option>
+                                        <option value="7">Víctima con afiliación al Régimen subsidiado</option>
+                                        <option value="8">Víctima no asegurado (Vinculado)</option>
+                                        <option value="9">Especial</option>
+                                    </select>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <legend style="color: #999">Régimen de Salud</legend>
+                                      <select id="eps"
+                                        class="validate select browse-select membresia_precio_calc ">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <% 
+                                        eps.sort(function (a, b) {
+                                            if (a.name > b.name) {
+                                                return 1
+                                            } else if (a.name < b.name) {
+                                                return -1
+                                            } else {
+                                                return 0
+                                            }
+                                        })
+                                        for (let i = 0; i < eps.length; i++) {
+                                            const epsi = eps[i]; %>
+                                            <option value="<%= epsi.code %>"><%= epsi.name %></option>
+                                        <% } %>
+                                    </select>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <legend style="color: #999">Pertenencia Étnica</legend>
+                                    <select id="pertenencia_etnica" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="Afrocolombiano">Afrocolombiano</option> Afrocolombiano
+                                        <option value="Raizal">Raizal</option> Raizal
+                                        <option value="Palenquero">Palenquero</option> Palenquero
+                                        <option value="Gitano">Gitano</option> Gitano
+                                        <option value="Indígena">Indígena</option> Indígena
+                                        <option value="No Aplica">No Aplica</option> No Aplica
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <% let historia = 0
+                            for (let h = 0; h < user.Sedes.length; h++) {
+                                historia = user.Sedes[h].nombre === '2020' ? 1 : 0  %>
+                            <% } %>
+                            <% if(historia == 1) { %>
+                                <div class="collapsible-header active"><i class="material-icons">dehaze</i> Datos de contacto
+                                </div>
+                            <% } else { %>
+                                <div class="collapsible-header active"><i class="material-icons">dehaze</i> datos acompañante menor de 18 y mayor de 60 años
+                                </div>
+                        <% }  %>
+
+                        <div class="collapsible-body">
+                            
+                            <div class="row">
+                                <% if (user.Sedes !== '60049afed00d9b43a49e4da7') { %>
+                                    <div class="input-field col m4 s12">
+                                        <select id="tipo_id_acompanate" class="validate select browse-select">
+                                            <option value="" disabled selected>Elige una opción</option>
+                                            <option value="CC">Cédula De Ciudadanía</option>
+                                            <option value="CE">Cédula De Extranjería</option>
+                                            <option value="PA">Pasaporte</option>
+                                            <option value="PE">Permiso Especial De Permanencia</option>
+                                            
+                                        </select>
+                                        <label for="tipo_id_acompanate">Tipo de Identifiación: <span style="color:red">*</span></label>
+                                    </div>
+
+                               <% }
+                               else  {  %>
+                                <div class="input-field col m4 s12">
+                                    <select id="tipo_id_acompanate" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="CC">Cédula De Ciudadanía</option>
+                                        <option value="CE">Cédula De Extranjería</option>
+                                        <option value="CD">Carné Diplomático</option>
+                                        <option value="PA">Pasaporte</option>
+                                        <option value="PE">Permiso Especial De Permanencia</option>
+                                        <option value="RC">Registro Civil</option>
+                                        <option value="TI">Tarjeta De Identidad</option>
+                                        <option value="CN">Certificado De Nacido Vivo</option>
+                                        <option value="AS">Adulto Sin Identificar</option>
+                                        <option value="MS">Menor Sin Identificar</option>
+                                    </select>
+                                    <label for="tipo_id_acompanate">Tipo de Identifiación: <span style="color:red">*</span></label>
+                                </div>
+
+                               <% } %>
+                               
+
+                                <div class="input-field col m4 s12">
+                                    <input id="comp_identificacion" type="text" class="validate">
+                                    <label for="comp_identificacion">Número de Identificación <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <input id="user_id" type="hidden" value="<%= user._id%>" class="validate">
+
+                                <div class="input-field col m6 s12">
+                                    <input id="comp_Nombrecompleto" type="text" class="validate">
+                                    <label for="comp_Nombrecompleto">Nombre Completo <span style="color:red">*</span></label>
+                                </div>
+                                <% if (user.Sedes !== '60049afed00d9b43a49e4da7') { %>
+                                <div class="input-field col m3 s12">
+                                    
+                                    <select id="comp_Parentesco" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="PA">padre - madre</option>
+                                        <option value="HI">hijo - hija</option>
+                                        <option value="ES">Esposo - esposa</option>
+                                        <option value="AB">abuelo - abuela</option>
+                                        <option value="TI">tio - tia</option>
+                                        <option value="CU">cuidador - cuidadora</option>
+                                        <option value="TL">tutor legal</option>
+                                        <option value="OT">Otro </option>
+                                        
+         
+                                    </select>
+                                   
+                                  
+                                    <label for="comp_Parentesco">Parentezco <span style="color:red">*</span></label>
+  
+                                </div>
+                                <div class="input-field col m3 s12" id="input_otro">
+                                <input type="text" id="otro" placeholder="Otro" >
+                                <label for="input_otro">Otro <span style="color:red">*</span></label>
+                                </div>
+                                <% } %>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col m3 s12">
+                                    <input id="comp_telefono" type="number" class="validate">
+                                    <label for="comp_telefono">Telefono <span style="color:red">*</span></label>
+                                </div>
+
+                                <div class="input-field col m4 s12">
+                                    <input id="comp_email" type="email" class="validate">
+                                    <label for="comp_email">Email <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                    </li> 
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i> Permisos  </div>
+                        <div class="collapsible-body">
+                            
+                            <div class="row">
+                                <div class="col m4 s12">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="Firma_consInformado">
+                                        <label class="form-check-label" for="Firma_consInformado">Firma consentimiento informado</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="Create_Cita">
+                                        <label class="form-check-label" for="Create_Cita">Creación de citas</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="download_Certificate">
+                                        <label class="form-check-label" for="download_Certificate">Descarga de certificados de consulta </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="donwload_Remision">
+                                        <label class="form-check-label" for="donwload_Remision">Descarga de remisiones</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="dowload_history">
+                                        <label class="form-check-label" for="dowload_history">Descarga de historia clinica</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="anexar_documentos">
+                                        <label class="form-check-label" for="anexar_documentos">Anexar documentos</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="autoReportCondition">
+                                        <label class="form-check-label" for="autoReportCondition">Autoreporte de condiciones de salud</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="editDataIfno">
+                                        <label class="form-check-label" for="editDataIfno">Editar datos del paciente</label>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                            
+                        </div>
+                    </li> 
+                </ul>
+
+
+                <div class="col m12 m12 s12 text-center">
+                    <button class="col m12 m12 s12 btn waves-effect green waves-light" id="enviar_data">
+                        <i class="material-icons">save</i>
+                        <span style="position: relative; bottom: 4px;"> Guardar</span>
+                    </button>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+<script>
+ var locali=0;
+    var depart=0;
+    var munici=0;
+
+    var EpsToAutoComplete = Object({})
+    var Municipios = <%- JSON.stringify(municipios) %>;
+    var Cantones = <%- JSON.stringify(canton) %>;
+    var input = document.querySelector("#phone");
+    window.intlTelInput(input, {
+        // allowDropdown: false,
+        // autoHideDialCode: false,
+        // autoPlaceholder: "off",
+        // dropdownContainer: document.body,
+        // excludeCountries: ["us"],
+        // formatOnDisplay: false,
+        // geoIpLookup: function(callback) {
+        //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+        //     var countryCode = (resp && resp.country) ? resp.country : "";
+        //     callback(countryCode);
+        //   });
+        // },
+        // hiddenInput: "full_number",
+        // initialCountry: "auto",
+        // localizedCountries: { 'de': 'Deutschland' },
+        nationalMode: false,
+        // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+        placeholderNumberType: "FIXED_LINE",
+        preferredCountries: ['co'],
+        separateDialCode: true,
+        utilsScript: "https://cdnmetamedic.s3.amazonaws.com/js/intl-input/utils.js",
+
+    });
+    var input2 = document.querySelector("#cell");
+    window.intlTelInput(input2, {
+        // allowDropdown: false,
+        // autoHideDialCode: false,
+        // autoPlaceholder: "off",
+        // dropdownContainer: document.body,
+        // excludeCountries: ["us"],
+        // formatOnDisplay: false,
+        // geoIpLookup: function(callback) {
+        //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+        //     var countryCode = (resp && resp.country) ? resp.country : "";
+        //     callback(countryCode);
+        //   });
+        // },
+        // hiddenInput: "full_number",
+        // initialCountry: "auto",
+        // localizedCountries: { 'de': 'Deutschland' },
+        nationalMode: false,
+        // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+        placeholderNumberType: "MOBILE",
+        preferredCountries: ['co'],
+        separateDialCode: true,
+        utilsScript: "https://cdnmetamedic.s3.amazonaws.com/js/intl-input/utils.js",
+
+    });
+    
+    
+  
+   
+    $('.datepicker').pickadate({
+        monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+            'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'
+        ],
+        monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov',
+            'Dic'
+        ],
+        weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+        selectMonths: true,
+        selectYears: 200, // Puedes cambiarlo para mostrar más o menos años
+        min: new Date(1650, 1, 1),
+        max: true, // `true` sets it to today. `false` removes any limits.
+        today: 'Hoy',
+        clear: 'Limpiar',
+        close: 'Ok',
+        labelMonthNext: 'Siguiente mes',
+        labelMonthPrev: 'Mes anterior',
+        labelMonthSelect: 'Selecciona un mes',
+        labelYearSelect: 'Selecciona un año',
+        container: undefined, // ex. 'body' will append picker to body
+
+    });
+    $('#identificacion').keyup(function() {
+       let username = $('#identificacion').val()
+       console.log("Validando ")
+       $.ajax({
+          method: 'GET',
+          url: `/api/profesionales/validarId?filter[username]=${username}`,
+          success: function (r) {
+              console.log(r)
+              if(r==true){
+                Materialize.toast(`Ya Existe Un Usuario Creado Con Este Numero. ${username}`, 1000, 'rounded red')
+              }else if(r == false){
+              
+              }
+            
+          }
+      })
+    });
+
+    $('.datepicker').on('mousedown', function (event) {
+        event.preventDefault();
+    })
+    $(document).on("click", ".select-wrapper", function (event) {
+        event.stopPropagation();
+    });
+     $(document).ready(function () {
+         $("#escolaridad").select2()
+         $('#escolaridad').material_select();
+         $("#isex").select2()
+         $('#isex').material_select();
+         $("#ocupacion").select2()
+         $('#ocupacion').material_select();
+         $("#estado_civil").select2()
+         $('#estado_civil').material_select();
+         $("#genero").select2()
+         $('#genero').material_select();
+         $("#rh").select2()
+         $('#rh').material_select();
+         $("#regimen_salud").select2()
+         $('#regimen_salud').material_select();
+         $("#eps").select2()
+         $('#eps').material_select();
+         $("#pertenencia_etnica").select2()
+         $('#pertenencia_etnica').material_select();
+         
+
+         
+         
+        $("#identificacion").keyup(function () {
+            var value = $(this).val();
+            $("#password").val(value);
+        });
+    $('#input_otro').hide();
+    $("#comp_Parentesco").change(function (e) {
+        let value = String($(this).val())
+         if(value === "OT"){
+           $('#input_otro').show();
+         } else{
+            $('#input_otro').hide();
+         }
+    });
+  
+   
+
+    $('#pais').material_select();
+       $('#disabled').attr("disabled",true);
+
+     $('.departamentosInput').hide();
+	   $('.departamentosSelect2').hide();
+
+
+     $('.localidadSelect2').hide();
+
+
+	   $('.municipiosInput').hide();
+
+       $('.provincia').hide();
+
+       $('#canton_select').hide();
+
+
+        console.log('Preparado para enviar');
+        $('#identificacion').characterCounter();
+        $('#comp_identificacion').characterCounter();
+
+         $('#pais').change(function(e){
+
+	        
+              $('.localidad0').show();
+              $('.select-wrapper.localidadSelect2').hide();
+
+            $('#municipio').html(`<option value="" disabled selected>Elige una opción</option>`)
+            
+            var pais = $(this).val();
+
+             //alert(pais);
+          
+              if(pais===""){
+
+              	 $('.departamentosSelect1').show();
+                 $('.select-wrapper.departamentosSelect2').hide();
+                 $('.departamentosInput').hide();
+	             $('.departamentosInput').attr("disabled",true);
+
+	             $('.select-wrapper.municipiosSelect2').show();
+	   			 $('.municipiosInput').hide();
+	   			 $('.municipiosInput').val("");
+	             $('.municipiosInput').attr("disabled",true);
+                 $('#departamento_remove').html("Departamento");
+                 $('#municipio_remove').html("Municipio");
+                 $('#canton_select').hide();
+                 
+                
+                 
+                 
+                 
+                
+                
+              }
+              else if(pais==="Colombia"){
+                  depart=1;
+                  locali=0;
+                  munici=0;
+                 $('.departamentosSelect1').hide();
+                 $('.select-wrapper.departamentosSelect2').show();
+                 $('.departamentosInput').hide();
+	   			 $('.departamentosInput').val("");
+	             $('.departamentosInput').attr("disabled",true);
+
+	             $('.select-wrapper.municipiosSelect2').show();
+	   			 $('.municipiosInput').hide();
+	   			 $('.municipiosInput').val("");
+	             $('.municipiosInput').attr("disabled",true);
+                 $('.provincia').hide();
+                 $('#departamento_remove').html(`Departamento <span style="color:red">*</span>`);
+                 $('#municipio_remove').html(`Municipio <span style="color:red">*</span>`); 
+                 $('#estrato_remove').show();
+                 $('#canton_select').hide();
+                 $('#ocultar_datos_afi').show();
+              
+                
+	          }
+              else if(pais=="Ecuador"){   
+             $('.provincia').show();
+             
+             $('#canton_select').show();
+
+             $('#estrato_remove').hide()
+
+             $('#ocultar_datos_afi').hide();
+               $('.select-wrapper.departamentosSelect2').hide();
+       
+             $('.departamentosSelect1').hide();
+	             $('.departamentosInput').hide();
+	   			 $('.departamentosInput').val("");
+	             $('.departamentosInput').attr("disabled",false);
+	             
+
+
+
+	            $('.select-wrapper.municipiosSelect2').hide();
+	   			$('.municipiosInput').hide();
+	   			$('.municipiosInput').val("");
+	            $('.municipiosInput').attr("disabled",false);
+               // $('.departamentotext').html(`<label for="provincia" >provincia <span style="color:red">*</span></label>`);
+               $('#departamento_remove').html(`Provincia <span style="color:red">*</span>`);
+               $('#municipio_remove').html(`Cantón <span style="color:red">*</span>`);
+               
+               
+               
+                          
+
+            
+              
+            }
+	          else{
+            depart=0;
+            locali=0;
+            munici=0;
+                 $('.departamentosSelect1').hide();
+	             $('.departamentosInput').show();
+	   			 $('.departamentosInput').val("");
+	             $('.departamentosInput').attr("disabled",false);
+	             $('.select-wrapper.departamentosSelect2').hide();
+
+
+
+	            $('.select-wrapper.municipiosSelect2').hide();
+	   			$('.municipiosInput').show();
+	   			$('.municipiosInput').val("");
+	            $('.municipiosInput').attr("disabled",false);
+                $('.provincia').hide();
+                $('#departamento_remove').html(`Departamento <span style="color:red">*</span>`);
+                $('#municipio_remove').html(`Municipio <span style="color:red">*</span>`); 
+                $('#estrato_remove').show();
+                $('#canton_select').hide();
+                $('#ocultar_datos_afi').hide();
+                
+
+
+
+                
+       			
+	          }
+
+        })
+
+
+     
+
+        
+        $('#departamento').change(function(e){
+              $('.localidad0').show();
+              $('.select-wrapper.localidadSelect2').hide(); 
+            var municipios = getMunicipios(String($(this).val()))
+            $('#municipio').html(`<option value="" disabled selected>Elige una opción</option>`)
+            municipios.sort(function (a, b) {
+            if (a.Municipio > b.Municipio) {
+                return 1
+            } else if (a.Municipio < b.Municipio) { return -1 } else { return 0 } })
+            for (let i = 0; i < municipios.length; i++) {
+                const muni = municipios[i];
+                $('#municipio').append(`<option value="${muni.Cod_muni}">${muni.Municipio}</option>`)
+            }
+            $('#municipio').material_select();
+            if($(this).val()=="11"){
+                  locali=0;
+                  munici=1;
+            }
+            else{
+
+                  locali=0;
+                  munici=0;
+            }
+
+        })
+         $('#municipio').change(function(e){
+            var dp=$('#departamento').val();
+            var mn=$(this).val();
+            if(mn=="001" && dp=="11"){
+               locali=1;
+               $('.localidad1').hide();
+               $('.localidad0').hide();
+               $('.select-wrapper.localidadSelect2').show();
+            }
+            else{
+              locali=0;
+              $('.localidad1').show();
+              $('.select-wrapper.localidadSelect2').hide();
+            }
+         });
+         $('#provincia').change(function (e){
+            
+            var cantones = getCantones(String($(this).val()))
+            $('#canton').html(`<option value="" disabled selected>Elige una opción</option>`)
+            cantones.sort(function (a, b) {
+            if (a.cantones > b.cantones) {
+                return 1
+            } else if (a.cantones < b.cantones) { return -1 } else { return 0 } })
+            for (let i = 0; i < cantones.length; i++) {
+                const can = cantones[i];
+                $('#canton').append(`<option value="${can.Codigo_cat}">${can.canton_name}</option>`)
+            }
+            $('#canton').material_select();
+          })
+
+
+        $("#fecha_nacimiento").change(function(e){
+            $('#tipEdad').val('')
+            var valueBirth = ($("#fecha_nacimiento").val())
+            .replace('Enero', 'Jan')
+            .replace('Abril', 'Apr')
+            .replace('Agosto', 'Aug')
+            .replace('Diciembre', 'Dec')
+            var a = moment();
+            var b = moment(valueBirth);
+            var age = moment.duration(a.diff(b));
+            var years = age.years();
+            if(years > 0){
+                if (years < 6) { 
+                    rango = "PRIMERA INFANCIA"
+                } else if (years < 12) {
+                    rango = "INFANCIA"
+                } else if (years < 18) {
+                    rango = "ADOLESCENCIA"
+                } else if (years < 27) {
+                    rango = "JUVENTUD"
+                } else if (years < 61) {
+                    rango = "ADULTEZ"
+                } else {
+                    rango = "ADULTEZ MAYOR"
+                }
+                $('#tipEdad').val(`${rango}`)
+            }
+            $('#edad').val(`${years} años`)
+        })
+        
+        $('#tipo_id').change(function (e) {
+            var tipo_id_abbr = $(this).val();
+            switch (tipo_id_abbr) {
+                case 'CC':
+                    $('#identificacion').attr('data-length', '10')
+                    break;
+                case 'CE':
+                    $('#identificacion').attr('data-length', '6')
+                    break;
+                case 'CD':
+                    $('#identificacion').attr('data-length', '16')
+                    break;
+                case 'PA':
+                    $('#identificacion').attr('data-length', '16')
+                    break;
+                case 'PE':
+                    $('#identificacion').attr('data-length', '15')
+                    break;
+                case 'RC':
+                    $('#identificacion').attr('data-length', '11')
+                    break;
+                case 'TI':
+                    $('#identificacion').attr('data-length', '11')
+                    break;
+                case 'CN':
+                    $('#identificacion').attr('data-length', '9')
+                    break;
+                case 'AS':
+                    $('#identificacion').attr('data-length', '10')
+                    break;
+                case 'MS':
+                    $('#identificacion').attr('data-length', '12')
+                    break;
+                case 'SC':
+                    $('#identificacion').attr('data-length', '16')
+                    break;
+                default:
+                    $('#identificacion').removeAttr('data-length')
+                    break;
+            }
+            // $('#identificacion').val('');
+            $('#identificacion').characterCounter();
+        })
+        
+        $('#tipo_id_acompanate').change(function (e) {
+            var tipo_id_abbr = $(this).val();
+            switch (tipo_id_abbr) {
+                case 'CC':
+                    $('#comp_identificacion').attr('data-length', '10')
+                    break;
+                case 'CE':
+                    $('#comp_identificacion').attr('data-length', '6')
+                    break;
+                case 'CD':
+                    $('#comp_identificacion').attr('data-length', '16')
+                    break;
+                case 'PA':
+                    $('#comp_identificacion').attr('data-length', '16')
+                    break;
+                case 'PE':
+                    $('#comp_identificacion').attr('data-length', '15')
+                    break;
+                case 'RC':
+                    $('#comp_identificacion').attr('data-length', '11')
+                    break;
+                case 'TI':
+                    $('#comp_identificacion').attr('data-length', '11')
+                    break;
+                case 'CN':
+                    $('#comp_identificacion').attr('data-length', '9')
+                    break;
+                case 'AS':
+                    $('#comp_identificacion').attr('data-length', '10')
+                    break;
+                case 'MS':
+                    $('#comp_identificacion').attr('data-length', '12')
+                    break;
+                case 'SC':
+                    $('#comp_identificacion').attr('data-length', '16')
+                    break;
+                default:
+                    $('#comp_identificacion').removeAttr('data-length')
+                    break;
+            }
+            // $('#identificacion').val('');
+            $('#comp_identificacion').characterCounter();
+        })
+        
+
+        $('#enviar_data').click(function () {
+            const url = '/api/pacientes';
+            const method = 'POST'
+
+            const username = $("#identificacion").val() || null;
+            const user_id = $("#user_id").val() || null;
+            const password = $("#password").val();
+            const primer_nombre = $('#primer_nombre').val();
+            const segundo_nombre = $('#segundo_nombre').val();
+            const primer_apellido = $('#primer_apellido').val();
+            const segundo_apellido = $('#segundo_apellido').val();
+            const nombre = `${primer_nombre} ${segundo_nombre}`;
+            const apellido = `${primer_apellido} ${segundo_apellido}`;;
+            const code = $('.iti__selected-dial-code').html();
+            const phone = $('#phone').val();
+
+            const cell = $('#cell').val();
+
+            const telefono = code.substring(4, 1) + phone;
+            const celular = code.substring(4, 1) + cell;
+            const email = $("#email").val() || "";
+            const genero_nacimiento = $("#genero").val() || "";
+            const identidad_sexual = $("#isex").val() || "";
+            const escolaridad = $("#escolaridad").val() || "";
+            const estado_civil = $("#estado_civil").val() || "";
+            const ocupacion = $("#ocupacion").val() || "";
+            const pais = $('#pais').val();
+            const canton = $('#canton').val();
+            const provincia = $('#provincia').val();
+
+            const acompanante_nombre = $("#comp_Nombrecompleto").val() || "";
+            const acompanante_tipo_identificacion = $("#tipo_id_acompanate").val() || "DNI";
+            const acompanante_identificacion = $("#comp_identificacion").val() || "";
+            const acompanante_parentezco = $("#comp_Parentesco").val() || "DNI";
+            const acompanante_parentezco_otro = $("#otro").val() || "";
+            const acompanante_telefono = $("#comp_telefono").val() || "";
+            const acompanante_correo = $("#comp_email").val() || "prueba@gmail.com";
+           
+
+            
+            let permisosUsers_CreateCitas = 0, permisosUsers_DescargaCertificado = 0, 
+                permisosUsers_DescargaRemisiones = 0, permisosUsers_DescargaHistorialClinico = 0, 
+                permisosUsers_AnexarDocumento = 0, permisosUsers_autoreporte = 0, permisosUsers_FirmaConsentimiento = 0, permisosUsers_editarInfo = 0;
+
+            const vlrFirmaConsentimiento = $("#Firma_consInformado").is(':checked');
+            const vrlCreateCita = $("#Create_Cita").is(':checked');
+            const vlrDescargaCertificado = $("#download_Certificate").is(':checked');
+            const vlrDescargaRemision = $("#donwload_Remision").is(':checked');
+            const vlrDescarHistoricoClinico = $("#dowload_history").is(':checked');
+            const vlrAnexarDocumento = $("#anexar_documentos").is(':checked');
+            const vlrautoreporte = $("#autoReportCondition").is(':checked');
+            const vlreditInfor = $("#editDataIfno").is(':checked');
+            if(vlrFirmaConsentimiento){
+                permisosUsers_FirmaConsentimiento = 1;
+            }
+            if(vrlCreateCita){
+                permisosUsers_CreateCitas = 1;
+            }
+            if(vlrDescargaCertificado){
+                permisosUsers_DescargaCertificado = 1;
+            }
+            if(vlrDescargaRemision){
+                permisosUsers_DescargaRemisiones = 1;
+            }
+            if(vlrDescarHistoricoClinico){
+                permisosUsers_DescargaHistorialClinico = 1;
+            }
+            if(vlrAnexarDocumento){
+                permisosUsers_AnexarDocumento = 1;
+            }
+            if(vlrautoreporte){
+                permisosUsers_autoreporte = 1;
+            }
+            if(vlreditInfor){
+              permisosUsers_editarInfo = 1;
+            }
+
+
+            var departamento="";
+            var municipio="";
+            var localidad
+            if(depart==0){
+              departamento = $('input.departamento1').val();
+            }
+            else{
+              departamento = $('select.departamentosSelect2').val();
+            }
+
+
+            if(munici==0){
+              municipio = $('input.municipio1').val();
+            }
+            else{
+              municipio = $('select.municipiosSelect2').val();
+            }
+
+
+            if(locali==0){
+              localidad = $('input.localidad1').val();
+            }
+            else{
+              localidad = $('select.localidadSelect2').val();
+            }
+
+  
+
+
+
+            const zona = $('#zona').val();
+            const direccion = $("#direccion").val() || "";
+            const estrato = $("#estrato").val() || "";
+            const rh = $('#rh').val() || "";
+            const eps = $('#eps').val() || "";
+            const regimen_salud = $('#regimen_salud').val() || "";
+            const pertenencia_etnica = $('#pertenencia_etnica').val() || "";
+            const tipo_id = $('#tipo_id').val() || "";
+            const nacimiento_value = ($("#fecha_nacimiento").val())
+                .replace('Enero', 'Jan')
+                .replace('Abril', 'Apr')
+                .replace('Agosto', 'Aug')
+                .replace('Diciembre', 'Dec') ||
+                '1 Jan, 2000';
+            const nacimiento_arr = (moment(nacimiento_value).format('DD,MM,YYYY')).split(',');
+            const dd_nacimiento = nacimiento_arr[0];
+            const mm_nacimiento = nacimiento_arr[1];
+            const yyyy_nacimiento = nacimiento_arr[2];
+            const ts_nacimiento = moment(nacimiento_value).unix()
+            const urlParams = new URLSearchParams(window.location.search);
+            const Sedes = urlParams.get('sede');
+
+            const body = {
+                primer_apellido,
+                segundo_apellido,
+                primer_nombre,
+                segundo_nombre,
+                pais,
+                departamento,
+                provincia,
+                canton,
+                municipio,
+                localidad,
+                zona,
+                rh,
+                regimen_salud,
+                eps,
+                pertenencia_etnica,
+                username,
+                tipo_id,
+                password,
+                nombre,
+                apellido,
+                yyyy_nacimiento,
+                mm_nacimiento,
+                dd_nacimiento,
+                ts_nacimiento,
+                genero_nacimiento,
+                identidad_sexual,
+                escolaridad,
+                estado_civil,
+                ocupacion,
+                direccion,
+                estrato,
+                telefono,
+                celular,
+                email,
+                Sedes,                
+                acompanante_nombre,
+                acompanante_tipo_identificacion,
+                acompanante_identificacion,
+                acompanante_parentezco,
+                acompanante_parentezco_otro,
+                acompanante_telefono,
+                acompanante_correo,
+                permisosUsers_FirmaConsentimiento,
+                permisosUsers_CreateCitas,
+                permisosUsers_DescargaCertificado,
+                permisosUsers_DescargaRemisiones,
+                permisosUsers_DescargaHistorialClinico,
+                permisosUsers_AnexarDocumento,
+                permisosUsers_autoreporte
+            }
+                
+            console.log(body);
+
+            $.ajax({
+                method: method,
+                url: url,
+                data: body,
+                success: function (response) {
+                    console.log(response);
+                    Materialize.toast('Usuario creado con éxito.', 4000, 'rounded green')
+                    setTimeout(function () {
+                        location.href = `/pacientes?sede=${Sedes}`
+                    }, 2000);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    const errors = jqXHR.responseJSON.error.errors;
+                    let htmlErrors = "";
+                    for (const err in errors) {
+                        if (errors.hasOwnProperty(err)) {
+                            const error = errors[err];
+                            htmlErrors += `<br>${error.message}`
+                        }
+                    }
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    Materialize.toast(
+                        `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                        10000, 'rounded red');
+                }
+            })
+
+        })
+    })
+
+    function getMunicipios(codigoDepa) {
+        return Municipios.filter(function(muni){
+            return muni.Cod_depa == codigoDepa
+
+        })
+    }
+
+    function getCantones(codProv) {
+        return Cantones.filter(function(can){
+            return can.Codigo_prov == codProv
+        })
+    }
+
+</script>
+
+<% include  ../view_distribution/bot2.ejs%>

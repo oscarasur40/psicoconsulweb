@@ -1,0 +1,39 @@
+name: Deploy lambda cool
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths-ignore: 
+      - "*.md"
+
+jobs:
+  build:
+    name: Desplegar Lambda
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Instalar Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '10.x'
+      - name: Instalar Npm Dependencias
+        run: |
+          npm install --only=prod
+          zip -r bundle.zip .
+      
+      - name: Guardar bundle
+        uses: actions/upload-artifact@v2
+        with:
+          name: bundle
+          path: bundle.zip
+
+      - name: Publicar
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWS_SECRET_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
+          function_name: ${{ secrets.APPLICATION_NAME }}
+          zip_file: bundle.zip

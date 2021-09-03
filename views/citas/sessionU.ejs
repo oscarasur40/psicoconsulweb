@@ -1,0 +1,1248 @@
+<% include  ../view_distribution/top1.ejs%>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css">
+<style>
+    .timeline {
+  position: relative;
+  padding: 0;
+  width: 100%;
+  margin-top: 20px;
+  list-style-type: none;
+}
+
+.timeline:before {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  content: ' ';
+  display: block;
+  width: 2px;
+  height: 100%;
+  margin-left: -1px;
+  background: rgb(213,213,213);
+  background: -moz-linear-gradient(top, rgba(213,213,213,0) 0%, rgb(213,213,213) 8%, rgb(213,213,213) 92%, rgba(213,213,213,0) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,87,153,1)), color-stop(100%,rgba(125,185,232,1)));
+  background: -webkit-linear-gradient(top, rgba(213,213,213,0) 0%, rgb(213,213,213) 8%, rgb(213,213,213) 92%, rgba(213,213,213,0) 100%);
+  background: -o-linear-gradient(top, rgba(213,213,213,0) 0%, rgb(213,213,213) 8%, rgb(213,213,213) 92%, rgba(213,213,213,0) 100%);
+  background: -ms-linear-gradient(top, rgba(213,213,213,0) 0%, rgb(213,213,213) 8%, rgb(213,213,213) 92%, rgba(213,213,213,0) 100%);
+  background: linear-gradient(to bottom, rgba(213,213,213,0) 0%, rgb(213,213,213) 8%, rgb(213,213,213) 92%, rgba(213,213,213,0) 100%);
+  z-index: 5;
+}
+
+.timeline li {
+  padding: 2em 0;
+}
+
+.timeline .hexa{
+  width: 16px;
+  height: 10px;
+  position: absolute;
+  background: #00c4f3;
+  z-index: 5;
+  left: 0;
+  right: 0;
+  margin-left:auto;
+  margin-right:auto;
+  top: -30px;
+  margin-top: 0;
+}
+
+.timeline .hexa:before {
+  border-bottom: 4px solid #00c4f3;
+  border-left-width: 8px;
+  border-right-width: 8px;
+  top: -4px;
+}
+
+.timeline .hexa:after {
+  border-left-width: 8px;
+  border-right-width: 8px;
+  border-top: 4px solid #00c4f3;
+  bottom: -4px;
+}
+
+.direction-l,
+.direction-r {
+  float: none;
+  width: 100%;
+  text-align: center;
+}
+
+.flag-wrapper {
+  text-align: center;
+  position: relative;
+}
+
+.flag {
+  position: relative;
+  display: inline;
+  background: rgb(255,255,255);
+  font-weight: 600;
+  z-index: 15;
+  padding: 6px 10px;
+  text-align: left;
+  border-radius: 5px;
+}
+
+.direction-l .flag:after,
+.direction-r .flag:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -15px;
+  height: 0;
+  width: 0;
+  margin-left: -8px;
+  border: solid transparent;
+  border-bottom-color: rgb(255,255,255);
+  border-width: 8px;
+  pointer-events: none;
+}
+
+.direction-l .flag {
+  -webkit-box-shadow: -1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
+  -moz-box-shadow: -1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
+  box-shadow: -1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
+}
+
+.direction-r .flag {
+  -webkit-box-shadow: 1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
+  -moz-box-shadow: 1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
+}
+
+.time-wrapper {
+  display: block;
+  position: relative;
+  margin: 4px 0 0 0;
+  z-index: 14;
+  line-height: 1em;
+  vertical-align: middle;
+  color: #fff;
+}
+
+.direction-l .time-wrapper {
+  float: none;
+}
+
+.direction-r .time-wrapper {
+  float: none;
+}
+
+.time {
+  background: #00c4f3;
+  display: inline-block;
+  padding: 8px;
+}
+
+.desc {
+  position: relative;
+  margin: 1em 0 0 0;
+  padding: 1em;
+  background: rgb(254,254,254);
+  -webkit-box-shadow: 0 0 1px rgba(0,0,0,0.20);
+  -moz-box-shadow: 0 0 1px rgba(0,0,0,0.20);
+  box-shadow: 0 0 1px rgba(0,0,0,0.20);
+  z-index: 15;
+}
+
+.direction-l .desc,
+.direction-r .desc {
+  position: relative;
+  margin: 1em 1em 0 1em;
+  padding: 1em;
+  z-index: 15;
+}
+
+@media(min-width: 768px){
+  .timeline {
+    width: 660px;
+    margin: 0 auto;
+    margin-top: 20px;
+  }
+
+  .timeline li:after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+  
+  .timeline .hexa {
+    left: -28px;
+    right: auto;
+    top: 8px;
+  }
+
+  .timeline .direction-l .hexa {
+    left: auto;
+    right: -28px;
+  }
+
+  .direction-l {
+    position: relative;
+    width: 310px;
+    float: left;
+    text-align: right;
+  }
+
+  .direction-r {
+    position: relative;
+    width: 310px;
+    float: right;
+    text-align: left;
+  }
+
+  .flag-wrapper {
+    display: inline-block;
+  }
+  
+  .flag {
+    font-size: 18px;
+  }
+
+  .direction-l .flag:after {
+    left: auto;
+    right: -16px;
+    top: 50%;
+    margin-top: -8px;
+    border: solid transparent;
+    border-left-color: rgb(254,254,254);
+    border-width: 8px;
+  }
+
+  .direction-r .flag:after {
+    top: 50%;
+    margin-top: -8px;
+    border: solid transparent;
+    border-right-color: rgb(254,254,254);
+    border-width: 8px;
+    left: -8px;
+  }
+
+  .time-wrapper {
+    display: inline;
+    vertical-align: middle;
+    margin: 0;
+  }
+
+  .direction-l .time-wrapper {
+    float: left;
+  }
+
+  .direction-r .time-wrapper {
+    float: right;
+  }
+
+  .time {
+    padding: 5px 10px;
+  }
+
+  .direction-r .desc {
+    margin: 1em 0 0 0.75em;
+  }
+}
+
+@media(min-width: 992px){
+  .timeline {
+    width: 800px;
+    margin: 0 auto;
+    margin-top: 20px;
+  }
+
+  .direction-l {
+    position: relative;
+    width: 380px;
+    float: left;
+    text-align: right;
+  }
+
+  .direction-r {
+    position: relative;
+    width: 380px;
+    float: right;
+    text-align: left;
+  }
+}
+
+    .fc-content td:hover {
+        background: #adf4fa;
+    }
+    .btn-flotante {
+        font-size: 16px; /* Cambiar el tamaño de la tipografia */
+        text-transform: uppercase; /* Texto en mayusculas */
+        font-weight: bold; /* Fuente en negrita o bold */
+        color: #ffffff; /* Color del texto */
+        border-radius: 5px; /* Borde del boton */
+        letter-spacing: 2px; /* Espacio entre letras */
+        background-color: #E91E63; /* Color de fondo */
+        padding: 18px 30px; /* Relleno del boton */
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        transition: all 300ms ease 0ms;
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+        z-index: 99;
+    }
+    .btn-flotante:hover {
+        background-color: #2c2fa5; /* Color de fondo al pasar el cursor */
+        box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-7px);
+    }
+    @media only screen and (max-width: 600px) {
+        .btn-flotante {
+            font-size: 14px;
+            padding: 12px 20px;
+            bottom: 20px;
+            right: 20px;
+        }
+    } 
+    </style>
+    <style type="text/css">
+      html { font-family:Calibri, Arial, Helvetica, sans-serif; font-size:11pt; background-color:white }
+      a.comment-indicator:hover + div.comment { background:#ffd; position:absolute; display:block; border:1px solid black; padding:0.5em }
+      a.comment-indicator { background:red; display:inline-block; border:1px solid black; width:0.5em; height:0.5em }
+      div.comment { display:none }
+      table { border-collapse:collapse; page-break-after:always }
+      .gridlines td { border:1px dotted black }
+      .gridlines th { border:1px dotted black }
+      .b { text-align:center }
+      .e { text-align:center }
+      .f { text-align:right }
+      .inlineStr { text-align:left }
+      .n { text-align:right }
+      .s { text-align:left }
+      td.style0 { vertical-align:bottom; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Calibri'; font-size:11pt; background-color:white }
+      th.style0 { vertical-align:bottom; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Calibri'; font-size:11pt; background-color:white }
+      td.style1 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:2px solid #CCCCCC !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style1 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:2px solid #CCCCCC !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style2 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:2px solid #CCCCCC !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style2 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:2px solid #CCCCCC !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style3 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:2px solid #CCCCCC !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style3 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:2px solid #CCCCCC !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style4 { vertical-align:middle; border-bottom:2px solid #CCCCCC !important; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style4 { vertical-align:middle; border-bottom:2px solid #CCCCCC !important; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style5 { vertical-align:middle; border-bottom:2px solid #CCCCCC !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style5 { vertical-align:middle; border-bottom:2px solid #CCCCCC !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style6 { vertical-align:middle; border-bottom:2px solid #CCCCCC !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style6 { vertical-align:middle; border-bottom:2px solid #CCCCCC !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style7 { vertical-align:middle; border-bottom:2px solid #000000 !important; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style7 { vertical-align:middle; border-bottom:2px solid #000000 !important; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style8 { vertical-align:middle; border-bottom:2px solid #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style8 { vertical-align:middle; border-bottom:2px solid #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style9 { vertical-align:middle; border-bottom:2px solid #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style9 { vertical-align:middle; border-bottom:2px solid #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style10 { vertical-align:middle; border-bottom:none #000000; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style10 { vertical-align:middle; border-bottom:none #000000; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style11 { vertical-align:middle; border-bottom:none #000000; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style11 { vertical-align:middle; border-bottom:none #000000; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style12 { vertical-align:middle; border-bottom:none #000000; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style12 { vertical-align:middle; border-bottom:none #000000; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style13 { vertical-align:middle; border-bottom:none #000000; border-top:none #000000; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style13 { vertical-align:middle; border-bottom:none #000000; border-top:none #000000; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style14 { vertical-align:middle; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style14 { vertical-align:middle; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style15 { vertical-align:middle; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style15 { vertical-align:middle; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style16 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style16 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style17 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style17 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style18 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style18 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style19 { vertical-align:top; text-align:center; border-bottom:2px solid #000000 !important; border-top:2px solid #000000 !important; border-left:2px solid #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style19 { vertical-align:top; text-align:center; border-bottom:2px solid #000000 !important; border-top:2px solid #000000 !important; border-left:2px solid #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style20 { vertical-align:top; text-align:center; border-bottom:2px solid #000000 !important; border-top:2px solid #000000 !important; border-left:none #000000; border-right:2px solid #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style20 { vertical-align:top; text-align:center; border-bottom:2px solid #000000 !important; border-top:2px solid #000000 !important; border-left:none #000000; border-right:2px solid #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style21 { vertical-align:top; text-align:center; border-bottom:2px solid #CCCCCC !important; border-top:2px solid #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style21 { vertical-align:top; text-align:center; border-bottom:2px solid #CCCCCC !important; border-top:2px solid #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style22 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:none #000000; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style22 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:none #000000; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style23 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:none #000000; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style23 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:none #000000; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style24 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:none #000000; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style24 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:none #000000; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style25 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:2px solid #CCCCCC !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:#FFFF00 }
+      th.style25 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:2px solid #CCCCCC !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:#FFFF00 }
+      td.style26 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:2px solid #CCCCCC !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:#FFFF00 }
+      th.style26 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:2px solid #CCCCCC !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:#FFFF00 }
+      td.style27 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:2px solid #CCCCCC !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:#FFFF00 }
+      th.style27 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:2px solid #CCCCCC !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:#FFFF00 }
+      td.style28 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style28 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style29 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style29 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style30 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style30 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style31 { vertical-align:middle; text-align:center; border-bottom:none #000000; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style31 { vertical-align:middle; text-align:center; border-bottom:none #000000; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style32 { vertical-align:middle; text-align:center; border-bottom:none #000000; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style32 { vertical-align:middle; text-align:center; border-bottom:none #000000; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style33 { vertical-align:middle; text-align:center; border-bottom:none #000000; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style33 { vertical-align:middle; text-align:center; border-bottom:none #000000; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style34 { vertical-align:middle; text-align:center; border-bottom:3px double #000000 !important; border-top:none #000000; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style34 { vertical-align:middle; text-align:center; border-bottom:3px double #000000 !important; border-top:none #000000; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style35 { vertical-align:middle; text-align:center; border-bottom:3px double #000000 !important; border-top:none #000000; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style35 { vertical-align:middle; text-align:center; border-bottom:3px double #000000 !important; border-top:none #000000; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style36 { vertical-align:middle; text-align:center; border-bottom:3px double #000000 !important; border-top:none #000000; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style36 { vertical-align:middle; text-align:center; border-bottom:3px double #000000 !important; border-top:none #000000; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style37 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:#FFFF00 }
+      th.style37 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:#FFFF00 }
+      td.style38 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:#FFFF00 }
+      th.style38 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:#FFFF00 }
+      td.style39 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:#FFFF00 }
+      th.style39 { vertical-align:middle; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:#FFFF00 }
+      td.style40 { vertical-align:top; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style40 { vertical-align:top; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:3px double #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style41 { vertical-align:top; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style41 { vertical-align:top; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style42 { vertical-align:top; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style42 { vertical-align:top; border-bottom:3px double #000000 !important; border-top:3px double #000000 !important; border-left:none #000000; border-right:3px double #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style43 { vertical-align:top; text-align:center; border-bottom:2px solid #CCCCCC !important; border-top:2px solid #000000 !important; border-left:2px solid #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style43 { vertical-align:top; text-align:center; border-bottom:2px solid #CCCCCC !important; border-top:2px solid #000000 !important; border-left:2px solid #000000 !important; border-right:none #000000; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      td.style44 { vertical-align:top; text-align:center; border-bottom:2px solid #CCCCCC !important; border-top:2px solid #000000 !important; border-left:none #000000; border-right:2px solid #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      th.style44 { vertical-align:top; text-align:center; border-bottom:2px solid #CCCCCC !important; border-top:2px solid #000000 !important; border-left:none #000000; border-right:2px solid #000000 !important; color:#000000; font-family:'Arial'; font-size:10pt; background-color:white }
+      table.sheet0 col.col0 { width:42pt }
+      table.sheet0 col.col1 { width:42pt }
+      table.sheet0 col.col2 { width:42pt }
+      table.sheet0 col.col3 { width:42pt }
+      table.sheet0 col.col4 { width:42pt }
+      table.sheet0 col.col5 { width:42pt }
+      table.sheet0 col.col6 { width:42pt }
+      table.sheet0 col.col7 { width:42pt }
+      table.sheet0 col.col8 { width:42pt }
+      table.sheet0 col.col9 { width:42pt }
+      table.sheet0 col.col10 { width:42pt }
+      table.sheet0 col.col11 { width:42pt }
+      table.sheet0 tr { height:15pt }
+      table.sheet0 tr.row0 { height:16.5pt }
+      table.sheet0 tr.row1 { height:25.5pt }
+      table.sheet0 tr.row2 { height:25.5pt }
+      table.sheet0 tr.row3 { height:38.25pt }
+      table.sheet0 tr.row4 { height:16.5pt }
+      table.sheet0 tr.row5 { height:15.75pt }
+      table.sheet0 tr.row6 { height:16.5pt }
+      table.sheet0 tr.row7 { height:25.5pt }
+      table.sheet0 tr.row8 { height:16.5pt }
+      table.sheet0 tr.row9 { height:16.5pt }
+      table.sheet0 tr.row10 { height:16.5pt }
+      table.sheet0 tr.row11 { height:16.5pt }
+      table.sheet0 tr.row12 { height:16.5pt }
+      table.sheet0 tr.row13 { height:16.5pt }
+      table.sheet0 tr.row14 { height:51pt }
+   
+    
+</style>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+<%
+    const formulario = HistoriaClinica.formulario
+    const servicio = HistoriaClinica.Servicio
+    const paciente = HistoriaClinica.Paciente[0]
+    const profesional = HistoriaClinica.Profesional
+%>
+<input type="hidden" id="sede_id" value="<%= HistoriaClinica.Sede._id %>">
+<input type="hidden" id="hc_id" value="<%= HistoriaClinica._id %>">
+<input type="hidden" id="paciente_id" value="<%= paciente._id %>">
+<input type="hidden" id="profesional_id" value="<%= profesional._id %>">
+<input type="hidden" id="cita_id" value="<%= HistoriaClinica.Cita._id %>">
+<div id="imprimirpdf" class="imprir" style="display: none;">
+   
+</div>
+
+<section id="content"  oncopy="return false" onpaste="return false">
+    <div class="container">        
+        <div class="row">
+          <div class="input-field col s12"></div>
+          <input disabled id="user_id" type="hidden" value="<%= paciente._id%>" class="validate">
+
+          <div class="input-field col m6 s12">
+              <input disabled id="primer_nombre" type="text" class="validate"
+                  value="<%= paciente.primer_nombre%>">
+              <label for="primer_nombre">Primer Nombre <span style="color:red">*</span></label>
+          </div>
+          <div class="input-field col m6 s12">
+              <input disabled id="segundo_nombre" type="text" class="validate"
+                  value="<%= paciente.segundo_nombre || " " %>">
+              <label for="segundo_nombre">Segundo Nombre</label>
+          </div>
+          <div class="input-field col m6 s12">
+              <input disabled id="primer_apellido" type="text" class="validate"
+                  value="<%= paciente.primer_apellido%>">
+              <label for="primer_apellido">Primer Apellido <span
+                      style="color:red">*</span></label>
+          </div>
+          <div class="input-field col m6 s12">
+              <input disabled id="segundo_apellido" type="text" class="validate"
+                  value="<%= paciente.segundo_apellido%>">
+              <label for="segundo_apellido">Segundo Apellido <span
+                      style="color:red">*</span></label>
+          </div>
+      </div>
+      <div class="row">
+          <div class="input-field col m5 s12">
+              <select disabled id="tipo_id" class="validate select browse-select">
+                  <option value="" disabled>Elige una opción</option>
+                  <option value="CC" <%- paciente.tipo_id == 'CC' ? 'selected' : '' %>>Cédula De Ciudadanía</option>
+                  <option value="CE" <%- paciente.tipo_id == 'CE' ? 'selected' : '' %>>Cédula De Extranjería</option>
+                  <option value="CD" <%- paciente.tipo_id == 'CD' ? 'selected' : '' %>>Carné Diplomático</option>
+                  <option value="PA" <%- paciente.tipo_id == 'PA' ? 'selected' : '' %>>Pasaporte</option>
+                  <option value="PE" <%- paciente.tipo_id == 'PE' ? 'selected' : '' %>>Permiso Especial De Permanencia</option>
+                  <option value="RC" <%- paciente.tipo_id == 'RC' ? 'selected' : '' %>>Registro Civil</option>
+                  <option value="TI" <%- paciente.tipo_id == 'TI' ? 'selected' : '' %>>Tarjeta De Identidad</option>
+                  <option value="CN" <%- paciente.tipo_id == 'CN' ? 'selected' : '' %>>Certificado De Nacido Vivo</option>
+                  <option value="AS" <%- paciente.tipo_id == 'AS' ? 'selected' : '' %>>Adulto Sin Identificar</option>
+                  <option value="MS" <%- paciente.tipo_id == 'MS' ? 'selected' : '' %>>Menor Sin  Identificar</option>
+              </select>
+              <label>Tipo de Identifiación: <span style="color:red">*</span></label>
+          </div>
+          <div class="input-field col m4 s12">
+              <input disabled id="identificacion" type="text" value="<%= paciente.username %>"
+                  class="validate">
+              <label for="identificacion">Número de Identifiación <span
+                      style="color:red">*</span></label>
+          </div>
+          <div class="input-field col m3 s12">
+              <select disabled id="estado_civil" class="validate select browse-select">
+                  <option value="" disabled selected>Elige una opción</option>
+                  <option value="soltero"
+                      <%- paciente.estado_civil == 'soltero' ? 'selected' : '' %>>Soltero(a)
+                  </option>
+                  <option value="casado"
+                      <%- paciente.estado_civil == 'casado' ? 'selected' : '' %>>Casado(a)
+                  </option>
+                  <option value="union_libre"
+                      <%- paciente.estado_civil == 'union_libre' ? 'selected' : '' %>>Unión libre
+                  </option>
+                  <option value="separado"
+                      <%- paciente.estado_civil == 'separado' ? 'selected' : '' %>>Separado(a)
+                  </option>
+                  <option value="divorciado"
+                      <%- paciente.estado_civil == 'divorciado' ? 'selected' : '' %>>Divorciado(a)
+                  </option>
+                  <option value="viudo" <%- paciente.estado_civil == 'viudo' ? 'selected' : '' %>>
+                      Viudo(a)</option>
+              </select>
+              <label>Estado Civil: <span style="color:red">*</span></label>
+          </div>
+      </div>
+      <div class="row">
+          <div class="input-field col m8 s12">
+              <input value="<%= paciente.email %>" disabled id="email" type="email"
+                  class="validate">
+              <label for="email">Email <span style="color:red">*</span></label>
+          </div>
+          <div class="input-field col m4 s12">
+              <input disabled id="phone" name="phone" type="tel"
+                  value="+<%= paciente.telefono %>">
+          </div>
+      </div>
+      <div class="row">
+          <div class="input-field col m3 s12">
+              <input disabled type="text" id="fecha_nacimiento" class="datepicker"
+                  value="<%=paciente.dd_nacimiento%>/<%=paciente.mm_nacimiento%>/<%=paciente.yyyy_nacimiento%>">
+              <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+          </div>
+          <div class="input-field col m3 s12">
+              <select disabled id="genero" class="validate select browse-select">
+                  <option value="" disabled>Elige una opción</option>
+                  <option value="Femenino"
+                      <%- paciente.genero_nacimiento == 'Femenino' ? 'selected' : '' %>>Femenino
+                  </option>
+                  <option value="Masculino"
+                      <%- paciente.genero_nacimiento == 'Masculino' ? 'selected' : '' %>>Masculino
+                  </option>
+                  <option value="Otro"
+                      <%- paciente.genero_nacimiento == 'Otro' ? 'selected' : '' %>>Otro</option>
+              </select>
+              <label>Género de Nacimiento</label>
+          </div>
+          <div class="input-field col m6 s12">
+              <input disabled id="ocupacion" type="text" class="validate"
+                  value="<%= paciente.ocupacion %>">
+              <label for="ocupacion">Ocupación: <span style="color:red">*</span></label>
+          </div>
+      </div>
+
+        <table border="0" cellpadding="0" cellspacing="0" id="sheet0" class="sheet0 gridlines">
+            <col class="col0">
+            <col class="col1">
+            <col class="col2">
+            <col class="col3">
+            <col class="col4">
+            <col class="col5">
+            <col class="col6">
+            <col class="col7">
+            <col class="col8">
+            <col class="col9">
+            <col class="col10">
+            <col class="col11">
+            <tbody>
+                <button  data-target="modal_sesion" class="btn modal-trigger" id="comentSesion" title="Comentarios">
+                    <i class="material-icons">question_answer</i>
+                    <span>Observaciones</span>
+                </button>
+              <tr class="row0">
+                <td class="column0 style4 s style6" colspan="3" rowspan="2">Sesión con Coterapéuta: 
+                    
+                    <select id="sessionCoterapeuta" class="validate select browse-select">
+                        <option value="" disabled selected>Elige una opción</option>
+                        <option value="No">No</option>
+                        <option value="Si">Si</option>
+                    </select>
+                    <label for="causaExterma" class="">Causa</label>
+                </td>
+                <td class="column3 style10 s style24" colspan="9" rowspan="2"> Nombre del Coterapeuta:  
+                  <div id="divCoterapeutas">
+                    <input type="text" id="dataCoterapeuta" placeholder="Nombre Del Coterapeuta">
+                  </div>                           
+                </td>
+              </tr>
+              <tr class="row1">
+              </tr>
+              <tr class="row2">
+                <td class="column0 style28 s style30" colspan="3" rowspan="2">Sesión llevada a supervisión directa
+                    
+                    <select id="sessionSupervisor" class="validate select browse-select">
+                        <option value="" disabled selected>Elige una opción</option>
+                        <option value="No">No</option>
+                        <option value="Si">Si</option>
+                    </select>
+                    <label for="causaExterma" class="">Causa</label>
+                </td>
+                <td class="column3 style10 s style24" colspan="9" rowspan="2">  Nombre del Docentes - Supervisor 
+                  <div id="divSupervisor">
+                    <input type="text" id="dataSupervisor" placeholder="Nombre del Docentes - Supervisor">
+                    </div>
+   
+              </tr>
+              <tr class="row3">
+              </tr>
+              <tr class="row4">
+                <td class="column0 style10 s style24" colspan="3" rowspan="3" >Fecha Sesión: <%-
+                  new Date()
+                %></td>
+                <td class="column3 style4 s style6" colspan="9">Asistió:
+                    
+                    <select id="asistio" class="validate select browse-select">
+                        <option value="" disabled selected>Elige una opción</option>
+                        <option value="No">No</option>
+                        <option value="Si">Si</option>
+                    </select>
+                    <label for="causaExterma" class="">Causa</label>
+                </td>
+              </tr>
+              <tr class="row6">
+                <td class="column3 style16 s style18" colspan="9">El consultante justificó oportunamente su inasistencia?
+                    
+                    <select id="justificacion" class="validate select browse-select">
+                        <option value="" disabled selected>Elige una opción</option>
+                        <option value="No">No</option>
+                        <option value="Si">Si</option>
+                    </select>
+                    <label for="causaExterma" class="">Causa</label>
+                </td>
+              </tr>
+              <tr class="row7">
+                <td class="column0 style40 s style42" colspan="12">Valoración de efectos y de curso del cambio (prescripciones, sugerencias, acontecimientos y acuerdos hechos en la sesión anterior)
+                    
+                    <textarea id="valoracion" class="materialize-textarea clean_on_create tooltipped" tipo="parrafo"
+                                data-length="5000" data-position="top" data-delay="50"
+                                data-tooltip="Este campo es para los valores predetemrinado o los texto debajo de la firma o separador."
+                                style="width: 100%;"></textarea>
+                </td>
+              </tr>
+              <tr class="row8">
+                <td class="column0 style40 s style42" colspan="12">Dinámica de la sesión (proceso conversacional, posición de los participantes, relatos emergentes)
+                    
+                    <textarea id="dinamica" class="materialize-textarea clean_on_create tooltipped" tipo="parrafo"
+                                data-length="5000" data-position="top" data-delay="50"
+                                data-tooltip="Este campo es para los valores predetemrinado o los texto debajo de la firma o separador."
+                                style="width: 100%;"></textarea>
+                </td>
+              </tr>
+              <tr class="row9">
+                <td class="column0 style40 s style42" colspan="12">Objetivo
+                    <textarea id="objetivo" class="materialize-textarea clean_on_create tooltipped" tipo="parrafo"
+                                data-length="5000" data-position="top" data-delay="50"
+                                data-tooltip="Este campo es para los valores predetemrinado o los texto debajo de la firma o separador."
+                                style="width: 100%;"></textarea>
+                </td>
+              </tr>
+              <tr class="row10">
+                <td class="column0 style40 s style42" colspan="12">Hipótesis
+                    <textarea id="hipotesis" class="materialize-textarea clean_on_create tooltipped" tipo="parrafo"
+                                data-length="5000" data-position="top" data-delay="50"
+                                data-tooltip="Este campo es para los valores predetemrinado o los texto debajo de la firma o separador."
+                                style="width: 100%;"></textarea>
+                </td>
+              </tr>
+              <tr class="row11">
+                <td class="column0 style40 s style42" colspan="12">Estrategia
+                    <textarea id="estrategia" class="materialize-textarea clean_on_create tooltipped" tipo="parrafo"
+                                data-length="5000" data-position="top" data-delay="50"
+                                data-tooltip="Este campo es para los valores predetemrinado o los texto debajo de la firma o separador."
+                                style="width: 100%;"></textarea>
+                </td>
+              </tr>
+              <tr class="row12">
+                <td class="column0 style40 s style42" colspan="12">Cierre de la sesión (prescripciones, mensaje, sugerencia, acuerdos y cambios emergentes)
+                    <textarea id="cierreSesion" class="materialize-textarea clean_on_create tooltipped" tipo="parrafo"
+                                data-length="5000" data-position="top" data-delay="50"
+                                data-tooltip="Este campo es para los valores predetemrinado o los texto debajo de la firma o separador."
+                                style="width: 100%;"></textarea>
+                </td>
+              </tr>
+              <tr class="row13">
+                <td class="column0 style7 s style9" colspan="12">Personas convocadas a la siguiente sesión
+                    <textarea id="personaConvocadas" class="materialize-textarea clean_on_create tooltipped" tipo="parrafo"
+                                data-length="5000" data-position="top" data-delay="50"
+                                data-tooltip="Este campo es para los valores predetemrinado o los texto debajo de la firma o separador."
+                                style="width: 100%;"></textarea>
+                </td>
+              </tr>
+             
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col s4">
+                <p>diagnostico principal </p>
+            </div>
+            <div class="col s6">
+                <%- include('../formularios/campos/cie10.ejs',{renderizar: true, cerrado: false, nombre: 'CIE10 Primario', id : 'diagnosticoPrincipalSession', ancho: '12', validar: 'campo', orden: 'ejemplo', value: "Valor: Lorem ipsum dolor."}) %>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col m4">
+                <p>Tipo diagnostico</p>
+            </div>
+            <div class="col s6">                
+                <select id="tipoDiagnostico" class="validate select browse-select">
+                    <option value="" disabled>Elige una opción</option>
+                    <option value="01 Impresión diagnóstica ">Impresión diagnóstica </option>
+                    <option value="02 Confirmado nuevo ">Confirmado nuevo </option>
+                    <option value="03 Confirmado repetido">Confirmado repetido</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s4">
+                <p>diagnostico secundario </p>
+            </div>
+            <div class="col s6">
+                <%- include('../formularios/campos/cie10.ejs',{renderizar: true, cerrado: false, nombre: 'CIE10 Primario', id : 'diagnosticoSecundarioSession', ancho: '12', validar: 'campo', orden: 'ejemplo', value: "Valor: Lorem ipsum dolor."}) %>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <button class="col m12 m12 s12 btn waves-effect green waves-light" id="enviar_data">
+                <i class="material-icons">save</i>
+                <span style="position: relative; bottom: 4px;"> Guardar</span>
+                </button>
+            </div>
+            <!-- <div class="col s6">
+                <button class="col m12 m12 s12 btn waves-effect red waves-light" id="close_data">
+                    <i class="material-icons">save</i>
+                    <span style="position: relative; bottom: 4px;"> Cerrar Historia</span>
+                </button>
+            </div> -->
+        </div>
+        <button class=" btn-flotante col m12 m12 s12 btn waves-effect green waves-light" id="goBack">
+            <i style="position: relative; bottom: 16px;" class="material-icons">settings_backup_restore</i>
+            <span style="position: relative; bottom: 20px;"> Atras</span>
+        </button>
+    </div>
+</section> 
+
+<div class="modal " id="modal_sesion">
+    <section>
+        <div id="content_timeline_sesion">
+
+        </div>
+    </section>
+      <br >
+      <section>
+          <div class="row">
+            <textarea placeholder="Digite Su Comentario <%= user.nombre %>"  id="value_modal_sesion" class="materialize-textarea clean_on_create tooltipped" tipo="parrafo"
+                data-length="5000" data-position="top" data-delay="50" data-tooltip="Comentario Características sociodemográficas significativas de los miembros de la familia:."  style="width: 100%;"></textarea>
+          </div>
+          <div class="row">
+              <button type="button" id="btnGuardarComment_sesion" class="waves-effect waves-light btn green waves-light"> Guardar </button>
+          </div>
+      </section>
+</div>
+
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<script
+    src="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.3.0,npm/fullcalendar@5.3.0/locales-all.min.js,npm/moment@2.27.0/min/moment-with-locales.min.js">
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js'></script>
+
+  
+<% include  ../view_distribution/bot2.ejs%>
+<%
+var cie10auto = Object({});
+for (let i = 0; i < cie10.length; i++) {
+  const cie = cie10[i];
+  cie10auto[(`${cie.codigo} | ${cie.descripcion}`)] = null
+}
+%>
+
+<script>
+    var usuario = <%-JSON.stringify(user)%>;
+    var tipoUsuario = usuario.roles
+    console.log(">>>",tipoUsuario )
+    
+  var sede_id = $('#sede_id').val();
+  var HC_id = $('#hc_id').val();
+    $(document).on("click", ".select-wrapper", function (event) {
+        event.stopPropagation();
+    });
+    var pdfdoc = new jsPDF();
+    var specialElementHandlers = {
+        '#ignoreContent': function (element, renderer) {
+        return true;
+      }
+    };
+    document.addEventListener('DOMContentLoaded', function() {
+        $("#practicanteShow").hide();
+        $("#supervisorNShow").hide();
+    });
+    $(document).ready(function () {
+        $("#btnGuardarComment_sesion").click(function (event) {
+        console.log(">>>>> por fin caracteristicas sesiones")
+        saveSesion();
+        $("#value_modal_sesion").val("")
+        $('.modal').modal('close');
+    })
+        $('.modal').modal();
+        
+        let contadorSesiones=0
+            $("#comentSesion").click(function () {
+                contadorSesiones++
+                if(contadorSesiones>=2){
+                $("#content_timeline_sesion").empty()
+            }
+            ("#modal_sesion").openModal;
+                const cita = <%-JSON.stringify(Cita)%>;
+                var usuario = <%-JSON.stringify(user)%>;
+                var tipoUsuario = usuario.tipo
+                
+                let sede = cita.Sede._id
+                let Paciente = [cita.Paciente[0]._id]
+                let Cita = [cita._id]
+                let Profesional = [cita.Profesional._id]
+                let headComment = "sesion"
+                
+            
+                $.ajax({
+                method: 'GET',
+                url: `/api/citas/insertCommentGet/${sede}/${Cita}/${Paciente}/${headComment}`,
+                success: function (r) {
+                    console.log(">>>> Aqui tiene tu cometario ", r)
+                    if(r ==''){
+                        Materialize.toast('No tienes comentarios  :( <br> <- Puedes crear el primero aqui en la caja de texto', 4000, 'rounded red')
+                    }
+                    let comentario
+                    for(i=0;i<r.length;i++){
+                    datosComentario = r[i]
+                        comentario = datosComentario.comentario
+                        comentarioProfe = datosComentario.comentarioProfe
+                        var name = datosComentario.name
+                        var options = {weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "numeric", hour12:"false", minute: "numeric"};
+                        var fecha = new Date(datosComentario.fechaSystem)
+                        fecha =  fecha.toLocaleString ("es-ES", options) 
+                    
+                        
+                        if (comentarioProfe){
+                        $("#content_timeline_sesion").append(`
+                <ul class="timeline">
+                    <!-- Item 1 -->
+                    <!-- Item 2 -->
+                    <li>
+                        <div class="direction-l">
+                        <div class="flag-wrapper">
+                            <span class="hexa"></span>
+                            <span class="flag">${name}</span>
+                            <span class="time-wrapper"><span class="time">${fecha}</span></span>
+                        </div>
+                        <div class=""><textarea value="${comentarioProfe}" class="materialize-textarea clean_on_create tooltipped" readonly >${comentarioProfe}</textarea>.</div>
+                        </div>
+                    </li>
+                    </ul>
+                `);  
+                } else if(comentario){
+                    $("#content_timeline_sesion").append(`
+                <ul class="timeline">
+                    <!-- Item 1 -->
+                    <li>
+                        <div class="direction-r">
+                        <div class="flag-wrapper">
+                            <span class="hexa"></span>
+                            <span class="flag">${name}</span>
+                            <span class="time-wrapper"><span class="time">${fecha}</span></span>
+                        </div>
+                        <div class=""><textarea value="${comentario}" class="materialize-textarea clean_on_create tooltipped" readonly >${comentario}</textarea>.</div>
+                        </div>
+                    </li>
+                
+                    </ul>
+                `);  
+                        }
+                }
+                
+                }
+                    
+                    
+        
+                
+            })
+        
+            })
+        
+        $('#opcion').on('change', function() {
+      if ( this.value == 'Practicante')
+      {
+        $("#practicanteShow").show();
+        $("#supervisorNShow").hide();
+        $("#docenteShow").hide();
+      }else if(this.value == 'supervisor'){
+        $("#practicanteShow").hide();
+        $("#docenteShow").hide();
+        $("#supervisorNShow").show();
+      }else{
+        $("#practicanteShow").hide();
+        $("#supervisorNShow").hide();
+        $("#docenteShow").show();
+      }
+    });  
+    autocompleteCie10('input.autocomplete-cie10');
+     $("#enviar_data").click(function() {
+        saveData();
+        
+    })
+    
+      
+      Init()
+
+      $("#divSupervisor").hide();
+      $("#divCoterapeutas").hide();
+      
+      $('#sessionCoterapeuta').on('change', function() {
+        if ( this.value == 'Si')
+        {
+          $("#divCoterapeutas").show();
+        }
+        else
+        {
+          $("#divCoterapeutas").hide();
+        }
+      })
+      $('#sessionSupervisor').on('change', function() {
+        if ( this.value == 'Si')
+        {
+          $("#divSupervisor").show();
+        }
+        else
+        {
+          $("#divSupervisor").hide();
+        }
+      })
+      $("#goBack").click(function () {
+        goback();
+      })
+      $("#asistio").change(function (ev) {
+        let value = String($(this).val())
+         if(value === "No"){
+            var valoracion = $('#valoracion').val("No asistio").attr("disabled", true)
+            var dinamica = $('#dinamica').val("No asistio").attr("disabled", true)
+            var objetivo  = $('#objetivo').val("No asistio").attr("disabled", true)
+            var hipotesis = $('#hipotesis').val("No asistio").attr("disabled", true)
+            var estrategia = $('#estrategia').val("No asistio").attr("disabled", true)
+            var cierreSesion = $('#cierreSesion').val("No asistio").attr("disabled", true)
+            var personaConvocadas = $('#personaConvocadas').val("No asistio").attr("disabled", true)
+            var tipoDiagnostico = $('#tipoDiagnostico').val("").attr("disabled", true)
+
+         } else{
+            var valoracion = $('#valoracion').val("").attr("disabled", false)
+            var dinamica = $('#dinamica').val("").attr("disabled", false)
+            var objetivo  = $('#objetivo').val("").attr("disabled", false)
+            var hipotesis = $('#hipotesis').val("").attr("disabled", false)
+            var estrategia = $('#estrategia').val("").attr("disabled", false)
+            var cierreSesion = $('#cierreSesion').val("").attr("disabled", false)
+            var personaConvocadas = $('#personaConvocadas').val("").attr("disabled", false)
+            var tipoDiagnostico = $('#tipoDiagnostico').val("").attr("disabled", false)
+         }
+      })
+      $("#justificacion").change(function (ev) {
+        let value = String($(this).val())
+        if(value === "Si"){
+            var personaConvocadas = $('#personaConvocadas').val("").attr("disabled", false)
+        }else{
+            var personaConvocadas = $('#personaConvocadas').val("No asistio").attr("disabled", true)
+        }
+      });   
+
+
+    })
+    function autocompleteCie10(input) {
+        $(input).autocomplete({
+            minLength: 3,
+            limit: 20,
+            data: <%-JSON.stringify(cie10auto)%>
+        })
+    }
+    
+    function goback(){
+      location.href = `/citas?sede=${sede_id}`
+    }
+    function Init() {
+    //   $.ajax({
+    //       method: 'GET',
+    //       url: `/api/profesionales/terapeuta?filter[sede]=${sede_id}&limit=1000000&projection=nombre+apellido+username+-Sedes+-Encargados+-SedeUserInfos`,
+    //       success: function (r) {
+    //           //console.log(">>>> terapeuta: ", r)
+    //           for (let i = 0; i < r.length; i++) {
+    //               const formulario = r[i];
+    //               $('#dataCoterapeuta').append(
+    //                 `<option value="${formulario._id}">${formulario.nombre} ${formulario.apellido}</option>`)
+    //           }
+    //           $('#dataCoterapeuta').material_select();
+    //       }
+    //   })
+    //   $.ajax({
+    //       method: 'GET',
+    //       url: `/api/profesionales/docenteSup?filter[sede]=${sede_id}&limit=1000000&projection=nombre+apellido+username+-Sedes+-Encargados+-SedeUserInfos`,
+    //       success: function (r) {
+    //           //console.log(">>>> terapeuta: ", r)
+    //           for (let i = 0; i < r.length; i++) {
+    //               const formulario = r[i];
+    //               $('#dataSupervisor').append(
+    //                 `<option value="${formulario._id}">${formulario.nombre} ${formulario.apellido}</option>`)
+    //           }
+    //           $('#dataSupervisor').material_select();
+    //       }
+    //   })
+
+                     
+      
+    }
+    /* Traemos todos Los datos*/
+    $.ajax({
+          method: 'GET',
+          url: `/api/profesionales?sede=${sede_id}&projection=nombre+apellido+username+email+-Sedes+roles+usuario+-SedeUserInfos+-Encargados`,
+          success: function (r) {
+              for (let i = 0; i < r.length; i++) {
+                  const profesionales = r[i];
+                  switch (profesionales.roles){
+                    case 'PG': 
+                    $('#practicante').append(
+                    `<option value="${profesionales._id}">${profesionales.nombre} ${profesionales.apellido}</option>`)
+                    break;
+                    case 'SP':  
+                    $('#supervisorN').append(
+                    `<option value="${profesionales._id}">${profesionales.nombre} ${profesionales.apellido}</option>`)
+                    break;
+
+                  }
+                  
+              }
+              $('#practicante').material_select();
+              $('#supervisorN').material_select();
+          }
+      })
+
+
+    function saveData() {
+     const sessionCoterapeuta = $('#sessionCoterapeuta').val()   
+     const dataCoterapeuta = $('#dataCoterapeuta').val()
+     const dataSupervisor = $('#dataSupervisor').val()   
+     const sessionSupervisor = $('#sessionSupervisor').val()
+     const asistio = $('#asistio').val()   
+     const justificacion = $('#justificacion').val()   
+     const valoracion = $('#valoracion').val()
+     const dinamica = $('#dinamica').val()
+     const objetivo  = $('#objetivo').val()
+     const hipotesis = $('#hipotesis').val()
+     const estrategia = $('#estrategia').val()
+     const cierreSesion = $('#cierreSesion').val()
+     const personaConvocadas = $('#personaConvocadas').val()
+     const tipoDiagnostico = $('#tipoDiagnostico').val()
+     const opcionEscogida = $('#opcion').val()
+     const practicante = $('#practicante').val()
+     const supervisorN = $('#supervisorN').val()
+     const diagnosticoPrincipalSession = $('#diagnosticoPrincipalSession').val()
+     const diagnosticoSecundarioSession = $('#diagnosticoSecundarioSession').val()
+
+    
+    const body = {
+        sessionCoterapeuta,
+        dataCoterapeuta,
+        dataSupervisor,
+        sessionSupervisor,
+        asistio,
+        justificacion,
+        valoracion,
+        dinamica,
+        objetivo,
+        hipotesis,
+        estrategia,
+        cierreSesion,
+        personaConvocadas,
+        tipoDiagnostico,
+        practicante,
+        supervisorN,
+        opcionEscogida,
+        diagnosticoPrincipalSession,
+        diagnosticoSecundarioSession
+
+        }
+ 
+
+         const urlEnvio = `/api/historias-clinicas/${HC_id}`
+         const method = 'PATCH'
+         const sesion = body
+         var historial = {
+             datos_sesion: body,
+             cerrado: false,
+             closePrimeraVez: true
+         }
+        
+        $.ajax({
+                 url: urlEnvio,
+                 type: method,
+                 data: historial,
+                 dataType: 'json',
+                 contentType: 'application/json',
+                 data: JSON.stringify(historial),
+            success: function (response) {
+                console.log(response);
+                let paciente = response.Paciente[0]
+                let datos = response.datos_sesion;
+
+
+                event.preventDefault();
+                Materialize.toast('Historia Guardada con éxito.', 4000, 'rounded green')
+                console.log(historial)
+                cambiarPrimeravez()
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                const errors = jqXHR.responseJSON.error.errors;
+                let htmlErrors = "";
+                for (const err in errors) {
+                    if (errors.hasOwnProperty(err)) {
+                        const error = errors[err];
+                        htmlErrors += `<br>${error.message}`
+                    }
+                }
+                console.log(textStatus);
+                console.log(errorThrown);
+                Materialize.toast(
+                    `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                    10000, 'rounded red');
+            }
+        })
+    }
+    function cambiarPrimeravez(){
+        var cita = <%-JSON.stringify(Cita)%>;
+        let Paciente = cita.Paciente[0]._id
+        let cita_id = new URLSearchParams(window.location.search).get('cita');
+                let urlEnvio = `/api/citas/${cita_id}`
+                let methodEnvio = 'PATCH'
+                editarCita = {
+                    closePrimeraVez: true
+                }
+                $.ajax({
+                    url: urlEnvio,
+                    method: methodEnvio,
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(editarCita),
+                    success: function () {
+                        setTimeout(function () {
+                     location.href = `/pacientes/ver?id=${Paciente}`
+                       }, 2000);
+                    },
+                    error: function (a, b, c) {
+                        console.log(a, b, c);
+                        Materialize.toast(
+                            'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                            4000, 'rounded red');
+                    }
+                })
+
+    }
+    function saveSesion() {
+
+const fecha = new Date()
+const cita = <%-JSON.stringify(Cita)%>;
+var usuario = <%-JSON.stringify(user)%>;
+var tipoUsuario = usuario.roles
+var nombreMensaje = usuario.primer_nombre + " " + usuario.primer_apellido
+
+console.log(tipoUsuario)
+if (tipoUsuario== 'SP'){
+    var data = {
+    sede: cita.Sede._id,
+    Paciente: [cita.Paciente[0]._id],
+    Cita: [cita._id],
+    Profesional: [cita.Profesional._id],
+    headComment: "sesion",
+    fechaSystem: fecha,
+    comentarioProfe: $("#value_modal_sesion").val(),
+    name: nombreMensaje
+}
+
+
+
+}else{
+    var data = {
+    sede: cita.Sede._id,
+    Paciente: [cita.Paciente[0]._id],
+    Cita: [cita._id],
+    Profesional: [cita.Profesional._id],
+    headComment: "sesion",
+    fechaSystem: fecha,
+    comentario: $("#value_modal_sesion").val(),
+    name: nombreMensaje
+}
+}
+
+
+
+$.ajax({
+        url: "/api/citas/insertCommentSave",
+        type: "POST",
+        data: data,
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+    success: function (response) {
+        console.log(response);
+        Materialize.toast('Comentario Guardado con éxito.', 4000, 'rounded green')
+        setTimeout(function () {
+        // location.href = `/citas?sede=${sede_id}`
+        }, 2000);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+        const errors = jqXHR.responseJSON.error.errors;
+        let htmlErrors = "";
+        for (const err in errors) {
+            if (errors.hasOwnProperty(err)) {
+                const error = errors[err];
+                htmlErrors += `<br>${error.message}`
+            }
+        }
+        console.log(textStatus);
+        console.log(errorThrown);
+        Materialize.toast(
+            `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+            10000, 'rounded red');
+    }
+});
+
+}
+
+</script>

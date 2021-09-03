@@ -1,0 +1,778 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <% if(user.Sedes[0]._id == '60049afed00d9b43a49e4da7'){%>
+            <div class="col s12">
+                <h4 class="">Mis Datos Personales</h4>
+                <ul class="collapsible popout" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i> Datos Personales
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <input id="user_id" type="hidden" value="<%= user._id%>" class="validate">
+
+                                <div class="input-field col m6 s12">
+                                    <input id="primer_nombre" type="text" class="validate" value="<%= user.primer_nombre %>" disabled>
+                                    <label for="primer_nombre">Primer Nombre <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <input id="segundo_nombre" type="text" class="validate" value="<%= user.segundo_nombre %>" disabled>
+                                    <label for="segundo_nombre">Segundo Nombre</label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <input id="primer_apellido" type="text" class="validate" value="<%= user.primer_apellido %>" disabled>
+                                    <label for="primer_apellido">Primer Apellido <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <input id="segundo_apellido" type="text" class="validate" value="<%= user.segundo_apellido %>" disabled>
+                                    <label for="segundo_apellido">Segundo Apellido <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col m5 s12">
+                                    <select id="tipo_id" class="validate select browse-select" disabled>
+                                        <option value="" disabled>Elige una opción</option>
+                                        <option value="CC" <%- user.tipo_id == 'CC' ? 'selected' : '' %> >Cédula De Ciudadanía</option>
+                                        <option value="CE" <%- user.tipo_id == 'CE' ? 'selected' : '' %> >Cédula De Extranjería</option>
+                                        <option value="CD" <%- user.tipo_id == 'CD' ? 'selected' : '' %> >Carné Diplomático</option>
+                                        <option value="PA" <%- user.tipo_id == 'PA' ? 'selected' : '' %> >Pasaporte</option>
+                                        <option value="PE" <%- user.tipo_id == 'PE' ? 'selected' : '' %> >Permiso Especial De Permanencia</option>
+                                        <option value="RC" <%- user.tipo_id == 'RC' ? 'selected' : '' %> >Registro Civil</option>
+                                        <option value="TI" <%- user.tipo_id == 'TI' ? 'selected' : '' %> >Tarjeta De Identidad</option>
+                                        <option value="CN" <%- user.tipo_id == 'CN' ? 'selected' : '' %> >Certificado De Nacido Vivo</option>
+                                        <option value="AS" <%- user.tipo_id == 'AS' ? 'selected' : '' %> >Adulto Sin Identificar</option>
+                                        <option value="MS" <%- user.tipo_id == 'MS' ? 'selected' : '' %> >Menor Sin Identificar</option>
+                                    </select>
+                                    <label>Tipo de Identifiación: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input id="identificacion" type="text" class="validate" value="<%= user.username %>" disabled>
+                                    <label for="identificacion">Número de Identifiación <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input id="email" type="email" class="validate" value="<%= user.email %>" disabled>
+                                    <label for="email">Email <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <select id="estado_civil" class="validate select browse-select" disabled>
+                                        <option value="" disabled> Elige una opción</option>
+                                        <option value="soltero" <%- user.estado_civil == 'soltero' ? 'selected' : '' %> >Soltero(a)</option>
+                                        <option value="casado" <%- user.estado_civil == 'casado' ? 'selected' : '' %> >Casado(a)</option>
+                                        <option value="union_libre" <%- user.estado_civil == 'union_libre' ? 'selected' : '' %> >Unión libre</option>
+                                        <option value="separado" <%- user.estado_civil == 'separado' ? 'selected' : '' %> >Separado(a)</option>
+                                        <option value="divorciado" <%- user.estado_civil == 'divorciado' ? 'selected' : '' %> >Divorciado(a)</option>
+                                        <option value="viudo" <%- user.estado_civil == 'viudo' ? 'selected' : '' %> >Viudo(a)</option>
+                                    </select>
+                                    <label>Estado Civil: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input id="phone" name="phone" type="tel" value="+<%= user.telefono%>" disabled>
+                                    <!-- <label for="phone">Teléfono: </label> -->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <% const monthsShort =['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'] %>
+                                <div class="input-field col m4 s12">
+                                    <input type="text" id="fecha_nacimiento"
+                                        class="datepicker"
+                                        value="<%= user.dd_nacimiento %> <%= monthsShort[user.mm_nacimiento - 1] %>, <%= user.yyyy_nacimiento %>" disabled>
+                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <select id="genero" class="validate select browse-select" disabled>
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="Femenino" <%= user.genero_nacimiento == 'Femenino' ? 'selected' : '' %>>Femenino</option>
+                                        <option value="Masculino" <%= user.genero_nacimiento == 'Masculino' ? 'selected' : '' %>>Masculino</option>
+                                        <option value="Otro" <%= user.genero_nacimiento == 'Otro' ? 'selected' : '' %>>Otro</option>
+                                    </select>
+                                    <label>Género de Nacimiento</label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+          <% }else{ %>
+            <div class="col s12">
+                <h4 class="">Editar Mi Perfil</h4>
+                <h5><small><span style="color:red">*</span> = Campo Obligatorio</small></h5>
+                <ul class="collapsible popout" data-collapsible="expandable">
+                    
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">lock</i>Cambio de Contraseña</div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="input-field col m12 s12">
+                                    <input id="password_actual" type="password" class="validate">
+                                    <label for="password_actual">Contraseña Actual <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m12 s12">
+                                    <input id="password_nuevo" type="password" class="validate">
+                                    <label for="password_nuevo">Nueva Contraseña <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m12 s12">
+                                    <input id="password_nuevo_repeat" type="password" class="validate">
+                                    <label for="password_nuevo_repeat">Repita nueva Contraseña <span style="color:red">*</span></label>
+                                </div>
+                                <div class="col m12 s12">
+                                    <button class="col m12 m12 s12 btn waves-effect green waves-light" id="enviar_password">
+                                        <i class="material-icons">save</i>
+                                        <span style="position: relative; bottom: 4px;"> Cambiar contraseña</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="collapsible-header"><i
+                                class="material-icons">image</i> Imágenes
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="file-field input-field  col l6 s12">
+                                    <div class="btn blue">
+                                        <span>Foto de Perfil</span>
+                                        <input type="file" id="foto_perfil"
+                                            accept="image/*">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate"
+                                            type="text">
+                                    </div>
+                                </div>
+                                <div class="file-field input-field  col l6 s12">
+                                    <div class="btn red">
+                                        <span>Firma</span>
+                                        <input type="file" id="foto_firma"
+                                            accept="image/*">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col l6 s12">
+                                    <img src="<%= user.foto_perfil != null ? user.foto_perfil.location : 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/600px-Imagen_no_disponible.svg.png' %>"
+                                        alt="" class="materialboxed"
+                                        style="width:100%">
+                                </div>
+                                <div class="col l6 s12">
+                                    <img src="<%= user.foto_firma != null ? user.foto_firma.location : 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/600px-Imagen_no_disponible.svg.png' %>"
+                                        alt="" class="materialboxed"
+                                        style="width:100%">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i> Datos Personales
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <input id="user_id" type="hidden" value="<%= user._id%>" class="validate">
+
+                                <div class="input-field col m6 s12">
+                                    <input id="primer_nombre" type="text" class="validate" value="<%= user.primer_nombre %>">
+                                    <label for="primer_nombre">Primer Nombre <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <input id="segundo_nombre" type="text" class="validate" value="<%= user.segundo_nombre %>">
+                                    <label for="segundo_nombre">Segundo Nombre</label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <input id="primer_apellido" type="text" class="validate" value="<%= user.primer_apellido %>">
+                                    <label for="primer_apellido">Primer Apellido <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <input id="segundo_apellido" type="text" class="validate" value="<%= user.segundo_apellido %>">
+                                    <label for="segundo_apellido">Segundo Apellido <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col m5 s12">
+                                    <select id="tipo_id" class="validate select browse-select">
+                                        <option value="" disabled>Elige una opción</option>
+                                        <option value="CC" <%- user.tipo_id == 'CC' ? 'selected' : '' %> >Cédula De Ciudadanía</option>
+                                        <option value="CE" <%- user.tipo_id == 'CE' ? 'selected' : '' %> >Cédula De Extranjería</option>
+                                        <option value="CD" <%- user.tipo_id == 'CD' ? 'selected' : '' %> >Carné Diplomático</option>
+                                        <option value="PA" <%- user.tipo_id == 'PA' ? 'selected' : '' %> >Pasaporte</option>
+                                        <option value="PE" <%- user.tipo_id == 'PE' ? 'selected' : '' %> >Permiso Especial De Permanencia</option>
+                                        <option value="RC" <%- user.tipo_id == 'RC' ? 'selected' : '' %> >Registro Civil</option>
+                                        <option value="TI" <%- user.tipo_id == 'TI' ? 'selected' : '' %> >Tarjeta De Identidad</option>
+                                        <option value="CN" <%- user.tipo_id == 'CN' ? 'selected' : '' %> >Certificado De Nacido Vivo</option>
+                                        <option value="AS" <%- user.tipo_id == 'AS' ? 'selected' : '' %> >Adulto Sin Identificar</option>
+                                        <option value="MS" <%- user.tipo_id == 'MS' ? 'selected' : '' %> >Menor Sin Identificar</option>
+                                    </select>
+                                    <label>Tipo de Identifiación: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input id="identificacion" type="text" class="validate" value="<%= user.username %>" disabled>
+                                    <label for="identificacion">Número de Identifiación <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input id="email" type="email" class="validate" value="<%= user.email %>">
+                                    <label for="email">Email <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <select id="estado_civil" class="validate select browse-select">
+                                        <option value="" disabled> Elige una opción</option>
+                                        <option value="soltero" <%- user.estado_civil == 'soltero' ? 'selected' : '' %> >Soltero(a)</option>
+                                        <option value="casado" <%- user.estado_civil == 'casado' ? 'selected' : '' %> >Casado(a)</option>
+                                        <option value="union_libre" <%- user.estado_civil == 'union_libre' ? 'selected' : '' %> >Unión libre</option>
+                                        <option value="separado" <%- user.estado_civil == 'separado' ? 'selected' : '' %> >Separado(a)</option>
+                                        <option value="divorciado" <%- user.estado_civil == 'divorciado' ? 'selected' : '' %> >Divorciado(a)</option>
+                                        <option value="viudo" <%- user.estado_civil == 'viudo' ? 'selected' : '' %> >Viudo(a)</option>
+                                    </select>
+                                    <label>Estado Civil: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input id="phone" name="phone" type="tel" value="+<%= user.telefono%>">
+                                    <!-- <label for="phone">Teléfono: </label> -->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <% const monthsShort =['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'] %>
+                                <div class="input-field col m4 s12">
+                                    <input type="text" id="fecha_nacimiento"
+                                        class="datepicker"
+                                        value="<%= user.dd_nacimiento %> <%= monthsShort[user.mm_nacimiento - 1] %>, <%= user.yyyy_nacimiento %>">
+                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <select id="genero" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="Femenino" <%= user.genero_nacimiento == 'Femenino' ? 'selected' : '' %>>Femenino</option>
+                                        <option value="Masculino" <%= user.genero_nacimiento == 'Masculino' ? 'selected' : '' %>>Masculino</option>
+                                        <option value="Otro" <%= user.genero_nacimiento == 'Otro' ? 'selected' : '' %>>Otro</option>
+                                    </select>
+                                    <label>Género de Nacimiento</label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i> Dirección
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="input-field col m3 s12">
+                                    <input id="pais" type="text" value="Colombia" disabled class="validate">
+                                    <label for="pais">Pais <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <select id="departamento"
+                                        class="validate select browse-select membresia_precio_calc">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <% 
+                                        departamentos.sort(function (a, b) {
+                                            if (a.Nombre > b.Nombre) {
+                                                return 1
+                                            } else if (a.Nombre < b.Nombre) {
+                                                return -1
+                                            } else {
+                                                return 0
+                                            }
+                                        })
+                                        for (let i = 0; i < departamentos.length; i++) {
+                                            const depa = departamentos[i]; %>
+                                            <option value="<%= depa.Codigo %>"><%= depa.Nombre %></option>
+                                        <% } %>
+                                    </select>
+                                    <label for="departamento">Departamento <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <select id="municipio"
+                                        class="validate select browse-select membresia_precio_calc">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                    </select>
+                                    <label for="municipio">Municipio <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <input id="localidad" type="text" class="validate">
+                                    <label for="localidad">Localidad</label>
+                                </div>
+                                <div class="input-field col m9 s11 ">
+                                    <textarea id="direccion" class="materialize-textarea" data-length="120"></textarea>
+                                    <label for="direccion">Dirección</label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <select id="zona" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="rural">Rural</option>
+                                        <option value="urbana">Urbana</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                    <label>Zona</label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+-->
+
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i>Datos Profesionales</div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="input-field col m3 s12">
+                                    <input id="profesion" type="text" class="validate" value="<%= user.profesion %>">
+                                    <label for="profesion">Profesión: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <input id="especialidad" type="text"
+                                        class="validate" value="<%= user.especialidad %>">
+                                    <label for="especialidad">Especialidad: <span
+                                            style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <input id="tarjeta_profesional" type="text" class="validate" value="<%= user.tarjeta_profesional %>" >
+                                    <label for="tarjeta_profesional">Tarjeta Profesional: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <select id="tipo_profesional" class="validate select browse-select">
+                                        <option value="" disabled>Elige una opción</option>
+                                        <option value="colegiado" <%- user.tipo_profesional == 'colegiado' ? 'selected' : '' %>>Profesional Colegiado</option> Afrocolombiano
+                                        <option value="auxiliar" <%- user.tipo_profesional == 'auxiliar' ? 'selected' : '' %>>Auxiliar/Estudiante</option> Raizal
+                                    </select>
+                                    <label>Tipo de Profesional</label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="col m12 m12 s12 text-center">
+                    <button class="col m12 m12 s12 btn waves-effect green waves-light" id="enviar_data">
+                        <i class="material-icons">save</i>
+                        <span style="position: relative; bottom: 4px;"> Guardar</span>
+                    </button>
+                    <hr>
+                </div>
+            </div>
+         <% } %>
+        </div>
+    </div>
+</section>
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
+<script>
+    var Municipios = <%- JSON.stringify(municipios) %>;
+    var input = document.querySelector("#phone");
+    window.intlTelInput(input, {
+        // allowDropdown: false,
+        // autoHideDialCode: false,
+        // autoPlaceholder: "off",
+        // dropdownContainer: document.body,
+        // excludeCountries: ["us"],
+        // formatOnDisplay: false,
+        // geoIpLookup: function(callback) {
+        //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+        //     var countryCode = (resp && resp.country) ? resp.country : "";
+        //     callback(countryCode);
+        //   });
+        // },
+        // hiddenInput: "full_number",
+        // initialCountry: "auto",
+        // localizedCountries: { 'de': 'Deutschland' },
+        nationalMode: false,
+        // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+        placeholderNumberType: "MOBILE",
+        preferredCountries: ['co'],
+        separateDialCode: true,
+        utilsScript: "https://cdnmetamedic.s3.amazonaws.com/js/intl-input/utils.js",
+
+    });
+    $('.datepicker').pickadate({
+        monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+            'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'
+        ],
+        monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov',
+            'Dic'
+        ],
+        weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+        selectMonths: true,
+        selectYears: 200, // Puedes cambiarlo para mostrar más o menos años
+        min: new Date(1940, 1, 1),
+        max: true, // `true` sets it to today. `false` removes any limits.
+        today: 'Hoy',
+        clear: 'Limpiar',
+        close: 'Ok',
+        labelMonthNext: 'Siguiente mes',
+        labelMonthPrev: 'Mes anterior',
+        labelMonthSelect: 'Selecciona un mes',
+        labelYearSelect: 'Selecciona un año',
+        container: undefined, // ex. 'body' will append picker to body
+
+    });
+
+    $('.datepicker').on('mousedown', function (event) {
+        event.preventDefault();
+    })
+    $(document).on("click", ".select-wrapper", function (event) {
+        event.stopPropagation();
+    });
+    $(document).ready(function () {
+        console.log('Preparado para enviar');
+        $('#identificacion').characterCounter();
+
+        
+        $('#departamento').change(function(e){
+            var municipios = getMunicipios(String($(this).val()))
+            $('#municipio').html(`<option value="" disabled selected>Elige una opción</option>`)
+            municipios.sort(function (a, b) {
+            if (a.Municipio > b.Municipio) {
+                return 1
+            } else if (a.Municipio < b.Municipio) { return -1 } else { return 0 } })
+            for (let i = 0; i < municipios.length; i++) {
+                const muni = municipios[i];
+                $('#municipio').append(`<option value="${muni.Cod_muni}">${muni.Municipio}</option>`)
+            }
+            $('#municipio').material_select();
+        })
+
+        $('#tipo_id').change(function (e) {
+            var tipo_id_abbr = $(this).val();
+            switch (tipo_id_abbr) {
+                case 'CC':
+                    $('#identificacion').attr('data-length', '10')
+                    break;
+                case 'CE':
+                    $('#identificacion').attr('data-length', '6')
+                    break;
+                case 'CD':
+                    $('#identificacion').attr('data-length', '16')
+                    break;
+                case 'PA':
+                    $('#identificacion').attr('data-length', '16')
+                    break;
+                case 'PE':
+                    $('#identificacion').attr('data-length', '15')
+                    break;
+                case 'RC':
+                    $('#identificacion').attr('data-length', '11')
+                    break;
+                case 'TI':
+                    $('#identificacion').attr('data-length', '11')
+                    break;
+                case 'CN':
+                    $('#identificacion').attr('data-length', '9')
+                    break;
+                case 'AS':
+                    $('#identificacion').attr('data-length', '10')
+                    break;
+                case 'MS':
+                    $('#identificacion').attr('data-length', '12')
+                    break;
+                case 'SC':
+                    $('#identificacion').attr('data-length', '16')
+                    break;
+                default:
+                    $('#identificacion').removeAttr('data-length')
+                    break;
+            }
+            // $('#identificacion').val('');
+            $('#identificacion').characterCounter();
+            
+        })
+
+        $('#enviar_data').click(function () {
+            
+            const user_id = $("#user_id").val() || null;
+            // const password = String(Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000);
+            const primer_nombre = $('#primer_nombre').val();
+            const segundo_nombre = $('#segundo_nombre').val();
+            const primer_apellido = $('#primer_apellido').val();
+            const segundo_apellido = $('#segundo_apellido').val();
+            const nombre = `${primer_nombre} ${segundo_nombre}`
+            const apellido = `${primer_apellido} ${segundo_apellido}`
+            const code = $('.iti__selected-dial-code').html()
+            const phone = $('#phone').val()
+            const telefono = code.substring(4, 1) + phone
+            const email = $("#email").val() || "";
+            const genero_nacimiento = $("#genero").val() || "";
+            const identidad_sexual = "";
+            const estado_civil = $("#estado_civil").val() || "";
+            const profesion = $("#profesion").val() || "";
+            const especialidad = $("#especialidad").val() || "";
+            const tipo_profesional = $("#tipo_profesional").val() || "";
+            const tarjeta_profesional = $("#tarjeta_profesional").val() || "";
+            // const pais = $('#pais').val()
+            // const departamento = $('#departamento').val()
+            // const municipio = $('#municipio').val()
+            // const localidad = $('#localidad').val()
+            // const zona = $('#zona').val()
+            // const direccion = $("#direccion").val() || "";
+            const tipo_id = $('#tipo_id').val() || "";
+            const nacimiento_value = ($("#fecha_nacimiento").val())
+            .replace('Enero', 'Jan')
+            .replace('Abril', 'Apr')
+            .replace('Agosto', 'Aug')
+            .replace('Diciembre', 'Dec') ||
+            '1 Jan, 2000';
+            const nacimiento_arr = (moment(nacimiento_value).format('DD,MM,YYYY')).split(',');
+            const dd_nacimiento = nacimiento_arr[0];
+            const mm_nacimiento = nacimiento_arr[1];
+            const yyyy_nacimiento = nacimiento_arr[2];
+            const ts_nacimiento = moment(nacimiento_value).unix()
+
+            const body = {
+                primer_apellido,
+                segundo_apellido,
+                primer_nombre,
+                segundo_nombre,
+                // pais,
+                // departamento,
+                // municipio,
+                // localidad,
+                // zona,
+                // direccion,
+                tipo_profesional,
+                especialidad,
+                tarjeta_profesional,
+                tipo_id,
+                nombre,
+                apellido,
+                yyyy_nacimiento,
+                mm_nacimiento,
+                dd_nacimiento,
+                ts_nacimiento,
+                genero_nacimiento,
+                identidad_sexual,
+                estado_civil,
+                telefono,
+                email,
+                profesion
+
+            }
+            console.log(nacimiento_value);
+            console.log(nacimiento_arr);
+            console.log(body);
+            
+            const url = `/api/me/update/`;
+            const method = 'PATCH'
+            $.ajax({
+                    method: method,
+                    url: url,
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(body),
+                    success: function (response) {
+                            console.log(response);
+                            Materialize.toast('Datos Actualizados con éxito.', 4000, 'rounded green')
+                            setTimeout(function () {
+                        location.href = `/mi-perfil`
+                    }, 2000);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    const errors = jqXHR.responseJSON.error.errors;
+                    let htmlErrors = "";
+                    for (const err in errors) {
+                        if (errors.hasOwnProperty(err)) {
+                            const error = errors[err];
+                            htmlErrors += `<br>${error.message}`
+                        }
+                    }
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    Materialize.toast(
+                        `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                        10000, 'rounded red');
+                }
+            })
+
+        })
+
+        $('#enviar_password').click(function () {
+
+            const password_nuevo = $('#password_nuevo').val() || ''
+            const password_nuevo_repeat = $('#password_nuevo_repeat').val() || ''
+            const password_actual = $('#password_actual').val() || ''
+
+            const body = {
+                password_nuevo,
+                password_nuevo_repeat,
+                password_actual
+            }
+            
+            const url = `/api/me/password/`;
+            const method = 'POST'
+            $.ajax({
+                    method: method,
+                    url: url,
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(body),
+                    success: function (response) {
+                            console.log(response);
+                            Materialize.toast('Contraseña Actualizada con éxito.', 4000, 'rounded green')
+                            setTimeout(function () {
+                        location.href = `/mi-perfil`
+                    }, 2000);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+        
+                    console.log(jqXHR.responseJSON.message);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    Materialize.toast(
+                        `${jqXHR.responseJSON.message}`,
+                        10000, 'rounded red');
+                }
+            })
+
+        })
+        $('#foto_perfil').bind('change', function () {
+            console.log('Cambio en Foto de perfil')
+            if (this.files[0].size / 1024 / 1024 > 1) {
+                alert('La imagen es demaisado grande. (Tamaño Máximo: 1 MB)');
+                this.value = "";
+            } else {
+                Materialize.toast('Subiendo Imagen.', 4000, 'rounded blue')
+                console.log('Imagen Aceptada');
+                const campo_id = 'foto_perfil'
+                const sede_id = <%- JSON.stringify(user.Sedes[0]._id) %>;
+                const tipo = 'foto_de_perfil'
+                const tipo_id = <%- JSON.stringify(user._id) %>;
+                var archivo = document.getElementById('foto_perfil').files[0]
+                var formData = new FormData();
+                formData.append('archivo', document.getElementById(campo_id).files[0]);
+                const urlEnvio = `/api/archivos?sede=${sede_id}&tipo=${tipo}&tipo_id=${tipo_id}&campo_id=${campo_id}`
+                $.ajax({
+                    url: urlEnvio,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false,  // tell jQuery not to set contentType
+                    enctype: 'multipart/form-data',
+                    success: function (data) {
+                        Materialize.toast('Imagen subida con éxito.', 4000, 'rounded green')
+                        const bodyIMG = {
+                            foto_perfil: data.data
+                        }
+                        console.log(bodyIMG)
+                        $.ajax({
+                            method: 'PATCH',
+                            url: '/api/me/update',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            data: JSON.stringify(bodyIMG),
+                            success: function (response) {
+                                console.log(response);
+                                Materialize.toast('Foto de perfil actualizada con éxito.', 4000, 'rounded green')
+                                setTimeout(function () {
+                                    location.href = "/mi-perfil"
+                                }, 2000);
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                const errors = jqXHR.responseJSON.error.errors;
+                                let htmlErrors = "";
+                                for (const err in errors) {
+                                    if (errors.hasOwnProperty(err)) {
+                                        const error = errors[err];
+                                        htmlErrors += `<br>${error.message}`
+                                    }
+                                }
+                                console.log(textStatus);
+                                console.log(errorThrown);
+                                Materialize.toast(
+                                    `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                                    10000, 'rounded red');
+                            }
+                        })
+                    },
+                    error: function (a, b, c){
+                        Materialize.toast('Hubo un error al subir el archivo.', 4000, 'rounded blue')
+                        console.error(a, b, c)
+                    }
+                });
+            };
+        });
+
+        $('#foto_firma').bind('change', function () {
+            console.log('Cambio en Foto de perfil')
+            if (this.files[0].size / 1024 / 1024 > 1) {
+                alert('La imagen es demaisado grande. (Tamaño Máximo: 1 MB)');
+                this.value = "";
+            } else {
+                Materialize.toast('Subiendo Imagen.', 4000, 'rounded blue')
+                console.log('Imagen Aceptada');
+                const campo_id = 'foto_firma'
+                const sede_id = <%- JSON.stringify(user.Sedes[0]._id) %>;
+                const tipo = 'foto_de_perfil'
+                const tipo_id = <%- JSON.stringify(user._id) %>;
+                var archivo = document.getElementById('foto_firma').files[0]
+                var formData = new FormData();
+                formData.append('archivo', document.getElementById(campo_id).files[0]);
+                const urlEnvio = `/api/archivos?sede=${sede_id}&tipo=${tipo}&tipo_id=${tipo_id}&campo_id=${campo_id}`
+                $.ajax({
+                    url: urlEnvio,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false,  // tell jQuery not to set contentType
+                    enctype: 'multipart/form-data',
+                    success: function (data) {
+                        Materialize.toast('Imagen subida con éxito.', 4000, 'rounded green')
+                        const bodyIMG = {
+                            foto_firma: data.data
+                        }
+                        console.log(bodyIMG)
+                        $.ajax({
+                            method: 'PATCH',
+                            url: '/api/me/update',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            data: JSON.stringify(bodyIMG),
+                            success: function (response) {
+                                console.log(response);
+                                Materialize.toast('Imagen de Firma actualizada con éxito.', 4000, 'rounded green')
+                                setTimeout(function () {
+                                    location.href = "/mi-perfil"
+                                }, 2000);
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                const errors = jqXHR.responseJSON.error.errors;
+                                let htmlErrors = "";
+                                for (const err in errors) {
+                                    if (errors.hasOwnProperty(err)) {
+                                        const error = errors[err];
+                                        htmlErrors += `<br>${error.message}`
+                                    }
+                                }
+                                console.log(textStatus);
+                                console.log(errorThrown);
+                                Materialize.toast(
+                                    `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                                    10000, 'rounded red');
+                            }
+                        })
+                    },
+                    error: function (a, b, c){
+                        Materialize.toast('Hubo un error al subir el archivo.', 4000, 'rounded blue')
+                        console.error(a, b, c)
+                    }
+                });
+            };
+        });
+    })
+
+    function getMunicipios(codigoDepa) {
+        return Municipios.filter(function(muni){
+            return muni.Cod_depa == codigoDepa
+
+        })
+    }
+
+    
+
+</script>
+
+<% include  ../view_distribution/bot2.ejs%>

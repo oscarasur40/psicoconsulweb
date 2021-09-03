@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+  <style>
+    body {
+      font-family: 'Open Sans';
+      font-size: 12px;
+    }
+    .norl {
+      padding: 0px;
+      margin: 0px;
+    }
+    .paciente-data {
+      width: 30%;
+      display: inline-block;
+    }
+    p {
+      margin-top: 0.25em;
+      margin-bottom: 0.25em;
+    }
+    .dont-break-out {
+
+      /* These are technically the same, but use both */
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+
+      -ms-word-break: break-all;
+      /* This is the dangerous one in WebKit, as it breaks things wherever */
+      word-break: break-all;
+      /* Instead use this non-standard one: */
+      word-break: break-word;
+
+      /* Adds a hyphen where the word breaks, if supported (No Blink) */
+      -ms-hyphens: auto;
+      -moz-hyphens: auto;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+
+    }
+    @media print {
+      body {
+        page-break-inside: avoid;
+        }
+      .pagebreak {
+        page-break-after: always !important;
+      }
+      p {page-break-after: always;}
+    }
+  </style>
+</head>
+<body style="margin:0px; padding: 0px;">
+  <div id="formulario" style="display: inline-block;padding: 0px; margin: 0px;">
+  <%
+    const paciente = Factura.Paciente[0]
+    const sede = Factura.Sede
+    const cita = Factura.Cita
+    const servicio = Factura.Cita.Servicio
+  %>
+  <div id="autorizacion" style="display: flex;">
+    <% let logoSede = "https://cdnmetamedic.s3.amazonaws.com/images/consultorio.jpg"
+      if (sede.logo) {
+          logoSede = sede.logo.location
+      }
+    %>
+    <img src="<%= logoSede %>" alt="Logo" style="max-height: 75px">
+    <div style="margin-left: auto">
+      <svg id="bc_historia_id" class="barcode-r"></svg>
+    </div>
+  </div>
+  <hr>
+    <h3>Datos del Consultorio</h3>
+    <div class="paciente-data">
+      <p><b>Nombre</b><br><%= sede.nombre %></p>
+    </div>
+    <div class="paciente-data" >
+      <p><b>Dirección</b><br><%= sede.direccion %></p>
+    </div>
+    <div class="paciente-data">
+      <p><b>Teléfono</b><br>+<%= sede.telefono %></p>
+    </div>
+  <hr>
+    <h3>Datos de Facturación</h3>
+    <div class="paciente-data" style="width: 60%;">
+      <p><b>Nombre</b><br><%= Factura.contribuyente_nombre %></p>
+    </div>
+    <div class="paciente-data">
+      <p><b>Nit</b><br><%= Factura.contribuyente_nit %></p>
+    </div>
+    <div class="paciente-data" style="width: 90%;">
+      <p><b>Dirección</b><br><%= Factura.contribuyente_direccion %></p>
+    </div>
+  <hr>
+    <h3 style="width: 40%; display: inline-block;">Datos del Paciente</h3>
+    <div style="margin-left: auto; display: inline-block;">
+      <svg id="bc_paciente_id" class="barcode-r"></svg>
+    </div>
+    <br>
+    <div class="paciente-data">
+      <p><b>Nombre</b><br><%= paciente.nombre %> <%= paciente.apellido %></p>
+    </div>
+    <div class="paciente-data">
+      <p><b>Identificación</b><br><%= paciente.tipo_id %>-<%= paciente.username %></p>
+    </div>
+    <div class="paciente-data">
+      <p><b>Fecha de Nacimiento</b><br><%= paciente.dd_nacimiento %>/<%= paciente.mm_nacimiento %>/<%= paciente.yyyy_nacimiento %></p>
+    </div>
+    <% const resultadoDir = municipios.find( muni => (muni.Cod_depa == paciente.departamento) && (muni.Cod_muni == paciente.municipio) ) %>
+    <div class="paciente-data" style="width: 60%">
+      <p><b>Dirección</b><br><%= paciente.direccion %></p>
+    </div>
+    <div class="paciente-data">
+      <p><b>Genero de Nacimiento</b><br><%= paciente.genero_nacimiento %></p>
+    </div>
+    <div class="paciente-data">
+      <p><b>Estado Civil</b><br><%= paciente.estado_civil %></p>
+    </div>
+    <div class="paciente-data">
+      <p><b>Correo Electrónico</b><br><%= paciente.email %></p>
+    </div>
+    <div class="paciente-data">
+      <p><b>Número de Teléfono</b><br>+<%= paciente.telefono %></p>
+    </div>
+  <hr>
+    <h3>Datos del Servicio</h3>
+    <div class="paciente-data" style="width: 90%;">
+      <p><b>Código CUPS y Descripción</b><br><%= servicio.cups_codigo %> | <%= servicio.cups_nombre %></p>
+    </div>
+    <div class="paciente-data" style="width:50%">
+      <p><b>Fecha de la Cita</b><br><%= moment(cita.start).locale('es').format('LLLL') %></p>
+    </div>
+    <div class="paciente-data">
+      <p><b>Valor</b><br><%= cita.valor_cita %></p>
+    </div>
+  <hr>
+    <div class="paciente-data" style="width: 100%;">
+      <% let infoPago = ''
+      if(Factura.pagado) {
+        infoPago = `<h2>Esta Factura ha sido pagada por ${Factura.contribuyente_nombre} el ${ moment.unix(Factura.pagado_timestamp).locale('es').format('LLLL') }</h2>`
+      } else {
+        infoPago = `<h2>Esta Factura aún no ha sido pagada.</h2>`
+      } %>
+      <p><b><%- infoPago %></b></p>
+    </div>
+  </div>
+  <script>
+    JsBarcode('#bc_historia_id', '<%-Factura._id%>', {
+      height: 50,
+      fontSize: 0,
+      width: 1
+    })
+    JsBarcode('#bc_paciente_id', '<%-paciente._id%>', {
+      height: 20,
+      fontSize: 0,
+      width: 1
+    })
+    window.onload = function() {
+      window.print();
+    }
+    const Factura = <%- JSON.stringify(Factura) %>
+  </script>
+</body>
+</html>

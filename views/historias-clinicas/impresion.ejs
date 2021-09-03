@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+  </script>
+
+  <style>
+  </style>
+</head>
+
+<body style="margin:0px; padding: 0px;">
+  <div id="formulario" style="display: inline-block;padding: 0px; margin: 0px;">
+    <%
+    const formulario = HistoriaClinica.formulario
+    const servicio = HistoriaClinica.Cita.Servicio
+    const paciente = HistoriaClinica.Paciente[0]
+    const profe = HistoriaClinica.Profesional[0]
+    const datos = HistoriaClinica.datos_formulario
+    const sede = HistoriaClinica.Sede
+    const firma = HistoriaClinica.Cita
+    const datos_selectores = HistoriaClinica.datos_selectores 
+    const userD = user
+    const Cita = HistoriaClinica.Cita
+  %>
+    <div id="autorizacion" style="display: flex;">
+      <% let logoSede = "https://cdnmetamedic.s3.amazonaws.com/images/consultorio.jpg"
+      if (sede.logo) {
+          logoSede = sede.logo.location
+      }
+    %>
+      <div class="row">
+        <div class="col 4">
+          <img src="<%= logoSede %>" alt="Logo" style="max-width: 14rem;">
+        </div>
+        <div class="col 4">
+          <h3 class="text-center"><%= sede.nombre %></h3>
+          <p class="text-center" style="max-width: 18rem;">
+            <%= sede.direccion %></p>
+          <h3 class="text-center" style="max-width: 18rem;">Teléfono:
+            <b><%= sede.telefono %></b></h3>
+            <b><%= sede.email %></b></h3>
+        </div>
+        <div class="col 4">
+          <div>
+            <svg id="bc_historia_id" class="barcode-r"></svg>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <hr>
+
+    <h3><u>Datos del Paciente</u></h3>
+    <div class="row">
+      <div class="col 6">
+        <p class="text-justify"><b>Nombre</b><br><%= paciente.nombre %> <%= paciente.apellido %></p>
+        <% const resultadoDir = municipios.find( muni => (muni.Cod_depa === paciente.departamento) && (muni.Cod_muni === paciente.municipio) ) %>
+        <div>
+          <% if (resultadoDir !== undefined) { %>
+              <p class="text-justify"><b>Dirección</b><br><%= resultadoDir.Departamento %>, <%= resultadoDir.Municipio %>,
+                <%= paciente.direccion %>
+              </p>
+          <% } else { %>
+            <p class="text-justify"><b>Dirección</b><br>N/A, N/A,
+              <%= paciente.direccion %>
+            </p>
+          <% } %>
+        </div>
+        <div class="">
+          <p class="text-justify"><b>Genero de Nacimiento</b><br><%= paciente.genero_nacimiento %></p>
+        </div>
+        <div class="">
+          <p class="text-justify"><b>Estado Civil</b><br><%= paciente.estado_civil %></p>
+        </div>
+      </div>
+      <div class="col 6">
+        <p class="text-justify"><b>Identificación</b><br><%= paciente.tipo_id %>-<%= paciente.username %></p>
+        <div class="">
+          <p class="text-justify"><b>Fecha de
+              Nacimiento</b><br><%= paciente.dd_nacimiento %>/<%= paciente.mm_nacimiento %>/<%= paciente.yyyy_nacimiento %>
+          </p>
+        </div>
+        <div class="">
+          <p class="text-justify"><b>Correo Electrónico</b><br><%= paciente.email %></p>
+        </div>
+        <div class="">
+          <p class="text-justify"><b>Número de Teléfono</b><br>+<%= paciente.telefono %></p>
+        </div>
+      </div>
+    </div>
+    <% if(firma.firma !== undefined || firma.firma !== "") { %>
+      <hr>
+      <h3><u>Firma Consentimiento</u></h3>
+      <table>
+          <tr>
+              <td>
+                <div class="row">
+                    <div class="input-field col m6 s12">
+                      <p class="text-justify"><b>Nombre Paciente Consentimiento</b><br><%= firma.nombrePacienteFirma %></p>
+                    </div>
+                    <div class="input-field col m6 s12">
+                      <p class="text-justify"><b> Cedula Paciente Consentimiento:   </b><br><%= firma.cedulaPacienteFirma %></p>
+                    </div>
+                </div>
+                <div class="row">
+                  <p class="text-justify"><b>Consentimiento:   </b><br><%= firma.consentimientoFirmado %></p>
+                </div>
+                  <div class="" class="pagebreak"
+                    style="width:34%; display: inline-block;">
+                    <div class="signature-pad--body">                                                
+                      <img src="<%= firma.firma %>">
+                    </div>
+                    <p><%= firma.nombrePacienteFirma %> <br> <%= firma.cedulaPacienteFirma %></p>
+                  </div>
+              </td>
+          </tr>
+      </table>
+    <%}%>
+    <hr>
+    <div class="">
+      <h3><u><%= formulario.nombre %></u></h3>
+      <p>
+        <b>
+          <%= servicio.cups_codigo %> - <%= servicio.cups_nombre %>
+        </b>
+      </p>
+      <div class="container">
+        <h4>Emisión:<%- moment.unix(HistoriaClinica.cita_cerrada_timestamp).locale('es').format('LLL') %></h4>
+        <%
+      for (let i = 0; i < formulario.preguntas.length; i++) {
+          var campo = formulario.preguntas[i];
+          campo.validar = 'historia-clinica-input';
+          campo.orden = i;
+          campo.renderizar = true;
+          campo.cerrado = HistoriaClinica.cerrado || false;
+          if ((datos[campo.id] == undefined || datos[campo.id] == "" || datos[campo.id] == null) && campo.tipo != 'separador') { %>
+
+        <% } else {
+          switch (campo.tipo) {
+              case 'texto': %>
+        <div class="row">
+          <div class="col 12"
+            style="width:<%= ( ( parseInt(campo.ancho) / 0.12 ) - 0.5).toFixed(2) %>%; display: inline-block;">
+            <p class="text-justify">
+              <b><%- campo.nombre %>:</b><br>
+              <%- datos[campo.id] %>
+            </p>
+          </div>
+        </div>
+        <% break;
+        case 'parrafo': %>
+        <div class="row">
+          <div class="col 12"
+            style="width:<%= ( ( parseInt(campo.ancho) / 0.12 ) - 0.5).toFixed(2) %>%; display: inline-block;">
+            <p class="text-justify">
+              <b><%- campo.nombre %>:</b><br>
+              <%- datos[campo.id] %>
+            </p>
+          </div>
+        </div>
+        <% break; 
+        case 'numero': %>
+        <div class="row">
+          <div class="col 12"
+            style="width:<%= ( ( parseInt(campo.ancho) / 0.12 ) - 0.5).toFixed(2) %>%; display: inline-block;">
+            <p class="text-justify">
+              <b><%- campo.nombre %>:</b><br>
+              <%- datos[campo.id] %>
+            </p>
+          </div>
+        </div>
+        <% break;
+            case 'archivo': %>
+        <% break;
+              case 'imagen': %>
+        <div class="row"
+          style="width:<%= ( ( parseInt(campo.ancho) / 0.12 ) - 0.5).toFixed(2) %>%; max-width: 380px;
+          margin: 10px; display: inline-block;">
+          <p class="">
+            <b><%- campo.nombre %>:</b><br>
+          </p>
+          <img style="width: 100%; max-height: 350px;" src="<%- datos[campo.id].data.location %>" alt="">
+          <small class="">
+            <%- datos[campo.id].data.location %>
+          </small>
+        </div>
+        <% break;
+              case 'separador': %>
+        <div class=""
+          style="width:<%= ( ( parseInt(campo.ancho) / 0.12 ) - 0.5).toFixed(2) %>%; display: inline-block; max-height: 300px;">
+          <p style="font-size: 1.5rem;">
+            <b><%- campo.nombre %></b><br>
+            <%- datos[campo.id] %>
+          </p>
+        </div>
+        <% break;
+              case 'firma': %>
+        <%
+                var id = campo.id;
+                var nombre = campo.nombre
+              %>
+        <div class="row">
+          <div class="" class="pagebreak"
+            style="width:<%= ( ( parseInt(campo.ancho) / 0.12 ) - 0.5).toFixed(2) %>%; display: inline-block;">
+            <p class="text-justify">
+              <b><%- campo.nombre %>:</b><br>
+            </p>
+            <div class="signature-pad--body">
+              <canvas id="<%= id %>" tipo="firma"></canvas>
+            </div>
+            <div class="signature-pad--footer">
+              <div class="description"><b><%= nombre %></b></div>
+            </div>
+            <script>
+              var canvas <%- id %> = document.getElementById("<%- id %>");
+              var signaturePad <%-id %> = new SignaturePad(canvas <%- id %>, {
+                backgroundColor: 'rgb(230, 230, 230)'
+              });
+
+              signaturePad <%- id %>.off();
+              signaturePad <%- id %>.fromData(<% -JSON.stringify(datos[campo.id]) %>)
+            </script>
+          </div>
+        </div>
+        <% break;
+              case 'cie10': %>
+        <div class="row">
+          <div class=""
+            style="width:<%= ( ( parseInt(campo.ancho) / 0.12 ) - 0.5).toFixed(2) %>%; display: inline-block;">
+            <p class="text-justify">
+              <b><%- campo.nombre %>:</b><br>
+              <%- datos[campo.id] %>
+            </p>
+          </div>
+        </div>
+        <% break;
+              case 'selector': %>
+        <div class="row">
+          <div class=""
+            style="width:<%= ( ( parseInt(campo.ancho) / 0.12 ) - 0.5).toFixed(2) %>%; display: inline-block;">
+            <p class="text-justify">
+              <b><%- campo.nombre %>:</b><br>
+              <%- datos[campo.id] %>
+            </p>
+          </div>
+        </div>
+        <% break;
+              default:
+                  break;
+          }
+        }
+      }
+      %>
+      </div>
+      
+
+    </div>
+    <div>
+      <% if(datos_selectores){ %>
+        <div class="row">
+            <div class="col m4">
+              <p><b>Finalidad De La Consulta</b></p> <%= datos_selectores[0] %>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col m4">
+            <p><b>Causa Externa</b></p> <%= datos_selectores[1] %>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col m4">
+                <p><b>Tipo diagnóstico</b></p> <%= datos_selectores[2] %>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col m4">
+              <p><b>Diagnóstico Principal</b></p> <%= datos_selectores[3] %>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col m4">
+            <p><b>Diagnóstico Secundario</b></p> <%= datos_selectores[4] %>
+        </div>
+    </div>
+        <% } %>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col s12">
+      <h3><u>Datos del Profesional</u></h3>
+    </div>
+    </div><br>
+ 
+    <p><img src="<%= Cita.Profesional.foto_firma != null ? Cita.Profesional.foto_firma.location : 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/600px-Imagen_no_disponible.svg.png' %>"  width="120" height="80" ></p>
+    <p><%= Cita.Profesional.nombre %> <%= Cita.Profesional.apellido %><br><%= Cita.Profesional.profesion %><br><%= Cita.Profesional.especialidad %><br><b>T.P </b><%= Cita.Profesional.tarjeta_profesional %><br></p>
+  </div>
+ 
+  <script>
+    JsBarcode('#bc_historia_id', '<%-HistoriaClinica._id%>', {
+      height: 50,
+      fontSize: 0,
+      width: 1
+    })
+    window.onload = function () {
+      window.print();
+    }
+  </script>
+</body>
+
+</html>

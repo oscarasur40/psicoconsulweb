@@ -1,0 +1,513 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <h4 class="">Crear Administrador de Sedes</h4>
+                <h5><small><span style="color:red">*</span> = Campo Obligatorio</small></h5>
+                <ul class="collapsible popout" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i> Datos Obligatorios
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <input id="user_id" type="hidden" value="<%= user._id%>" class="validate">
+
+                                <div class="input-field col l6 s12">
+                                    <input id="first_name" type="text" class="validate">
+                                    <label for="first_name">Nombre <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col l6 s12">
+                                    <input id="last_name" type="text" class="validate">
+                                    <label for="last_name">Apellido <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col l6 s12">
+                                    <input id="username" type="text" class="validate">
+                                    <label for="last_name">Número de Identifiación <span
+                                            style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col l6 s12">
+                                    <input id="password" type="password" class="validate">
+                                    <label for="password">Password <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col l12 s12">
+                                    <input id="email" type="email" class="validate">
+                                    <label for="email">Email <span style="color:red">*</span></label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i> Límites y
+                            parámentros de uso</div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="input-field col l4 s12">
+                                    <select id="membresia_tipo"
+                                        class="validate select browse-select membresia_precio_calc">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="Mensual">Mensual</option>
+                                        <option value="Bimestral">Bimestral</option>
+                                        <option value="Trimestral">Trimestral</option>
+                                        <option value="Semestral">Semestral</option>
+                                        <option value="Anual">Anual</option>
+                                    </select>
+                                    <label>Tipo de Membresía: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col l4 s12">
+                                    <input id="membresia_precio" type="number" class="validate membresia_precio_calc"
+                                        value="0">
+                                    <label for="membresia_precio">Precio de la Membresía <span
+                                            style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col l4 s12">
+                                    <input id="membresia_precio_mensual" type="number"
+                                        class="validate membresia_precio_calc" value="0">
+                                    <label for="membresia_precio_mensual">Equivalente Mensual Precio de la Membresía
+                                        <span style="color:red">*</span></label>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <h6>Calcular Fecha de Finalización de Membresía</h6>
+                                <div class="input-field col l3 s12">
+                                    <input type="text" id="membresia_inicia" class="membresia_inicia_calc">
+                                    <label for="username">Fecha de Inicio <span id=""></span> <span
+                                            style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col l2 s12">
+                                    <input id="membresia_inicia_cantidad" type="number"
+                                        class="validate membresia_inicia_calc">
+                                    <label for="membresia_inicia_cantidad">Cantidad</label>
+                                </div>
+                                <div class="input-field col l4 s12">
+                                    <select id="membresia_inicia_tiempo"
+                                        class="validate select browse-select membresia_inicia_calc">
+                                        <option value="days">Días</option>
+                                        <option value="weeks">Semanas</option>
+                                        <option value="months" selected>Meses</option>
+                                        <option value="years">Años</option>
+                                    </select>
+                                    <label>Tiempo <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col l3 s12">
+                                    <input type="text" id="membresia_finaliza"
+                                        class="datepicker_mem">
+                                    <label for="username">Finalización de Membresía <span id=""></span> <span
+                                            style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col l4 s12">
+                                    <input id="limite_profesionales_por_sede" type="number" class="validate">
+                                    <label for="limite_profesionales_por_sede">Límite de profesionales por sede <span
+                                            style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col l4 s12">
+                                    <input id="limite_sedes_crear" type="number" class="validate">
+                                    <label for="limite_sedes_crear">Límite de sedes a crear <span
+                                            style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col l4 s12">
+                                    <input id="limite_pacientes_por_sede" type="number" class="validate">
+                                    <label for="limite_pacientes_por_sede">Límite de pacientes por sede <span
+                                            style="color:red">*</span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">dehaze</i>Otros datos</div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="input-field col l6 s12">
+                                    <input disabled value="Administrador de Sedes" id="tipo" type="text"
+                                        class="validate">
+                                    <label for="tipo">Tipo: </label>
+                                </div>
+                                <div class="input-field col l6 s12">
+                                    <input id="phone" name="phone" type="tel">
+                                    <!-- <label for="phone">Teléfono: </label> -->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col l6 s12">
+                                    <input type="text" id="fecha_nacimiento" class="datepicker">
+                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                                </div>
+                                <div class="input-field col l6 s12">
+                                    <input id="direccion" type="text" class="validate">
+                                    <label for="direccion">Dirección</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col l6 s12">
+                                    <select id="genero" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="Femenino">Femenino</option>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                    <label>Género de Nacimiento</label>
+                                </div>
+                                <div class="input-field col l6 s12">
+                                    <input id="id_sex" type="text" class="validate">
+                                    <label for="id_sex">Identidad Sexual</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col l6 s12">
+                                    <input id="estado_civil" type="text" class="validate">
+                                    <label for="estado_civil">Estado Civil</label>
+                                </div>
+                                <div class="input-field col l6 s12">
+                                    <input id="ocupacion" type="text" class="validate">
+                                    <label for="ocupacion">Ocupación</label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+
+                <div class="col l12 m12 s12 text-center">
+                    <button class="col l12 m12 s12 btn waves-effect green waves-light" id="enviar_data">
+                        <i class="material-icons">save</i>
+                        <span style="position: relative; bottom: 4px;"> Guardar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
+<script>
+    var input = document.querySelector("#phone");
+    window.intlTelInput(input, {
+        // allowDropdown: false,
+        // autoHideDialCode: false,
+        // autoPlaceholder: "off",
+        // dropdownContainer: document.body,
+        // excludeCountries: ["us"],
+        // formatOnDisplay: false,
+        // geoIpLookup: function(callback) {
+        //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+        //     var countryCode = (resp && resp.country) ? resp.country : "";
+        //     callback(countryCode);
+        //   });
+        // },
+        // hiddenInput: "full_number",
+        // initialCountry: "auto",
+        // localizedCountries: { 'de': 'Deutschland' },
+        nationalMode: false,
+        // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+        placeholderNumberType: "MOBILE",
+        preferredCountries: ['gt', 'co'],
+        separateDialCode: true,
+        utilsScript: "https://cdnmetamedic.s3.amazonaws.com/js/intl-input/utils.js",
+
+    });
+    $('.datepicker').pickadate({
+        monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+            'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'
+        ],
+        monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov',
+            'Dic'
+        ],
+        weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+        selectMonths: true,
+        selectYears: 200, // Puedes cambiarlo para mostrar más o menos años
+        min: new Date(1940, 1, 1),
+        max: true, // `true` sets it to today. `false` removes any limits.
+        today: 'Hoy',
+        clear: 'Limpiar',
+        close: 'Ok',
+        labelMonthNext: 'Siguiente mes',
+        labelMonthPrev: 'Mes anterior',
+        labelMonthSelect: 'Selecciona un mes',
+        labelYearSelect: 'Selecciona un año',
+        container: undefined, // ex. 'body' will append picker to body
+
+    });
+    $('.datepicker_mem').pickadate({
+        monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+            'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'
+        ],
+        monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov',
+            'Dic'
+        ],
+        weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+        selectMonths: true,
+        selectYears: 200, // Puedes cambiarlo para mostrar más o menos años
+        min: true,
+        max: false, // `true` sets it to today. `false` removes any limits.
+        today: 'Hoy',
+        clear: 'Limpiar',
+        close: 'Ok',
+        labelMonthNext: 'Siguiente mes',
+        labelMonthPrev: 'Mes anterior',
+        labelMonthSelect: 'Selecciona un mes',
+        labelYearSelect: 'Selecciona un año',
+        container: undefined, // ex. 'body' will append picker to body
+    });
+
+    $('#membresia_inicia').pickadate({
+        monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+            'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'
+        ],
+        monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov',
+            'Dic'
+        ],
+        weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+        selectMonths: true,
+        selectYears: 200, // Puedes cambiarlo para mostrar más o menos años
+        defaultDate: '01/01/01',
+        min: true,
+        max: false, // `true` sets it to today. `false` removes any limits.
+        today: 'Hoy',
+        clear: 'Limpiar',
+        close: 'Ok',
+        labelMonthNext: 'Siguiente mes',
+        labelMonthPrev: 'Mes anterior',
+        labelMonthSelect: 'Selecciona un mes',
+        labelYearSelect: 'Selecciona un año',
+        container: undefined, // ex. 'body' will append picker to body
+    });
+
+    var $input = $('#membresia_inicia').pickadate()
+    var $inputff = $('#membresia_inicia').pickadate()
+    var picker = $input.pickadate('picker')
+    var pickerff = $inputff.pickadate('picker')
+    picker.set('select', moment().add(1, 'months').format())
+    // picker.set('select', new Date())
+
+    $('.datepicker').on('mousedown', function (event) {
+        event.preventDefault();
+    })
+    $('.datepicker_mem').on('mousedown', function (event) {
+        event.preventDefault();
+    })
+    $('#membresia_inicia').on('mousedown', function (event) {
+        event.preventDefault();
+    })
+    $(document).on("click", ".select-wrapper", function (event) {
+        event.stopPropagation();
+    });
+    $(document).ready(function () {
+        console.log('Preparado para enviar');
+        $('#enviar_data').click(function () {
+            const url = '/api/adminsedes';
+            const method = 'POST'
+
+            const username = $("#username").val() || null;
+            const user_id = $("#user_id").val() || null;
+            const password = $("#password").val() || null;
+            const nombre = $("#first_name").val() || null;
+            const apellido = $("#last_name").val() || null;
+            const code = $('.iti__selected-dial-code').html()
+            const phone = $('#phone').val()
+            const telefono = code.substring(4, 1) + phone
+            const email = $("#email").val() || "";
+            const genero_nacimiento = $("#genero").val() || "";
+            const identidad_sexual = $("#id_sex").val() || "";
+            const estado_civil = $("#estado_civil").val() || "";
+            const ocupacion = $("#ocupacion").val() || "";
+            const direccion = $("#direccion").val() || "";
+            const membresia_tipo = $("#membresia_tipo ").val() || "";
+            const membresia_precio = $("#membresia_precio ").val() || "";
+            const membresia_precio_mensual = $("#membresia_precio_mensual ").val() || "";
+            const limite_profesionales_por_sede = parseInt($("#limite_profesionales_por_sede ").val()) || "";
+            const limite_pacientes_por_sede = parseInt($("#limite_pacientes_por_sede").val()) || 0;
+            const limite_sedes_crear = $("#limite_sedes_crear").val() || "";
+
+            const membresia_finaliza_raw = $("#membresia_finaliza").val()
+                .replace('Enero', 'Jan')
+                .replace('Abril', 'Apr')
+                .replace('Agosto', 'Aug')
+                .replace('Diciembre', 'Dec') ||
+                moment().add(1, 'M').format('DD MMM, YYYY')
+            const nacimiento_value = ($("#fecha_nacimiento").val())
+                .replace('Enero', 'Jan')
+                .replace('Abril', 'Apr')
+                .replace('Agosto', 'Aug')
+                .replace('Diciembre', 'Dec') ||
+                '1 Jan, 2000';
+            const nacimiento_arr = (moment(nacimiento_value).format('DD,MM,YYYY')).split(',');
+            const dd_nacimiento = nacimiento_arr[0];
+            const mm_nacimiento = nacimiento_arr[1];
+            const yyyy_nacimiento = nacimiento_arr[2];
+            const ts_nacimiento = moment(nacimiento_value).unix()
+            const membresia_finaliza = moment(membresia_finaliza_raw).unix();
+
+            const body = {
+                username,
+                password,
+                user_id,
+                nombre,
+                apellido,
+                dd_nacimiento,
+                mm_nacimiento,
+                yyyy_nacimiento,
+                ts_nacimiento,
+                telefono,
+                limite_sedes_crear,
+                limite_profesionales_por_sede,
+                limite_pacientes_por_sede,
+                membresia_finaliza,
+                email,
+                genero_nacimiento,
+                identidad_sexual,
+                estado_civil,
+                ocupacion,
+                direccion,
+            }
+            console.log(nacimiento_value);
+            console.log(nacimiento_arr);
+            console.log(body);
+
+            $.ajax({
+                method: method,
+                url: url,
+                data: body,
+                success: function (response) {
+                    console.log(response);
+                    Materialize.toast('Usuario creado con éxito.', 4000, 'rounded green')
+                    setTimeout(function () {
+                        location.href = "/users"
+                    }, 2000);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    const errors = jqXHR.responseJSON.error.errors;
+                    let htmlErrors = "";
+                    for (const err in errors) {
+                        if (errors.hasOwnProperty(err)) {
+                            const error = errors[err];
+                            htmlErrors += `<br>${error.message}`
+                        }
+                    }
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    Materialize.toast(
+                        `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                        10000, 'rounded red');
+                }
+            })
+
+        })
+
+        /* Calculo del precio de la membresia */
+        $('.membresia_precio_calc').keyup(function (e) {
+            calcPrecioEqTipo(e.currentTarget.id)
+        })
+        $('.membresia_precio_calc').change(function (e) {
+            calcPrecioEqTipo(e.currentTarget.id)
+        })
+
+        function calcPrecioEqTipo(whoChanged) {
+            var tipo = $('#membresia_tipo').val();
+            var precio = parseFloat($('#membresia_precio').val()) || 0;
+            var precio_eq = parseFloat($('#membresia_precio_mensual').val()) || 0;
+            var meses = 0
+            if (precio > 0 || precio_eq > 0) {
+                switch (tipo) {
+                    case 'Mensual':
+                        meses = 1
+                        break;
+                    case 'Bimestral':
+                        meses = 2
+                        break;
+                    case 'Trimestral':
+                        meses = 3
+                        break;
+                    case 'Semestral':
+                        meses = 6
+                        break;
+                    case 'Anual':
+                        meses = 12
+                        break;
+                    default:
+                        meses = 1
+                        break;
+                }
+                switch (whoChanged) {
+                    case 'membresia_tipo':
+                        changeMembresiaTipo(meses, precio)
+                        break;
+                    case 'membresia_precio':
+                        changeMembresiaTipo(meses, precio)
+                        break;
+                    case 'membresia_precio_mensual':
+                        changeMembresiaTipoEq(meses, precio_eq)
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        function changeMembresiaTipo(meses, precio) {
+            $('#membresia_precio_mensual').val((precio / meses))
+            $('#membresia_precio').val((precio))
+        }
+
+        function changeMembresiaPreio(meses, precio) {
+            $('#membresia_precio_mensual').val((precio * meses))
+        }
+
+        function changeMembresiaTipoEq(meses, precio_eq) {
+            $('#membresia_precio').val((precio_eq / meses))
+        }
+
+        /* Calculo de fecha de finalización de la membresía.*/
+        $('.membresia_inicia_calc').keyup(function (e) {
+            console.log('keyup');
+            calcFechaMembresiaFinaliza()
+        })
+        $('.membresia_inicia_calc').change(function (e) {
+            console.log('change');
+            calcFechaMembresiaFinaliza()
+        })
+
+        function calcFechaMembresiaFinaliza() {
+            var fecha_inicio = ($('#membresia_inicia').val())
+                .replace('Enero', 'Jan')
+                .replace('Abril', 'Apr')
+                .replace('Agosto', 'Aug')
+                .replace('Diciembre', 'Dec') ||
+                moment().format('DD MMM, YYYY');
+            var cantidad = parseFloat($('#membresia_inicia_cantidad').val()) || 1;
+            var tiempo = $('#membresia_inicia_tiempo').val() || "months";
+            var fecha_finaliza = moment(fecha_inicio).add(cantidad, tiempo).format('YYYY MM DD').split(' ');
+            
+            var $inputff = $('#membresia_finaliza').pickadate()
+            var picker = $inputff.pickadate('picker')
+            picker.set('select', new Date(fecha_finaliza[0], fecha_finaliza[1]-1, fecha_finaliza[2]))
+            console.log(fecha_finaliza);
+            console.log(new Date(fecha_finaliza[0], fecha_finaliza[1]-1, fecha_finaliza[2]));
+            console.log({
+                fecha_inicio,
+                cantidad,
+                tiempo,
+                fecha_finaliza
+            })
+        }
+    })
+</script>
+
+<% include  ../view_distribution/bot2.ejs%>

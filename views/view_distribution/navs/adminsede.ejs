@@ -1,0 +1,205 @@
+<li class="bold">
+  <a href="/" class="waves-effect waves-cyan">
+    <i class="material-icons">pie_chart_outlined</i>
+    <span class="nav-text">Dashboard</span>
+  </a>
+</li>
+<li class="bold">
+  <div class="collapsible-header"><i class="material-icons">business</i>Sedes</div>
+  <div class="collapsible-body grey lighten-5">
+    <a href="/sedes" class="waves-effect collection-item waves-cyan"
+      style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">business_center</i>
+      <span class="nav-text">Ver Sedes</span>
+    </a>
+    <a href="/sedes/crearSede" class="waves-effect collection-item waves-cyan"
+      style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">add</i>
+      <span class="nav-text">Crear Sede</span>
+    </a>
+  </div>
+</li>
+<% const sedeProfesional = [];
+for(let i = 0; i < user.Sedes.length; i++){
+    sedeProfesional.push(user.Sedes[i]._id)
+}
+
+const found = sedeProfesional.find(element => element == '60049afed00d9b43a49e4da7'); 
+%>
+<!-- Link Relacionados con Citas -->
+<li class="bold">
+  <div class="collapsible-header"><i class="material-icons">perm_contact_calendar</i>Citas</div>
+  <div class="collapsible-body grey lighten-5">
+    <% if (user.Sedes.length > 0) { 
+      for (let i = 0; i < user.Sedes.length; i++) {
+        const sede = user.Sedes[i]; %>
+    <a href="/citas?sede=<%= sede._id %>" class="waves-effect collection-item waves-cyan"
+      style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">class</i>
+      <span class="nav-text"><%= sede.nombre %></span>
+    </a>
+    <% } 
+     } else { %>
+    <a href="#" class="waves-effect collection-item waves-cyan" style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">close</i>
+      <span class="nav-text">No hay sedes asignadas</span>
+    </a>
+    <% } %>
+  </div>
+</li>
+ <% if (found != "60049afed00d9b43a49e4da7") { %>
+<!-- Link Relacionados con Usuarios -->
+<li class="bold">
+  <div class="collapsible-header"><i class="material-icons">insert_chart</i>Formularios</div>
+  <div class="collapsible-body grey lighten-5">
+    <% if (user.Sedes.length > 0) { 
+      for (let i = 0; i < user.Sedes.length; i++) {
+        const sede = user.Sedes[i]; %>
+        <a href="/formularios?sede=<%= sede._id %>" class="waves-effect collection-item waves-cyan" style="padding-left: 20px; width: 95%;">
+          <i class="material-icons">class</i>
+          <span class="nav-text"><%= sede.nombre %></span>
+        </a>
+      <% } 
+     } else { %>
+        <a href="#" class="waves-effect collection-item waves-cyan" style="padding-left: 20px; width: 95%;">
+          <i class="material-icons">close</i>
+          <span class="nav-text">No hay sedes asignadas</span>
+        </a>
+    <% } %>
+  </div>
+</li>
+<% } %>
+<li class="bold">
+  <div class="collapsible-header"><i class="material-icons">account_box</i>Profesionales</div>
+  <div class="collapsible-body grey lighten-5">
+    <% if (user.Sedes.length > 0) { 
+      for (let i = 0; i < user.Sedes.length; i++) {
+        const sede = user.Sedes[i]; %>
+    <a href="/profesionales?sede=<%= sede._id %>" class="waves-effect collection-item waves-cyan"
+      style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">class</i>
+      <span class="nav-text"><%= sede.nombre %></span>
+    </a>
+    <% } 
+     } else { %>
+    <a href="#" class="waves-effect collection-item waves-cyan" style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">close</i>
+      <span class="nav-text">No hay sedes asignadas</span>
+    </a>
+    <% } %>
+  </div>
+</li>
+<li class="bold">
+  <div class="collapsible-header"><i class="material-icons">local_hotel</i><%- found == "60049afed00d9b43a49e4da7" ? 'Consultantes' : 'Pacientes' %></div>
+  <div class="collapsible-body grey lighten-5">
+    <% if (user.Sedes.length > 0) { 
+      for (let i = 0; i < user.Sedes.length; i++) {
+        const sede = user.Sedes[i]; %>
+    <a href="/pacientes?sede=<%= sede._id %>" class="waves-effect collection-item waves-cyan"
+      style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">class</i>
+      <span class="nav-text"><%= sede.nombre %></span>
+    </a>
+    <% } 
+     } else { %>
+    <a href="#" class="waves-effect collection-item waves-cyan" style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">close</i>
+      <span class="nav-text">No hay sedes asignadas</span>
+    </a>
+    <% } %>
+  </div>
+</li>
+<% if (found != "60049afed00d9b43a49e4da7") { %>
+<li class="bold">
+  <div class="collapsible-header"><i class="material-icons">list</i>Servicios</div>
+  <div class="collapsible-body grey lighten-5">
+    <% if (user.Sedes.length > 0) { 
+      for (let i = 0; i < user.Sedes.length; i++) {
+        const sede = user.Sedes[i]; %>
+    <a href="/servicios?sede=<%= sede._id %>" class="waves-effect collection-item waves-cyan"
+      style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">class</i>
+      <span class="nav-text"><%= sede.nombre %></span>
+    </a>
+    <% } 
+     } else { %>
+    <a href="#" class="waves-effect collection-item waves-cyan" style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">close</i>
+      <span class="nav-text">No hay sedes asignadas</span>
+    </a>
+    <% } %>
+  </div>
+</li>
+
+<li class="bold">
+  <div class="collapsible-header"><i class="material-icons">account_balance_wallet</i>Facturas</div>
+  <div class="collapsible-body grey lighten-5">
+    <% if (user.Sedes.length > 0) { 
+      for (let i = 0; i < user.Sedes.length; i++) {
+        const sede = user.Sedes[i]; %>
+    <a href="/facturas?sede=<%= sede._id %>" class="waves-effect collection-item waves-cyan"
+      style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">class</i>
+      <span class="nav-text"><%= sede.nombre %></span>
+    </a>
+    <% } 
+     } else { %>
+    <a href="#" class="waves-effect collection-item waves-cyan" style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">close</i>
+      <span class="nav-text">No hay sedes asignadas</span>
+    </a>
+    <% } %>
+  </div>
+</li>
+<% } %>
+<li class="bold">
+  <div class="collapsible-header"><i class="material-icons">description</i><%- found == "60049afed00d9b43a49e4da7" ? 'Reportes' : 'Informes' %></div>
+  <div class="collapsible-body grey lighten-5">
+    <% if (user.Sedes.length > 0) { 
+      for (let i = 0; i < user.Sedes.length; i++) {
+        const sede = user.Sedes[i]; %>
+    <a href="/informes?sede=<%= sede._id %>" class="waves-effect collection-item waves-cyan"
+      style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">class</i>
+      <span class="nav-text"><%= sede.nombre %></span>
+    </a>
+    <% } 
+     } else { %>
+    <a href="#" class="waves-effect collection-item waves-cyan" style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">close</i>
+      <span class="nav-text">No hay sedes asignadas</span>
+    </a>
+    <% } %>
+  </div>
+</li>
+<li class="bold">
+  <div class="collapsible-header"><i class="material-icons">insert_chart</i>Administrar Datos</div>  
+  <div class="collapsible-body grey lighten-5">
+    <% if (user.Sedes.length > 0) { 
+      for (let i = 0; i < user.Sedes.length; i++) {
+        const sede = user.Sedes[i]; %>
+    <a href="/adminDatos?sede=<%= sede._id %>" class="waves-effect collection-item waves-cyan"
+    style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">settings</i>
+      <span class="nav-text">Datos <%= sede.nombre %></span>
+    </a>
+    <% } 
+  } else { %>
+    <a href="#" class="waves-effect collection-item waves-cyan" style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">close</i>
+      <span class="nav-text">No hay sedes asignadas</span>
+    </a>
+    <% } %>
+  </div>
+</li>
+<% if (found != "60049afed00d9b43a49e4da7") { %>
+<li class="bold">
+  <div class="collapsible-header"><i class="material-icons">settings</i>Configuraciones</div>  
+  <div class="collapsible-body grey lighten-5">
+    <a href="/configuracion/textConsentimiento" class="waves-effect waves-cyan">
+      <i class="material-icons">file_upload</i>
+      <span class="nav-text">Texto Consentimiento</span>
+    </a>
+  </div>
+</li>
+<% } %>

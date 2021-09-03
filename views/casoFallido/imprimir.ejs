@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% const sede = CasoFallido.Sede 
+  const profe = CasoFallido.Profesional
+  const paciente = CasoFallido.Paciente
+  %>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> <%= paciente.nombre %> </title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+  </script>
+
+  <style>
+  </style>
+</head>
+
+
+
+<section id="content"  oncopy="return false" onpaste="return false">
+  <div class="container">
+    <div class="row">
+      <div class="col s12 m12 l12">
+        <div class="card-panel">
+            <div id="autorizacion">
+                <% let logoSede = "https://cdnmetamedic.s3.amazonaws.com/images/consultorio.jpg"
+                if (sede.logo) {
+                    logoSede = sede.logo.location
+                }
+              %>
+                <div class="row">
+                  <div class="col 4">
+                    <img src="<%= logoSede %>" alt="Logo" style="max-width: 14rem;">
+                  </div><br>
+                </div>
+                <h5 style="text-align: center;">
+                    
+                   <b>Nombre : </b> <%= sede.nombre %> <br>
+                   <b>Dirección : </b> <%= sede.direccion %><br>
+                   <b>Telefono : </b><%= sede.telefono %><br>
+                   <b>Email : </b><%= sede.email %><br>
+                 
+                </h5>
+            </div>
+            <table id="tabla_caso" class="bordered highlight responsive-table centered">
+                <thead>
+                    <tr>
+                        <th>Datos Del Paciente</th>
+                    </tr> 
+                </thead>
+            <tbody>
+                <tr>
+                    <td>
+            <div class="row">  
+                <div class="input-field col m6 s12">
+                    <label for="primer_nombre">Primer Nombre</label>
+                    <input disabled id="primer_nombre" type="text" class="validate"
+                        value="<%= paciente.primer_nombre%>">
+                </div>
+                <div class="input-field col m6 s12">
+                    <label for="segundo_nombre">Segundo Nombre</label>
+                    <input disabled id="segundo_nombre" type="text" class="validate"
+                        value="<%= paciente.segundo_nombre || " " %>">
+                </div>
+                <div class="input-field col m6 s12">
+                    <label for="primer_apellido">Primer Apellido</label>
+                    <input disabled id="primer_apellido" type="text" class="validate"
+                        value="<%= paciente.primer_apellido%>">
+                </div>
+                <div class="input-field col m6 s12">
+                    <label for="segundo_apellido">Segundo Apellido</label>
+                    <input disabled id="segundo_apellido" type="text" class="validate"
+                        value="<%= paciente.segundo_apellido%>">
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col m6 s12">
+                    <label for="TipoId">Tipo de Identificación:</label>
+                    <input disabled id="TipoId" type="text" value="<%= paciente.tipo_id %>"
+                        class="validate">
+                </div>
+                <div class="input-field col m6 s12">
+                    <label for="identificacion">Número de Identificación</label>
+                    <input disabled id="identificacion" type="text" value="<%= paciente.username %>"
+                        class="validate">
+                </div>
+               
+                    <div class="input-field col m6 s12">
+                        <legend style="font-size: small;" for="email">Email:</legend>
+                        <input value="<%= paciente.email %>" disabled id="email" type="email"
+                            class="validate">
+                    </div>
+                    <div class="input-field col m6 s12">
+                        <label for="phone">Celular:</label>
+                        <input disabled id="phone" type="text" class="validate"
+                            value="+<%= paciente.telefono %>">
+                    </div>
+                
+            </div>
+            <div class="row">
+                <div class="input-field col m6 s12">
+                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                    <input disabled type="text" id="fecha_nacimiento" class="datepicker"
+                        value="<%=paciente.dd_nacimiento%>/<%=paciente.mm_nacimiento%>/<%=paciente.yyyy_nacimiento%>">
+                </div>
+                <div class="input-field col m6 s12">
+                    <label for="genero">Género de Nacimiento</label>
+                    <input disabled id="genero" type="text" class="validate"
+                    value="<%= paciente.genero_nacimiento %>">
+                </div>
+                <div class="input-field col m6 s12">
+                    <label for="ocupacion">Ocupación:</label>
+                    <input disabled id="ocupacion" type="text" class="validate"
+                        value="<%= paciente.ocupacion %>">
+                </div>
+                <div class="input-field col m6 s12">
+                    <label>Estado Civil:</label>
+                    <input disabled id="ocupacion" type="text" class="validate"
+                        value="<%= paciente.estado_civil %>">
+                </div>
+            </div>
+                 </td>
+               </tr>
+            </tbody>
+         </table>
+            <br><br>
+            <div class="row">
+                <div class="col s12">
+                <p>        
+                    <%= CasoFallido.argumento %>
+                </p><br><br><br>
+                <p style="text-align: center;"><img src="<%= profe.foto_firma != null ? profe.foto_firma.location : 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/600px-Imagen_no_disponible.svg.png' %>"  width="120" height="80" ></p>
+                <p style="text-align: center;"><%= profe.nombre %> <%= profe.apellido %><br><%= profe.profesion %><br><%= profe.especialidad %><br><b>T.P </b><%= profe.tarjeta_profesional %><br></p>
+            </div>
+         </div><br><br>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<script>
+  
+    window.onload = function () {
+      window.print();
+    }
+</script>

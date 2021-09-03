@@ -1,0 +1,111 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+<section id="content">
+    <div class="container">
+        <span style="font-size: 3rem;"> <%= title %>
+            <a href="/sedes/crearSede" class="btn-floating waves-effect waves-light red"><i
+                    class="material-icons">add</i></a>
+        </span>
+        <div class="row">
+            <% Sedes.forEach(sede => { %>
+                <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-image">
+                        <a href="/sedes/ver?id=<%= sede._id %>">
+                            <% let logoSede = "https://cdnmetamedic.s3.amazonaws.com/images/consultorio.jpg"
+                            if (sede.logo) {
+                                logoSede = sede.logo.location
+                            }
+                             %>
+                            <img src="<%= logoSede %>">
+                        </a>
+                        <span class="card-title"
+                            style="text-shadow: 2px 2px 2px #444444; font-weight: 800;"><%= sede.nombre%></span>
+                        <a href="/sedes/ver?id=<%= sede._id %> "
+                            class="btn-floating halfway-fab waves-effect waves-light red"><i
+                                class="material-icons">remove_red_eye</i></a>
+                    </div>
+                    <div class="card-content">
+                        <p>
+                            <b>Dirección</b>
+                            <br>
+                            - <%= sede.direccion %>
+                        </p>
+                        <p><b>Teléfono</b>
+                            <br>
+                            <%= sede.telefono %>
+                        </p>
+                        <p><b>Código</b>
+                            <br>
+                            - <%= sede.codigo %></p>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+
+        </div>
+
+    </div>
+</section>
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+
+<script>
+    var input = document.querySelector("#phone");
+    window.intlTelInput(input, {
+        // allowDropdown: false,
+        // autoHideDialCode: false,
+        // autoPlaceholder: "off",
+        // dropdownContainer: document.body,
+        // excludeCountries: ["us"],
+        // formatOnDisplay: false,
+        // geoIpLookup: function(callback) {
+        //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+        //     var countryCode = (resp && resp.country) ? resp.country : "";
+        //     callback(countryCode);
+        //   });
+        // },
+        // hiddenInput: "full_number",
+        // initialCountry: "auto",
+        // localizedCountries: { 'de': 'Deutschland' },
+        nationalMode: false,
+        // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+        placeholderNumberType: "MOBILE",
+        preferredCountries: ['gt', 'co'],
+        separateDialCode: true,
+        utilsScript: "https://cdnmetamedic.s3.amazonaws.com/js/intl-input/utils.js",
+    });
+    $('.datepicker').pickadate({
+        monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+            'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'
+        ],
+        monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov',
+            'Dic'
+        ],
+        weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+        selectMonths: true,
+        selectYears: 200, // Puedes cambiarlo para mostrar más o menos años
+        min: new Date(1940, 1, 1),
+        max: true, // `true` sets it to today. `false` removes any limits.
+        today: 'Hoy',
+        clear: 'Limpiar',
+        close: 'Ok',
+        labelMonthNext: 'Siguiente mes',
+        labelMonthPrev: 'Mes anterior',
+        labelMonthSelect: 'Selecciona un mes',
+        labelYearSelect: 'Selecciona un año',
+        container: undefined, // ex. 'body' will append picker to body
+
+    });
+    $('.datepicker').on('mousedown', function (event) {
+        event.preventDefault();
+    })
+    $(document).on("click", ".select-wrapper", function (event) {
+        event.stopPropagation();
+    });
+</script>
+
+<% include  ../view_distribution/bot2.ejs%>

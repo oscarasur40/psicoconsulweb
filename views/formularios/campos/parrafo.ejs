@@ -1,0 +1,12 @@
+<% if (renderizar) { %>
+  <div class="input-field col s12 m<%= ancho %>" orden="<%= orden %>">
+    <textarea id="<%= id %>" class="materialize-textarea campo <%= validar %>" tipo="parrafo" data-length="100000"><%- value != undefined ? value : "" %></textarea>
+    <label for="<%= id %>"><%= nombre %></label>
+  </div>
+<% } else { %>
+  _$div class="input-field col s12 m_$%= ancho %$_" orden="_$%= orden %$_"$_
+    _$textarea id="_$% id %$_" class="materialize-textarea campo _$%= validar %$_" tipo="parrafo" data-length="100000"
+    $__$%- value != undefined ? value : "" %$__$/textarea$_
+    _$label for="_$% id %$_"$__$%= nombre %$__$/label$_
+  _$/div$_
+<% } %>

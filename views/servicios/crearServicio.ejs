@@ -1,0 +1,212 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <h4 class=""><%= title %></h4>
+                <h5><small><span style="color:red">*</span> = Campo Obligatorio</small></h5>
+                <ul class="collapsible popout" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i>Datos del Servicio
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="input-field col m12 s12">
+                                    <input id="nombre" type="text" class="validate">
+                                    <label for="nombre">Nombre: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="col m2 s2">
+                                    <div class="switch">
+                                        <br>
+                                        <label>
+                                            No
+                                            <input type="checkbox" checked id="need_cups">
+                                            <span class="lever"></span>
+                                            Si
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="input-field col m10 s10">
+                                    <input id="cups" type="text">
+                                    <label for="cups">CUPS: <span style="color:red">*</span></label>
+                                </div>
+
+                                <div class="input-field col m8 s12">
+                                    <select id="Formulario" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                    </select>
+                                    <label>Formulario a Utilizar</label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input id="valor_consulta" type="number" min="0" step=".01" class="validate">
+                                    <label for="valor_consulta">Valor de la consulta: <span
+                                            style="color:red">*</span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+
+                <div class="col m12 m12 s12 text-center">
+                    <button class="col m12 m12 s12 btn waves-effect green waves-light" id="enviar_data">
+                        <i class="material-icons">save</i>
+                        <span style="position: relative; bottom: 4px;"> Guardar</span>
+                    </button>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
+<script>
+    $('input#input_text, textarea#textarea1').characterCounter();
+
+    const sede_id = new URLSearchParams(window.location.search).get('sede');
+    var cups = <%-JSON.stringify(cups)%>;
+    var cupsauto = Object({});
+    for (let i = 0; i < cups.length; i++) {
+        const cup = cups[i];
+        cupsauto[(`${cup.codigo} | ${cup.nombre}`)] = null;
+    }
+
+    $(document).on("click", ".select-wrapper", function (event) {
+        event.stopPropagation();
+    });
+
+
+
+    $(document).ready(function () {
+        console.log('Preparado para enviar');
+        autocompleteCUPS('#cups')
+        $.ajax({
+            method: 'GET',
+            url: `/api/formularios?filter[Sede]=${sede_id}&limit=1000000&projection=nombre+preguntas`,
+            success: function (response) {
+                console.log(response);
+                for (let i = 0; i < response.length; i++) {
+                    const formulario = response[i];
+                    $('#Formulario').append(
+                        `<option value="${formulario._id}">${formulario.nombre}</option>`)
+                }
+                $('#Formulario').material_select();
+            },
+            error: function (a, b, c) {
+                console.log(a, b, c);
+                Materialize.toast(
+                    'Hubo un error al buscar los formularios. Verificar e Intentar de nuevo.',
+                    4000, 'rounded red');
+            }
+        })
+
+        let valor_check = $('#need_cups').is(':checked')
+
+        $('#need_cups').change(function () {
+            if (this) {
+                $('#cups').prop('disabled', function (i, v) {
+                    return !v;
+                })
+                $('#cups').val("")
+            }
+        })
+
+        $('#probar').click(function () {
+            let valor_check = $('#need_cups').is(':checked')
+            let cups = ""
+
+            if (valor_check) {
+                cups = ($('#cups').val()).split(' | ');
+            } else {
+                cups = [
+                    "000000",
+                    "No Aplica"
+                ]
+            }
+            const cups_codigo = cups[0]
+            const cups_nombre = cups[1]
+
+            console.log(cups);
+        })
+
+        $('#enviar_data').click(function () {
+            const url = '/api/servicios';
+            const method = 'POST'
+
+            const Sede = new URLSearchParams(window.location.search).get('sede');
+            const nombre = $('#nombre').val()
+            let valor_check = $('#need_cups').is(':checked')
+            let cups = ""
+
+            if (valor_check) {
+                cups = ($('#cups').val()).split(' | ');
+            } else {
+                cups = [
+                    "000000",
+                    "No Aplica"
+                ]
+            }
+            const cups_codigo = cups[0]
+            const cups_nombre = cups[1]
+            const Formulario = $('#Formulario').val()
+            const valor_consulta = $('#valor_consulta').val()
+
+
+            const body = {
+                Sede,
+                nombre,
+                cups_codigo,
+                cups_nombre,
+                Formulario,
+                valor_consulta
+            }
+
+            console.log(body);
+
+            $.ajax({
+                method: method,
+                url: url,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(body),
+                success: function (response) {
+                    console.log(response);
+                    Materialize.toast('Servicio creado con éxito.', 4000, 'rounded green')
+                    setTimeout(function () {
+                        location.href = `/servicios?sede=${Sede}`
+                    }, 2000);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    const errors = jqXHR.responseJSON.error.errors;
+                    let htmlErrors = "";
+                    for (const err in errors) {
+                        if (errors.hasOwnProperty(err)) {
+                            const error = errors[err];
+                            htmlErrors += `<br>${error.message}`
+                        }
+                    }
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    Materialize.toast(
+                        `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                        10000, 'rounded red');
+                }
+            })
+
+        })
+    })
+
+    function autocompleteCUPS(input) {
+        $(input).autocomplete({
+            minLength: 2,
+            limit: 20,
+            data: cupsauto
+        })
+    }
+</script>
+
+<% include  ../view_distribution/bot2.ejs%>

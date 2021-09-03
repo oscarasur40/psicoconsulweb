@@ -1,0 +1,367 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+<section id="content">
+    <input type="hidden" id="sede_id" value="<%= sede_id %>">
+    <div class="container" id="contenido">
+        <div class="row">
+            <div class="col l6 m12 s12">
+                <div class="row">
+                    <div class="col l12 m12 s12" id="imagen">
+                        <div class="card">
+                            <div class="card-image" id="card_image_logo">
+                                <img class="materialboxed" width="100%" alt="foto_consultorio" id="logo_sede"
+                                    src="https://cdnmetamedic.s3.amazonaws.com/images/consultorio.jpg">
+                            </div>
+                            <div class="card-action right">
+                                <div class="file-field input-field col s12 m"
+                                    orden="">
+                                    <div class="btn green">
+                                        <span>Subir Logo <i class="material-icons right">file_upload</i></span>
+                                        <input type="file" accept="image/*" id="logo_upload" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col l6 m12 s12">
+                <ul class="collapsible" data-collapsible="accordion">
+                    <li>
+                        <div class="collapsible-header active"> <i class="material-icons">toc</i> Datos
+                        </div>
+                        <div class="collapsible-body">
+                            <h4 class=" center" id="nombre"></h4>
+                            <p>
+                                <b>
+                                    Teléfono:
+                                </b>
+                            </p>
+                            <h5 style="font-size: 1.25rem;" id="telefono"></h5>
+                            <p class="">
+                                <b>
+                                    Dirección:
+                                </b>
+                                <br>
+                            </p>
+                            <h5 style="font-size: 1.25rem;" id="direccion"></h5>
+                            <p>
+                                <b>
+                                    Código de Prestación de Servicios:
+                                </b>
+                            </p>
+                            <h5 style="font-size: 1.25rem;" id="codigo"></h5>
+                            <p>
+                                <b>
+                                    Correo Electrónico:
+                                </b>
+                            </p>
+                            <h5 style="font-size: 1.25rem;" id="email"></h5>
+                            <p>
+                                <b>
+                                    Representante Legal:
+                                </b>
+                            </p>
+                            <h5 style="font-size: 1.25rem;" id="representante_nombre"></h5>
+                            <p>
+                                <b>
+                                    Identificación de Representante legal:
+                                </b>
+                            </p>
+                            <h5 style="font-size: 1.25rem;" id="representante_identificacion"></h5>
+                            <p>
+                                <b>
+                                    Tipo de Identificación:
+                                </b>
+                            </p>
+                            <h5 style="font-size: 1.25rem;" id="representante_identificacion_tipo"></h5>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">settings_applications</i>Editar
+                            Información
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <span><b>Información Principal</b></span>
+                                <br>
+                                <div class="input-field col l12 s12">
+                                    <input id="nuevo_nombre" type="text" value="" class="validate">
+                                    <label for="nombre">Nombre <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col l12 s12">
+                                    <input id="nuevo_phone" name="phone" type="tel">
+                                    <!-- <label for="phone">Teléfono: </label> -->
+                                </div>
+                                <div class="input-field col l12 s12 mt-5">
+                                    <input id="nuevo_direccion" type="text" value="" class="validate">
+                                    <label for="direccion">Dirección</label>
+                                    <br>
+                                </div>
+                                <br>
+                                <span><b>Información adicional</b></span>
+                                <br>
+                                <br>
+                                <div class="input-field col l12 s12">
+                                    <input id="nuevo_representante_nombre" type="text" value="" class="validate">
+                                    <label for="nuevo_representante_nombre">Nombre de Representante legal</label>
+                                </div>
+                                <div class="input-field col l12 s12">
+                                    <select id="nuevo_representante_identificacion_tipo"
+                                        class="validate select browse-select">
+                                        <option value="CC" selected> Cédula de Ciudadanía
+                                        </option>
+                                        <option value="NI">Número de identificación tributaria – NIT</option>
+                                        <option value="CE">Cédula de Extranjería</option>
+                                        <option value="CD">Carné diplomático</option>
+                                        <option value="PA">Pasaporte</option>
+                                        <option value="PE">Permiso Especial de Permanencia</option>
+                                    </select>
+                                    <label>Tipo de identificación: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col l12 s12">
+                                    <input id="nuevo_representante_identificacion" type="text" value=""
+                                        class="validate">
+                                    <label for="nuevo_representante_identificacion">Número de Identificación</label>
+                                </div>
+                                <div class="input-field col l12 s12">
+                                    <input id="nuevo_codigo_servicios" type="text" class="validate tooltipped"
+                                        data-position="top" data-delay="50"
+                                        data-tooltip="Si esta obligado a generar RIPS, debe Ingresar ese campo.">
+                                    <label for="nuevo_codigo_servicios">Código de
+                                        Prestación de Servicios</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col l12 m12 s12 text-center">
+                                    <button class="col l12 m12 s12 btn waves-effect green waves-light" id="enviar_data">
+                                        <i class="material-icons">save</i>
+                                        <span style="position: relative; bottom: 4px;">
+                                            Guardar</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+
+<script>
+    var input = document.querySelector("#nuevo_phone");
+    window.intlTelInput(input, {
+        // allowDropdown: false,
+        // autoHideDialCode: false,
+        // autoPlaceholder: "off",
+        // dropdownContainer: document.body,
+        // excludeCountries: ["us"],
+        // formatOnDisplay: false,
+        // geoIpLookup: function(callback) {
+        // $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+        // var countryCode = (resp && resp.country) ? resp.country : "";
+        // callback(countryCode);
+        // });
+        // },
+        // hiddenInput: "full_number",
+        // initialCountry: "auto",
+        // localizedCountries: { 'de': 'Deutschland' },
+        nationalMode: false,
+        // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+        placeholderNumberType: "MOBILE",
+        preferredCountries: ['co', 'gt'],
+        separateDialCode: false,
+        utilsScript: "https://cdnmetamedic.s3.amazonaws.com/js/intl-input/utils.js",
+    });
+
+    $(document).on("click", ".select-wrapper", function (event) {
+        event.stopPropagation();
+    });
+
+
+    $(document).ready(function () {
+        const sede_id = $('#sede_id').val().split(' ').join('');
+        console.log(sede_id);
+        console.log(typeof sede_id);
+        console.log(sede_id.length);
+        if (sede_id.length != "") {
+            $.ajax({
+                method: 'GET',
+                url: '/api/sedes/' + sede_id,
+                success: function (response) {
+                    console.log(response);
+
+                    $('#nombre').html(response.nombre)
+                    $('#propietario').html(response.propietario)
+                    $('#telefono').html('- ' + response.telefono)
+                    $('#direccion').html('- ' + response.direccion)
+                    $('#codigo').html('- ' + response.codigo)
+                    $('#email').html('- ' + response.propietario.email)
+
+                    $('#representante_nombre').html('- ' + response.representante_nombre)
+                    $('#representante_identificacion').html('- ' + response.representante_identificacion)
+                    $('#representante_identificacion_tipo').html('- ' + response.representante_identificacion_tipo)
+                    $('#codigo_servicios').html('- ' + response.codigo_servicios)
+
+                    $('#nuevo_nombre').val(response.nombre)
+                    $('#nuevo_phone').val(response.telefono)
+                    $('#nuevo_direccion').val(response.direccion)
+                    $('#sede_id').val(response._id)
+                    $('#nuevo_representante_nombre').val(response.representante_nombre)
+                    $('#nuevo_representante_identificacion').val(response.representante_identificacion)
+                    $('#nuevo_representante_identificacion_tipo').val(response.representante_identificacion_tipo)
+                    $('#nuevo_codigo_servicios').val(response.codigo)
+
+                    if (response.logo) {
+                        $('#logo_sede').attr('src', response.logo.location)
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus);
+                    console.log(jqXHR);
+                    console.log(errorThrown);
+
+                    $('#contenido').html(` <br>
+                    <h2 class="center">
+                        ¡Huy! Parece que no hay datos qué mostrar.
+                                <img class="materialboxed responsive-img" style="margin: 0 auto"
+                                    src="https://www.clipartkey.com/mpngs/m/210-2106327_robot-error-404-png.png">
+
+                        <a href="/" class="waves-effect waves-light btn">Ir a inicio</a>
+                    </h2>`)
+                }
+            })
+        } else {
+            $('#contenido').html(` <br>
+                <h2 class="center">
+                    ¡Huy! Parece que no hay datos qué mostrar.
+        <img class="materialboxed responsive-img" style="margin: 0 auto"
+            src="https://www.clipartkey.com/mpngs/m/210-2106327_robot-error-404-png.png">
+
+                    <a href="/" class="waves-effect waves-light btn">Ir a inicio</a>
+                </h2>`)
+        }
+
+        $('#enviar_data').click(function () {
+            const code = $('.iti__selected-dial-code').html()
+            const telefono = $('#nuevo_phone').val()
+
+            const nombre = $('#nuevo_nombre').val();
+            const direccion = $('#nuevo_direccion').val();
+            const codigo = $('#nuevo_codigo_servicios').val();
+            const sede_id = $('#sede_id').val();
+            const representante_nombre = $('#nuevo_representante_nombre').val()
+            const representante_identificacion_tipo = $('#nuevo_representante_identificacion_tipo').val()
+            const representante_identificacion = $('#nuevo_representante_identificacion').val()
+
+
+            const body = {
+                nombre,
+                telefono,
+                direccion,
+                codigo,
+                representante_nombre,
+                representante_identificacion_tipo,
+                representante_identificacion
+            }
+
+            $.ajax({
+                method: 'PATCH',
+                url: '/api/sedes/' + sede_id,
+                data: body,
+                success: function (response) {
+                    console.log(response);
+                    $('#enviar_data').html(`<i class="material-icons">save</i><span
+                    style="position: relative; bottom: 4px;">Guardar</span>`)
+
+                    Materialize.toast('Datos modificados con éxito.', 4000, 'rounded green')
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    for (const err in errors) {
+                        if (errors.hasOwnProperty(err)) {
+                            const error = errors[err];
+                            htmlErrors += `<br>${error.message}`
+                        }
+                    }
+                    $('#enviar_data').html(`<i class="material-icons">save</i><span
+                    style="position: relative; bottom: 4px;">Guardar</span>`)
+                    console.log(textStatus);
+                    console.log(jqXHR);
+                    console.log(errorThrown);
+                    Materialize.toast(
+                        `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                        10000, 'rounded red');
+                }
+            })
+
+        })
+        
+        $('#logo_upload').bind('change', function () {
+            if (this.files[0].size / 1024 / 1024 > 1) {
+                alert('La imagen es demaisado grande. (Tamaño Máximo: 1 MB)');
+                this.value = "";
+            } else {
+                Materialize.toast('Subiendo Imagen.', 4000, 'rounded blue')
+                console.log('Imagen Aceptada');
+                const sede_id = $('#sede_id').val();
+                const campo_id = 'logo';
+                const tipo = 'imagen'
+                const tipo_id = $('#sede_id').val();
+                var archivo = 'logo_de_sede'
+                var formData = new FormData();
+                formData.append('archivo', document.getElementById('logo_upload').files[0]);
+                const urlEnvio = `/api/archivos?sede=${sede_id}&tipo=${tipo}&tipo_id=${tipo_id}&campo_id=${campo_id}`
+                $.ajax({
+                    url: urlEnvio,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false,  // tell jQuery not to set contentType
+                    enctype: 'multipart/form-data',
+                    success: function (response) {
+                        Materialize.toast('Imagen subida con éxito.', 4000, 'rounded green')
+                        console.log(response);
+                        const bodySend = JSON.stringify({
+                            logo: response.data
+                        })
+                        console.log(bodySend)
+                        $.ajax({
+                            method: 'PATCH',
+                            url: '/api/sedes/' + sede_id,
+                            contentType: 'application/json',
+                            data: bodySend,
+                            success: function (dataSede) {
+                                Materialize.toast('Asignada a la Sede con éxito.', 4000, 'rounded green')
+                                console.log(dataSede);
+                                setTimeout(function(){
+                                    location.reload()
+                                }, 2000)
+                            },
+                            error: function (a, b, c){
+                                Materialize.toast('Hubo un error al asignar a la sede. Vuelve a Intentarlo', 4000, 'rounded blue')
+                                console.error(a, b, c)
+                            }
+                        });
+                    },
+                    error: function (a, b, c){
+                        Materialize.toast('Hubo un error al subir el archivo.', 4000, 'rounded blue')
+                        console.error(a, b, c)
+                    }
+                });
+            };
+        });
+    })
+</script>
+
+<% include  ../view_distribution/bot2.ejs%>

@@ -1,0 +1,5 @@
+<script>
+  function convertEJS(text) {
+    return (text).split('_$').join('<').split('$_').join('>').split('*').join('`').split('[').join('{')
+  }
+</script>

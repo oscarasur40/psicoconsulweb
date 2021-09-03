@@ -1,0 +1,1639 @@
+<% include  ../../view_distribution/top1.ejs%>
+<style>
+    .fc-content td:hover {
+        background: #adf4fa;
+    }
+    .select2-results__option{
+        color: #ff4081;
+    }
+
+
+</style>
+
+<% include  ../../view_distribution/top2.ejs%>
+<% include  ../../view_distribution/sidebar-left.ejs%>
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <h4 class="">Crear Profesional</h4>
+                <h5><small><span style="color:red">*</span> = Campo Obligatorio</small></h5>
+                <ul class="collapsible popout" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i> Datos Personales
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <% if(sede_id === '60049afed00d9b43a49e4da7') { %>
+                                <div class="input-field col m5 s12">
+                                    <select id="tipo_id" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="CC">Cédula De Ciudadanía</option>
+                                        <option value="CE">Cédula De Extranjería</option>
+                                        <option value="PA">Pasaporte</option>
+                                        <option value="PE">Permiso Especial De Permanencia</option> 
+                                    </select>
+                                    <label>Tipo de Identifiación: <span style="color:red">*</span></label>
+                                </div>
+                                <% } 
+                                else { %> 
+                                    <div class="input-field col m5 s12">
+                                        <select id="tipo_id" class="validate select browse-select">
+                                            <option value="" disabled selected>Elige una opción</option>
+                                            <option value="CC">Cédula De Ciudadanía</option>
+                                            <option value="CE">Cédula De Extranjería</option>
+                                            <option value="CD">Carné Diplomático</option>
+                                            <option value="PA">Pasaporte</option>
+                                            <option value="PE">Permiso Especial De Permanencia</option>
+                                            <option value="RC">Registro Civil</option>
+                                            <option value="TI">Tarjeta De Identidad</option>
+                                            <option value="CN">Certificado De Nacido Vivo</option>
+                                            <option value="AS">Adulto Sin Identificar</option>
+                                            <option value="MS">Menor Sin Identificar</option>
+                                        </select>
+                                        <label>Tipo de Identifiación: <span style="color:red">*</span></label>
+                                    </div>
+
+                                <% } %>
+                                <div class="input-field col m4 s12">
+                                    <input id="identificacion" type="text" class="validate" >
+                                    <label for="identificacion">Número de Identifiación <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <input id="user_id" type="hidden" value="<%= user._id%>" class="validate">
+
+                                <div class="input-field col m5 s12">
+                                    <input id="primer_nombre" type="text" class="validate">
+                                    <label for="primer_nombre">Primer Nombre <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input id="segundo_nombre" type="text" class="validate">
+                                    <label for="segundo_nombre">Segundo Nombre</label>
+                                </div>
+                                <div class="input-field col m5 s12">
+                                    <input id="primer_apellido" type="text" class="validate">
+                                    <label for="primer_apellido">Primer Apellido <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input id="segundo_apellido" type="text" class="validate">
+                                    <label for="segundo_apellido">Segundo Apellido <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col m5 s12">
+                                    <input id="usuario" type="text" class="validate">
+                                    <label for="usuario">Usuario <span
+                                            style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input id="password" type="password" class="validate" readonly>
+                                    <label for="password">Contraseña</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col m4 s12">
+                                    <input id="email" type="email" class="validate">
+                                    <label for="email">CORREO INSTITUCIONAL  <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input id="phone" name="phone" type="tel">
+                                    <!-- <label for="phone">Teléfono: </label> -->
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <select id="estado" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="A">Activo</option>
+                                        <option value="I">Inactivo</option>
+                                    </select>
+                                    <label>Estado: <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col m4 s12">
+                                    <input type="text" id="fecha_nacimiento" class="datepicker">
+                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <select id="estado_civil" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="soltero">Soltero(a)</option>
+                                        <option value="casado">Casado(a)</option>
+                                        <option value="union_libre">Unión libre</option>
+                                        <option value="separado">Separado(a)</option>
+                                        <option value="divorciado">Divorciado(a)</option>
+                                        <option value="viudo">Viudo(a)</option>
+                                    </select>
+                                    <label>Estado Civil: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <select id="genero" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="Femenino">Femenino</option>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                    <label>Género de Nacimiento</label>
+                                </div>
+                            </div>
+                            <div class="row">     
+                                <% if(sede_id === '60049afed00d9b43a49e4da7') { %>                               
+                                <div class="input-field col m3 s12">
+                                    <select id="pregradoSelect" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="DI">DIRECTOR</option>
+                                        <option value="SC">SECRETARIA</option>
+                                        <option value="AU">AUDITOR</option>
+                                        <option value="PG">PRACTICANTE</option>
+                                        <option value="SP">SUPERVISOR</option>
+                                    </select>
+                                    <label for="pregradoSelect">Roles</label>
+                                </div>
+                                <% } 
+                                else { %> 
+                                    <div class="input-field col m3 s12">
+                                        <select id="pregradoSelect" class="validate select browse-select">
+                                            <option value="" disabled selected>Elige una opción</option>
+                                            <option value="DI">DIRECTOR</option>
+                                            <option value="SC">SECRETARIA</option>
+                                            <option value="PG">PRACTICANTE</option>
+                                            <option value="SP">SUPERVISOR</option>
+                                        </select>
+                                        <label for="pregradoSelect">Roles</label>
+                                    </div>  
+                                <% } %>     
+                                <div id="dropdownInstitucion" class="input-field col m3 s12">
+                                    <div id="PG" class="institucion" style="display:none">
+                                        <select id="PG_pregrado" class="validate select browse-select">
+                                          <option value="" disabled selected>Elige una opción</option>
+                                          <option value="PG_PG">Pregrado</option>
+                                          <option value="PG_MS">Maestria Semanal</option>
+                                          <option value="PG_MQ">Maestria Quincenal</option>
+                                        </select>
+                                        <label for="PG_pregrado"></label>
+                                    </div>
+                                    <div id="SP" class="institucion" style="display:none" class="input-field col m4 s12">
+                                        <select id="SP_supervisor" class="validate select browse-select">
+                                          <option value="" disabled selected>Elige una opción</option>
+                                          <option value="SP_FF">FORMACIÓN</option>
+                                          <option value="SP_II">INVESTIGACIÓN</option>
+                                        </select>
+                                        <label for="SP_pregrado"></label>
+                                    </div>
+                                </div>
+                                <div id="dropdownProfesional" class="input-field col m3 s12">                                    
+                                    <div id="PG_PG" class="institucion1 " style="display:none"> 
+                                        <select id="PG_PG_IX_pregrado" class="validate select browse-select">
+                                            <option value="" disabled selected>Elige una opción</option>
+                                            <option value="PG_PG_IX">IX</option>
+                                        </select>
+                                        <label for="PG_PG_IX_pregrado"></label>
+                                    </div>
+                                    <div id="PG_MS" class="institucion1 " style="display:none">
+                                        <select id="PG_MS_pregrado" class="validate select browse-select">
+                                          <option value="" disabled selected>Elige una opción</option>
+                                          <option value="PG_MS_I">I</option>
+                                          <option value="PG_MS_II">II</option>
+                                          <option value="PG_MS_III">III</option>
+                                          <option value="PG_MS_IV">IV</option>
+                                        </select>
+                                        <label for="PG_MS_pregrado"></label>
+                                    </div>
+                                    <div id="PG_MQ" class="institucion1" style="display:none">                  
+                                        <select id="PG_MQ_pregrado" class="validate select browse-select">
+                                            <option value="" disabled selected>Elige una opción</option>
+                                            <option value="PG_MQ_I">I</option>
+                                            <option value="PG_MQ_II">II</option>
+                                            <option value="PG_MQ_III">III</option>
+                                            <option value="PG_MQ_IV">IV</option>
+                                        </select>
+                                        <label for="PG_MQ_pregrado"></label>
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div  id="dropdownProfesionalSupervisor">                                                                 
+                                    <div id="supervisorAsingProf" >
+                                        <select id="tpAsignado" style="width: 440px; background: #ff4081;" >
+                                            <option value="" disabled selected>Elige una opción Para Asignar un supervisor</option>
+                                        </select>
+                                    </div>
+                            </div><br>
+                        </div>
+                    </li>
+                    <% if(sede_id !== '60049afed00d9b43a49e4da7') { %>
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i> Dirección
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="input-field col m3 s12">
+                                    <select id="pais"
+                                        class="validate select browse-select membresia_precio_calc ">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <% 
+                                       
+                                        for (let i = 0; i < paises.length; i++) {
+                                            const pais = paises[i]; %>
+                                            <option value="<%= pais.name %>"><%= pais.name %></option>
+                                        <% } %>
+                                    </select>
+                                    <label for="pais">Pais <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                                   
+                                    <select id="departamento2"
+                                        class="validate select browse-select membresia_precio_calc departamentosSelect1">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                       
+                                    </select>
+
+                                    <select id="departamento"
+                                        class="validate select browse-select membresia_precio_calc departamentosSelect2 departamento0">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <% 
+                                        departamentos.sort(function (a, b) {
+                                            if (a.Nombre > b.Nombre) {
+                                                return 1
+                                            } else if (a.Nombre < b.Nombre) {
+                                                return -1
+                                            } else {
+                                                return 0
+                                            }
+                                        })
+                                        for (let i = 0; i < departamentos.length; i++) {
+                                            const depa = departamentos[i]; %>
+                                            <option value="<%= depa.Codigo %>"><%= depa.Nombre %></option>
+                                        <% } %>
+                                    </select>
+                                    
+                                    <input id="departamento" type="text" value="" placeholder="Digite su Departamento/Estado" disabled class="validate departamentosInput departamento1">
+                                    <label for="departamento">Departamento <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <select id="municipio"
+                                        class="validate select browse-select membresia_precio_calc municipiosSelect2 municipio0">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                    </select>
+
+                                    <input id="municipio"  type="text" value="" placeholder="Digite su Ciudad/Municipio" disabled class="validate municipiosInput municipio1">
+                                    <label for="municipio">Municipio <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <input id="localidad" type="text" class="validate localidad1">
+                                    <select id="localidad"
+                                        class="validate select browse-select membresia_precio_calc localidadSelect2 localidad0">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="Usaquén">Usaquén</option>
+                                        <option value="Chapinero">Chapinero</option>
+                                        <option value="Santafé">Santafé</option>
+                                        <option value="San Cristobal">San Cristobal</option>
+                                        <option value="Usme">Usme</option>
+                                        <option value="Tunjuelito">Tunjuelito</option>
+                                        <option value="Bosa">Bosa</option>
+                                        <option value="Kennedy">Kennedy</option>
+                                        <option value="Fontibón">Fontibón</option>
+                                        <option value="Engativá">Engativá</option>
+                                        <option value="Suba">Suba</option>
+                                        <option value="Barrios Unidos">Barrios Unidos</option>
+                                        <option value="Teusaquillo">Teusaquillo</option>
+                                        <option value="Los Mártires">Los Mártires</option>
+                                        <option value="Antonio Nariño">Antonio Nariño</option>
+                                        <option value="Puente Aranda">Puente Aranda</option>
+                                        <option value="La Candelaria">La Candelaria</option>
+                                        <option value="Rafael Uribe Uribe">Rafael Uribe Uribe</option>
+                                        <option value="Ciudad Bolivar">Ciudad Bolivar</option>
+                                        <option value="Sumapaz">Sumapaz</option>
+                                        <option value="Municipios">Municipios</option>
+                                    </select>
+                                    <label for="localidad">Localidad</label>
+                                </div>
+                                <div class="input-field col m9 s11 ">
+                                    <textarea id="direccion" class="materialize-textarea" data-length="120"></textarea>
+                                    <label for="direccion">Dirección</label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <select id="zona" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="rural">Rural</option>
+                                        <option value="urbana">Urbana</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                    <label>Zona</label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                   <% } %>
+                   
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i>Datos Profesionales</div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="input-field col m3 s12">
+                                    <input id="profesion" type="text" class="validate">
+                                    <label for="profesion">Profesión: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <input id="especialidad" type="text"
+                                        class="validate">
+                                    <label for="especialidad">Especialidad: <span
+                                            style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <input id="tarjeta_profesional" type="text" class="validate">
+                                    <label for="tarjeta_profesional">Tarjeta Profesional: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <select id="tipo_profesional" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="profesional">Profesional</option>
+                                        <option value="auxiliar">Auxiliar</option> 
+                                        <option value="estudiante">Estudiante</option>
+                                    </select>
+                                    <label>Tipo de Profesional</label>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                            </div>
+                        </div>
+                    </li>
+                   
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i>Disponibilidad del Profesional</div>
+                        
+                        <!-- <%= sede_id  %> -->
+                        <% if(sede_id === '60049afed00d9b43a49e4da7') { %>
+
+                        <% } else { %>
+                            <div class="collapsible-body">
+                                <div class="row">  
+                                    <div class="input-field col m2 s12 ">
+                                        Lunes
+                                    </div>                              
+                                    <div class="row">
+                                        <div class="col m1.1">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="LDiurno">
+                                                <label class="form-check-label" for="LDiurno">Diurno</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="LTarde">
+                                                <label class="form-check-label" for="LTarde">Tarde</label>
+                                            </div>
+                                        </div>
+                                        <div class="col m3">
+                                            <div class="input-field col m10 s12" id="LDiurnoTime" style="display:none">
+                                                Horario Inicial Diruno
+                                                <label for="apptILD"></label>
+                                                <input type="time" id="apptILD" name="appt">
+                                                Horario Final Diurno
+                                                <label for="apptFLD"></label>
+                                                <input type="time" id="apptFLD" name="appt">
+                                            </div>
+                                        </div>
+                                        <div class="col m4">                                        
+                                            <div class="input-field col m8 s12" id="LTardeTime" style="display:none">
+                                                Horario Inicial Tarde
+                                                <label for="apptILT"></label>
+                                                <input type="time" id="apptILT" name="appt">
+                                                Horario Final Tarde
+                                                <label for="apptFLT"></label>
+                                                <input type="time" id="apptFLT" name="appt">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">  
+                                    <div class="input-field col m2 s12 ">
+                                        Martes
+                                    </div>                              
+                                    <div class="row">
+                                        <div class="col m1.1">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="MaDiurno">
+                                                <label class="form-check-label" for="MaDiurno">Diurno</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="MaTarde">
+                                                <label class="form-check-label" for="MaTarde">Tarde</label>
+                                            </div>
+                                        </div>
+                                        <div class="col m3">
+                                            <div class="input-field col m10 s12" id="MaDiurnoTime" style="display:none">
+                                                Horario Inicial Diruno
+                                                <label for="apptIMaD"></label>
+                                                <input type="time" id="apptIMaD" name="appt">
+                                                Horario Final Diurno
+                                                <label for="apptFMaD"></label>
+                                                <input type="time" id="apptFMaD" name="appt">
+                                            </div>
+                                        </div>
+                                        <div class="col m4">                                        
+                                            <div class="input-field col m8 s12" id="MaTardeTime" style="display:none">
+                                                Horario Inicial Tarde
+                                                <label for="apptIMaT"></label>
+                                                <input type="time" id="apptIMaT" name="appt">
+                                                Horario Final Tarde
+                                                <label for="apptFMaT"></label>
+                                                <input type="time" id="apptFMaT" name="appt">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">  
+                                    <div class="input-field col m2 s12 ">
+                                        Miercoles
+                                    </div>                              
+                                    <div class="row">
+                                        <div class="col m1.1">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="MiDiurno">
+                                                <label class="form-check-label" for="MiDiurno">Diurno</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="MiTarde">
+                                                <label class="form-check-label" for="MiTarde">Tarde</label>
+                                            </div>
+                                        </div>
+                                        <div class="col m3">
+                                            <div class="input-field col m10 s12" id="MiDiurnoTime" style="display:none">
+                                                Horario Inicial Diruno
+                                                <label for="apptIMiD"></label>
+                                                <input type="time" id="apptIMiD" name="appt">
+                                                Horario Final Diurno
+                                                <label for="apptFMiD"></label>
+                                                <input type="time" id="apptFMiD" name="appt">
+                                            </div>
+                                        </div>
+                                        <div class="col m4">                                        
+                                            <div class="input-field col m8 s12" id="MiTardeTime" style="display:none">
+                                                Horario Inicial Tarde
+                                                <label for="apptIMiT"></label>
+                                                <input type="time" id="apptIMiT" name="appt">
+                                                Horario Final Tarde
+                                                <label for="apptFMiT"></label>
+                                                <input type="time" id="apptFMiT" name="appt">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">  
+                                    <div class="input-field col m2 s12 ">
+                                        Jueves
+                                    </div>                              
+                                    <div class="row">
+                                        <div class="col m1.1">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="JDiurno">
+                                                <label class="form-check-label" for="JDiurno">Diurno</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="JTarde">
+                                                <label class="form-check-label" for="JTarde">Tarde</label>
+                                            </div>
+                                        </div>
+                                        <div class="col m3">
+                                            <div class="input-field col m10 s12" id="JDiurnoTime" style="display:none">
+                                                Horario Inicial Diruno
+                                                <label for="apptIJD"></label>
+                                                <input type="time" id="apptIJD" name="appt">
+                                                Horario Final Diurno
+                                                <label for="apptFJD"></label>
+                                                <input type="time" id="apptFJD" name="appt">
+                                            </div>
+                                        </div>
+                                        <div class="col m4">                                        
+                                            <div class="input-field col m8 s12" id="JTardeTime" style="display:none">
+                                                Horario Inicial Tarde
+                                                <label for="apptIJT"></label>
+                                                <input type="time" id="apptIJT" name="appt">
+                                                Horario Final Tarde
+                                                <label for="apptFJT"></label>
+                                                <input type="time" id="apptFJT" name="appt">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">  
+                                    <div class="input-field col m2 s12 ">
+                                        Viernes
+                                    </div>                              
+                                    <div class="row">
+                                        <div class="col m1.1">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="VDiurno">
+                                                <label class="form-check-label" for="VDiurno">Diurno</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="VTarde">
+                                                <label class="form-check-label" for="VTarde">Tarde</label>
+                                            </div>
+                                        </div>
+                                        <div class="col m3">
+                                            <div class="input-field col m10 s12" id="VDiurnoTime" style="display:none">
+                                                Horario Inicial Diruno
+                                                <label for="apptIVD"></label>
+                                                <input type="time" id="apptIVD" name="appt">
+                                                Horario Final Diurno
+                                                <label for="apptFVD"></label>
+                                                <input type="time" id="apptFVD" name="appt">
+                                            </div>
+                                        </div>
+                                        <div class="col m4">                                        
+                                            <div class="input-field col m8 s12" id="VTardeTime" style="display:none">
+                                                Horario Inicial Tarde
+                                                <label for="apptIVT"></label>
+                                                <input type="time" id="apptIVT" name="appt">
+                                                Horario Final Tarde
+                                                <label for="apptFVT"></label>
+                                                <input type="time" id="apptFVT" name="appt">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">  
+                                    <div class="input-field col m2 s12 ">
+                                        Sabado
+                                    </div>                              
+                                    <div class="row">
+                                        <div class="col m1.1">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="SDiurno">
+                                                <label class="form-check-label" for="SDiurno">Diurno</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="STarde">
+                                                <label class="form-check-label" for="STarde">Tarde</label>
+                                            </div>
+                                        </div>
+                                        <div class="col m3">
+                                            <div class="input-field col m10 s12" id="SDiurnoTime" style="display:none">
+                                                Horario Inicial Diruno
+                                                <label for="apptISD"></label>
+                                                <input type="time" id="apptISD" name="appt">
+                                                Horario Final Diurno
+                                                <label for="apptFSD"></label>
+                                                <input type="time" id="apptFSD" name="appt">
+                                            </div>
+                                        </div>
+                                        <div class="col m4">                                        
+                                            <div class="input-field col m8 s12" id="STardeTime" style="display:none">
+                                                Horario Inicial Tarde
+                                                <label for="apptIST"></label>
+                                                <input type="time" id="apptIST" name="appt">
+                                                Horario Final Tarde
+                                                <label for="apptFST"></label>
+                                                <input type="time" id="apptFST" name="appt">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">  
+                                    <div class="input-field col m2 s12 ">
+                                        Domingo
+                                    </div>                              
+                                    <div class="row">
+                                        <div class="col m1.1">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="DoDiurno">
+                                                <label class="form-check-label" for="DoDiurno">Diurno</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="DoTarde">
+                                                <label class="form-check-label" for="DoTarde">Tarde</label>
+                                            </div>
+                                        </div>
+                                        <div class="col m3">
+                                            <div class="input-field col m10 s12" id="DoDiurnoTime" style="display:none">
+                                                Horario Inicial Diruno
+                                                <label for="apptIDD"></label>
+                                                <input type="time" id="apptIDD" name="appt">
+                                                Horario Final Diurno
+                                                <label for="apptFDD"></label>
+                                                <input type="time" id="apptFDD" name="appt">
+                                            </div>
+                                        </div>
+                                        <div class="col m4">                                        
+                                            <div class="input-field col m8 s12" id="DoTardeTime" style="display:none">
+                                                Horario Inicial Tarde
+                                                <label for="apptIDT"></label>
+                                                <input type="time" id="apptIDT" name="appt">
+                                                Horario Final Tarde
+                                                <label for="apptFDT"></label>
+                                                <input type="time" id="apptFDT" name="appt">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                    </li>
+                    
+                  
+                   
+                </ul>
+
+
+                <div class="col m12 m12 s12 text-center">
+                    <button class="col m12 m12 s12 btn waves-effect green waves-light" id="enviar_data">
+                        <i class="material-icons">save</i>
+                        <span style="position: relative; bottom: 4px;"> Guardar</span>
+                    </button>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<% include  ../../view_distribution/sidebar-right.ejs%>
+<% include  ../../view_distribution/bot1.ejs%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script>
+    var locali=0;
+    var depart=0;
+    var munici=0;
+    let timeProfesional = []
+    var Municipios = <%- JSON.stringify(municipios) %>;
+    var input = document.querySelector("#phone");
+    window.intlTelInput(input, {
+        // allowDropdown: false,
+        // autoHideDialCode: false,
+        // autoPlaceholder: "off",
+        // dropdownContainer: document.body,
+        // excludeCountries: ["us"],
+        // formatOnDisplay: false,
+        // geoIpLookup: function(callback) {
+        //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+        //     var countryCode = (resp && resp.country) ? resp.country : "";
+        //     callback(countryCode);
+        //   });
+        // },
+        // hiddenInput: "full_number",
+        // initialCountry: "auto",
+        // localizedCountries: { 'de': 'Deutschland' },
+        nationalMode: false,
+        // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+        placeholderNumberType: "MOBILE",
+        preferredCountries: ['co'],
+        separateDialCode: true,
+        utilsScript: "https://cdnmetamedic.s3.amazonaws.com/js/intl-input/utils.js",
+
+    });
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        $('#pregradoSelect').val("");
+        $('#PG_pregrado').val("");
+        $("#SP_supervisor").val("")
+        $('#tpAsignado').val("");
+
+        $("#dropdownInstitucion").hide();
+        $("#dropdownProfesionalSupervisor").hide();
+        $("#dropdownProfesional").hide();
+    });
+
+    $('.datepicker').pickadate({
+        monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+            'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'
+        ],
+        monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov',
+            'Dic'
+        ],
+        weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+        selectMonths: true,
+        selectYears: 200, // Puedes cambiarlo para mostrar más o menos años
+        min: new Date(1650, 1, 1),
+        max: true, // `true` sets it to today. `false` removes any limits.
+        today: 'Hoy',
+        clear: 'Limpiar',
+        close: 'Ok',
+        labelMonthNext: 'Siguiente mes',
+        labelMonthPrev: 'Mes anterior',
+        labelMonthSelect: 'Selecciona un mes',
+        labelYearSelect: 'Selecciona un año',
+        container: undefined, // ex. 'body' will append picker to body
+
+    });
+    $('#identificacion').keyup(function() {
+       let username = $('#identificacion').val()
+       console.log("Validando ")
+       $.ajax({
+          method: 'GET',
+          url: `/api/profesionales/validarId?filter[username]=${username}`,
+          success: function (r) {
+              console.log(r)
+              if(r==true){
+                Materialize.toast(`Ya Existe Un Usuario Creado Con Este Numero. ${username}`, 2000, 'rounded red')
+              }else if(r == false){
+              
+              }
+            
+          }
+      })
+    });
+    $('#pregradoSelect').change(function() {
+        $('.institucion').hide();
+        $('#' + $(this).val()).show();
+    });
+
+    $('#PG_pregrado').change(function() {
+        $('.institucion1').hide();
+        $('#' + $(this).val()).show();
+    });
+
+    $('.datepicker').on('mousedown', function (event) {
+        event.preventDefault();
+    })
+
+    $(document).on("click", ".select-wrapper", function (event) {
+        event.stopPropagation();
+    });
+
+    $('.coc').on('mousedown', function (event) {
+        event.preventDefault();
+    })
+
+    $('#identificacion').change(function() {
+        const newValue = $("#identificacion").val();
+        $("#password").val(`${newValue}`);
+    });
+
+    $('#primer_apellido').change(function() {
+        const firstName = $("#primer_nombre").val();
+        const secondApellido = $("#primer_apellido").val();
+        $("#usuario").val(`${firstName}.${secondApellido}`);
+    });
+
+    $(document).ready(function () {
+        
+        $("#tpAsignado").select2()
+        $('.modal').modal();
+        $('#servicios').val('')
+        $("#hora").val('')
+        $("#periodo").val('')
+        $("#frecuencia").val('')
+        
+        console.log('Preparado para enviar');
+    
+        $('input.timepicker').timepicker();
+
+    $('#pregradoSelect').on('change', function() {
+      if ( this.value == 'PG')
+      {
+        $("#dropdownInstitucion").show();
+        $("#dropdownProfesionalSupervisor").show();
+      }
+      else if(this.value == 'SP'){
+        $("#dropdownInstitucion").show();
+        $("#dropdownProfesionalSupervisor").hide();
+      }else
+      {
+        $("#dropdownInstitucion").hide();
+        $("#dropdownProfesionalSupervisor").hide();
+        $("#dropdownProfesional").hide();
+      }
+    });
+
+    $("#PG_pregrado").on('change', function() {
+        if ( this.value == 'PG_PG')
+        {
+            $("#dropdownInstitucion").show();
+            $("#dropdownProfesional").show();
+        }
+        else if( this.value == 'PG_MS'){
+            $("#dropdownInstitucion").show();
+            $("#dropdownProfesional").show();
+        }else if( this.value == 'PG_MQ'){
+            $("#dropdownInstitucion").show();
+            $("#dropdownProfesional").show();
+        }else
+        {
+            $("#dropdownInstitucion").hide();
+            $("#dropdownProfesional").hide();
+        }
+    })
+
+      /* Obtener Profesionales-Estudiante */
+      const urlParams = new URLSearchParams(window.location.search);
+      const Sedes = [urlParams.get('sede')];
+      $.ajax({
+          method: 'GET',
+          url: `/api/profesionales/terapeuta?filter[sede]=${Sedes}&limit=1000000&projection=nombre+apellido+username+-Sedes+-Encargados+-SedeUserInfos`,
+          success: function (r) {
+              //console.log(">>>> terapeuta: ", r)
+             
+              for (let i = 0; i < r.length; i++) {
+                  const formulario = r[i];
+                  $('#tpAsignado').append(
+                    `<option value="${formulario._id}">${formulario.username}  || ${formulario.nombre} ${formulario.apellido}</option>`)
+              }
+              $('#tpAsignado').material_select();
+          }
+      })
+     var consultorio = []
+      $.ajax({
+                                                    method: 'GET',
+                                                    url: `/api/adminDatos/${Sedes}`,
+                                                    success: function (r) {
+                                                       for(x=0;x<r.length;x++){
+                                                         const consul = r[x];
+                                                         consultorio.push(consul)
+                                                          
+                                                       }
+                                                    }
+                                                })
+    $("#addProfesional").click(function() {
+    
+        //table_addProfesional
+        const tr = $("#table_addProfesional tr").length;
+        $("#table_addProfesional").html(`
+                              <tr class='tabrow closed'>
+                                <td>
+                                    <label for="start_${tr}">Start date:</label>
+                                    <input type="date" id="start_${tr}" name="trip-start">
+                                </td> 
+                                <td>
+                                <select id="consultorio_${tr}" class="validate select browse-select">
+                                     <option value="" disabled>Elige una opción</option>
+                                        <option value="Consultorio 1">Consultorio 1</option>
+                                        <option value="Consultorio 2">Consultorio 2</option>
+                                        <option value="Consultorio 3">Consultorio 3</option>
+                                        <option value="Consultorio 4">Consultorio 4</option>
+                                        <option value="Consultorio 5">Consultorio 5</option>
+                                        <option value="Consultorio 6">Consultorio 6</option>
+                                        <option value="Consultorio 7">Consultorio 7</option>
+                                        <option value="Consultorio 8">Consultorio 8</option>
+                                        <option value="Consultorio 9">Consultorio 9</option>
+                                        <option value="Consultorio 10">Consultorio 10</option>
+                                </select>
+                                    <label for="consultorio_${tr}" class="">Consultorio</label>  
+                                </td>
+                                <td>
+                                    <select id="hora_${tr}" class="validate select browse-select">
+                                        <option value="" disabled>Elige una opción</option>
+                                        <option value="07:00:00">07:00:00</option>
+                                        <option value="08:00:00">08:00:00</option>
+                                        <option value="09:00:00">09:00:00</option>
+                                        <option value="10:00:00">10:00:00</option>
+                                        <option value="11:00:00">11:00:00</option>
+                                        <option value="12:00:00">12:00:00</option>
+                                        <option value="13:00:00">13:00:00</option>
+                                        <option value="14:00:00">14:00:00</option>
+                                        <option value="15:00:00">15:00:00</option>
+                                        <option value="16:00:00">16:00:00</option>
+                                        <option value="17:00:00">17:00:00</option>
+                                        <option value="18:00:00">18:00:00</option>
+                                        <option value="19:00:00">19:00:00</option>
+                                        <option value="20:00:00">20:00:00</option>
+                                        <option value="21:00:00">21:00:00</option>
+                                    </select>
+                                    <label for="hora_${tr}" class="">Hora</label>
+                                </td>
+                                <td>
+                                    <select id="periodo_${tr}" class="validate select browse-select">
+                                        <option value="" disabled>Elige una opción</option>
+                                        <option value="Todo el Mes">Todo el Mes</option>
+                                        <option value="Todo el Semestre">Todo el Semestre</option>
+                                        <option value="Diario">Diario</option>
+                                    </select>
+                                    <label for="periodo_${tr}">Periodo</label>
+                                </td>
+                                <td>
+                                    <select id="frecuencia_${tr}" class="validate select browse-select">
+                                        <option value="" disabled>Elige una opción</option>
+                                        <option value="S">Semanal</option>
+                                        <option value="Q">Quincenal</option>
+                                    </select>
+                                    <label for="frecuencia_${tr}">Frecuencia</label>
+                                </td>
+                                <td>
+                                    <a id="addProfesional_${tr}" class="DeleteButton waves-effectwaves-effect primary waves-light">
+                                        <i class="material-icons">delete</i>
+                                        <span style="position: relative; bottom: 4px;">Delete</span>
+                                    </a>
+                                </td>
+                              </tr>`)
+                    $(`#hora_${tr}`).material_select();
+                    $(`#periodo_${tr}`).material_select();
+                    $(`#frecuencia_${tr}`).material_select();
+                    $(`#consultorio_${tr}`).material_select();
+                    $(`#hora_${tr}`).val('');
+                    $(`#periodo_${tr}`).val('');
+                    $(`#frecuencia_${tr}`).val('');
+                    $(`#consultorio_${tr}`).val('');
+    });
+
+    $("body").on("click",".DeleteButton", function(ev){
+        $(this).closest("tr").remove();
+    })
+
+    $('#pais').material_select();
+       $('#disabled').attr("disabled",true);
+
+     $('.departamentosInput').hide();
+	   $('.departamentosSelect2').hide();
+
+
+     $('.localidadSelect2').hide();
+
+
+       $('.municipiosInput').hide();
+       
+        $('#identificacion').characterCounter();
+        $('#pais').change(function(e){
+
+                        
+            $('.localidad0').show();
+            $('.select-wrapper.localidadSelect2').hide();
+
+            $('#municipio').html(`<option value="" disabled selected>Elige una opción</option>`)
+            var pais = $(this).val();
+            //alert(pais);
+
+            if(pais===""){
+
+                $('.departamentosSelect1').show();
+            $('.select-wrapper.departamentosSelect2').hide();
+            $('.departamentosInput').hide();
+            $('.departamentosInput').attr("disabled",true);
+
+            $('.select-wrapper.municipiosSelect2').show();
+                $('.municipiosInput').hide();
+                $('.municipiosInput').val("");
+            $('.municipiosInput').attr("disabled",true);
+            }
+            else if(pais==="Colombia"){
+                depart=1;
+                locali=0;
+                munici=0;
+            $('.departamentosSelect1').hide();
+            $('.select-wrapper.departamentosSelect2').show();
+            $('.departamentosInput').hide();
+                $('.departamentosInput').val("");
+            $('.departamentosInput').attr("disabled",true);
+
+            $('.select-wrapper.municipiosSelect2').show();
+                $('.municipiosInput').hide();
+                $('.municipiosInput').val("");
+            $('.municipiosInput').attr("disabled",true);
+            }
+            else{
+            depart=0;
+            locali=0;
+            munici=0;
+            $('.departamentosSelect1').hide();
+            $('.departamentosInput').show();
+                $('.departamentosInput').val("");
+            $('.departamentosInput').attr("disabled",false);
+            $('.select-wrapper.departamentosSelect2').hide();
+
+
+
+            $('.select-wrapper.municipiosSelect2').hide();
+                $('.municipiosInput').show();
+                $('.municipiosInput').val("");
+            $('.municipiosInput').attr("disabled",false);
+                
+            }
+
+        })
+
+        $('#departamento').change(function(e){
+              $('.localidad0').show();
+              $('.select-wrapper.localidadSelect2').hide();
+            var municipios = getMunicipios(String($(this).val()))
+            $('#municipio').html(`<option value="" disabled selected>Elige una opción</option>`)
+            municipios.sort(function (a, b) {
+            if (a.Municipio > b.Municipio) {
+                return 1
+            } else if (a.Municipio < b.Municipio) { return -1 } else { return 0 } })
+            for (let i = 0; i < municipios.length; i++) {
+                const muni = municipios[i];
+                $('#municipio').append(`<option value="${muni.Cod_muni}">${muni.Municipio}</option>`)
+            }
+            $('#municipio').material_select();
+            if($(this).val()=="11"){
+                  locali=0;
+                  munici=1;
+            }
+            else{
+
+                  locali=0;
+                  munici=0;
+            }
+
+        })
+
+         $('#municipio').change(function(e){
+            var dp=$('#departamento').val();
+            var mn=$(this).val();
+            if(mn=="001" && dp=="11"){
+               locali=1;
+               $('.localidad1').hide();
+               $('.localidad0').hide();
+               $('.select-wrapper.localidadSelect2').show();
+            }
+            else{
+              locali=0;
+              $('.localidad1').show();
+              $('.select-wrapper.localidadSelect2').hide();
+            }
+         }); 
+         
+
+        $('#tipo_id').change(function (e) {
+            var tipo_id_abbr = $(this).val();
+            switch (tipo_id_abbr) {
+                case 'CC':
+                    $('#identificacion').attr('data-length', '10')
+                    break;
+                case 'CE':
+                    $('#identificacion').attr('data-length', '6')
+                    break;
+                case 'CD':
+                    $('#identificacion').attr('data-length', '16')
+                    break;
+                case 'PA':
+                    $('#identificacion').attr('data-length', '16')
+                    break;
+                case 'PE':
+                    $('#identificacion').attr('data-length', '15')
+                    break;
+                case 'RC':
+                    $('#identificacion').attr('data-length', '11')
+                    break;
+                case 'TI':
+                    $('#identificacion').attr('data-length', '11')
+                    break;
+                case 'CN':
+                    $('#identificacion').attr('data-length', '9')
+                    break;
+                case 'AS':
+                    $('#identificacion').attr('data-length', '10')
+                    break;
+                case 'MS':
+                    $('#identificacion').attr('data-length', '12')
+                    break;
+                case 'SC':
+                    $('#identificacion').attr('data-length', '16')
+                    break;
+                default:
+                    $('#identificacion').removeAttr('data-length')
+                    break;
+            }
+            // $('#identificacion').val('');
+            $('#identificacion').characterCounter();
+        })
+
+        $('#LDiurno').change(function() {
+            $('#LDiurnoTime').toggle();
+        });
+        
+        $('#LTarde').change(function() {
+            $('#LTardeTime').toggle();
+        });
+        
+        $('#MaDiurno').change(function() {
+            $('#MaDiurnoTime').toggle();
+        });
+        
+        $('#MaTarde').change(function() {
+            $('#MaTardeTime').toggle();
+        });
+        
+        $('#MiDiurno').change(function() {
+            $('#MiDiurnoTime').toggle();
+        });
+        
+        $('#MiTarde').change(function() {
+            $('#MiTardeTime').toggle();
+        });
+        
+        $('#JDiurno').change(function() {
+            $('#JDiurnoTime').toggle();
+        });
+        
+        $('#JTarde').change(function() {
+            $('#JTardeTime').toggle();
+        });
+        
+        $('#VDiurno').change(function() {
+            $('#VDiurnoTime').toggle();
+        });
+        
+        $('#VTarde').change(function() {
+            $('#VTardeTime').toggle();
+        });
+        
+        $('#SDiurno').change(function() {
+            $('#SDiurnoTime').toggle();
+        });
+        
+        $('#STarde').change(function() {
+            $('#STardeTime').toggle();
+        });
+        
+        $('#DoDiurno').change(function() {
+            $('#DoDiurnoTime').toggle();
+        });
+        
+        $('#DoTarde').change(function() {
+            $('#DoTardeTime').toggle();
+        });
+
+        $('#enviar_data').click(function () {
+            
+            var departamento="";
+            var municipio="";
+            var localidad
+            if(depart==0){
+              departamento = $('input.departamento1').val();
+            }
+            else{
+              departamento = $('select.departamentosSelect2').val();
+            }
+
+
+            if(munici==0){
+              municipio = $('input.municipio1').val();
+            }
+            else{
+              municipio = $('select.municipiosSelect2').val();
+            }
+
+
+            if(locali==0){
+              localidad = $('input.localidad1').val();
+            }
+            else{
+              localidad = $('select.localidadSelect2').val();
+            }
+
+            const username = $("#identificacion").val() || null;
+            const password = $("#password").val() || null;
+            const user_id = $("#user_id").val() || null;
+            // const password = String(Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000);
+            const primer_nombre = $('#primer_nombre').val();
+            const segundo_nombre = $('#segundo_nombre').val();
+            const primer_apellido = $('#primer_apellido').val();
+            const segundo_apellido = $('#segundo_apellido').val();
+            const nombre = `${primer_nombre} ${segundo_nombre}`
+            const apellido = `${primer_apellido} ${segundo_apellido}`
+            const code = $('.iti__selected-dial-code').html()
+            const phone = $('#phone').val()
+            const telefono = code.substring(4, 1) + phone
+            const email = $("#email").val() || "";
+            const genero_nacimiento = $("#genero").val() || "";
+            const identidad_sexual = "";
+            const estado_civil = $("#estado_civil").val() || "";
+            const profesion = $("#profesion").val() || "";
+            const especialidad = $("#especialidad").val() || "";
+            const tipo_profesional = $("#tipo_profesional").val() || "";
+            const tarjeta_profesional = $("#tarjeta_profesional").val() || "";
+            const pais = $('#pais').val()
+            //const departamento = $('#departamento').val()
+            //const municipio = $('#municipio').val()
+            //const localidad = $('#localidad').val()
+            const zona = $('#zona').val()
+            const direccion = $("#direccion").val() || "";
+            const tipo_id = $('#tipo_id').val() || "";
+            const nacimiento_value = ($("#fecha_nacimiento").val())
+            .replace('Enero', 'Jan')
+            .replace('Abril', 'Apr')
+            .replace('Agosto', 'Aug')
+            .replace('Diciembre', 'Dec') ||
+            '1 Jan, 2000';
+            
+            const nacimiento_arr = (moment(nacimiento_value).format('DD,MM,YYYY')).split(',');
+            const dd_nacimiento = nacimiento_arr[0];
+            const mm_nacimiento = nacimiento_arr[1];
+            const yyyy_nacimiento = nacimiento_arr[2];
+            const ts_nacimiento = moment(nacimiento_value).unix()
+            const urlParams = new URLSearchParams(window.location.search);
+            const Sedes = [urlParams.get('sede')];
+            const estado = $("#estado").val() || "";
+            const usuario = $("#usuario").val() || "";
+            const roles = $("#pregradoSelect").val() || "";
+            const tipoRoles = $("#PG_pregrado").val() || $("#SP_supervisor").val();
+            const extraTipoRoles = $("#PG_PG_IX_pregrado").val() || $("#PG_MS_pregrado").val() || $("#PG_MQ_pregrado").val();
+            const horarioInicial = $("#timeInit").val() || "";
+            const horarioFinal = $("#timeFin").val() || "";
+
+            if(estado === ""){
+                Materialize.toast("Selecionar un Estado.", 2500, 'rounded red')
+                return;
+            }
+
+            let LDiurno = 0, LInicialTimeDiurno = '', LFinalTimeDiurno = '', 
+                LTarde = 0, LInicialTimeTarde = '', LFinalTimeTarde = '', 
+                MaDiruno = 0, MaInicialTimeDiurno = '', MaFinalTimeDiurno = '',
+                MaTarde = 0, MaInicialTimeTarde = '', MaFinalTimeTarde = '',
+                MiDiruno = 0, MiInicialTimeDiurno = '', MiFinalTimeDiurno = ''
+                MiTarde = 0, MiInicialTimeTarde = '', MiFinalTimeTarde = '',
+                JDiruno = 0, JInicialTimeDiurno = '', JFinalTimeDiurno = '',
+                JTarde = 0, JInicialTimeTarde = '', JFinalTimeTarde = '',
+                VDiruno = 0, VInicialTimeDiurno = '', VFinalTimeDiurno = '',
+                VTarde = 0, VInicialTimeTarde = '', VFinalTimeTarde = '',
+                SDiruno = 0, SInicialTimeDiurno = '', SFinalTimeDiurno = '', 
+                STarde = 0, SInicialTimeTarde = '', SFinalTimeTarde = '',
+                DoDiruno = 0, DoInicialTimeDiurno = '', DoFinalTimeDiurno = '',
+                DoTarde = 0, DoInicialTimeTarde = '', DoFinalTimeTarde = '';
+                
+
+            const checkLDiruno = $("#LDiurno").is(':checked');
+            const CheckLTarde = $("#LTarde").is(':checked');
+            const checkMaDiruno = $("#MaDiurno").is(':checked');
+            const CheckMaTarde = $("#MaTarde").is(':checked');
+            const checkMiDiruno = $("#MiDiurno").is(':checked');
+            const CheckMiTarde = $("#MiTarde").is(':checked');
+            const checkJDiruno = $("#JDiurno").is(':checked');
+            const CheckJTarde = $("#JTarde").is(':checked');
+            const checkVDiruno = $("#VDiurno").is(':checked');
+            const CheckVTarde = $("#VTarde").is(':checked');
+            const checkSDiruno = $("#SDiurno").is(':checked');
+            const CheckSTarde = $("#STarde").is(':checked');
+            const checkDoDiruno = $("#DoDiurno").is(':checked');
+            const CheckDoTarde = $("#DoTarde").is(':checked');
+
+            if(checkLDiruno){
+                LDiurno = 1;
+                LInicialTimeDiurno = document.getElementById("apptILD").value 
+                LFinalTimeDiurno =  document.getElementById("apptFLD").value
+            }
+            if(CheckLTarde){
+                LTarde = 1;                
+                LInicialTimeTarde = document.getElementById("apptILT").value 
+                LFinalTimeTarde = document.getElementById("apptFLT").value
+            }
+            if(checkMaDiruno){
+                MaDiruno = 1;
+                MaInicialTimeDiurno = document.getElementById("apptIMaD").value
+                MaFinalTimeDiurno = document.getElementById("apptFMaD").value
+            }
+            if(CheckMaTarde){
+                MaTarde = 1;
+                MaInicialTimeTarde = document.getElementById("apptIMaT").value
+                MaFinalTimeTarde = document.getElementById("apptFMaT").value
+            }
+            if(checkMiDiruno){
+                MiDiruno = 1;
+                MiInicialTimeDiurno = document.getElementById("apptIMiD").value
+                MiFinalTimeDiurno = document.getElementById("apptFMiD").value
+            }
+            if(CheckMiTarde){
+                MiTarde = 1;
+                MiInicialTimeTarde = document.getElementById("apptIMiT").value
+                MiFinalTimeTarde = document.getElementById("apptFMiT").value
+            }
+            if(checkJDiruno){
+                JDiruno = 1;
+                JInicialTimeDiurno = document.getElementById("apptIJD").value
+                JFinalTimeDiurno = document.getElementById("apptFJD").value
+            }
+            if(CheckJTarde){
+                JTarde = 1;
+                JInicialTimeTarde = document.getElementById("apptIJT").value
+                JFinalTimeTarde = document.getElementById("apptFJT").value
+            }
+            if(checkVDiruno){
+                VDiruno = 1;
+                VInicialTimeDiurno = document.getElementById("apptIVD").value
+                VFinalTimeDiurno = document.getElementById("apptFVD").value
+            }
+            if(CheckVTarde){
+                VTarde = 1;
+                VInicialTimeTarde = document.getElementById("apptIVT").value
+                VFinalTimeTarde = document.getElementById("apptFVT").value
+            }
+            if(checkSDiruno){
+                SDiruno = 1;
+                SInicialTimeDiurno = document.getElementById("apptISD").value
+                SFinalTimeDiurno = document.getElementById("apptFSD").value
+            }
+            if(CheckSTarde){
+                STarde = 1;
+                SInicialTimeTarde = document.getElementById("apptIST").value
+                SFinalTimeTarde = document.getElementById("apptFST").value
+            }
+            if(checkDoDiruno){
+                DoDiruno = 1;
+                DoInicialTimeDiurno = document.getElementById("apptIDD").value
+                DoFinalTimeDiurno = document.getElementById("apptFDD").value
+            }
+            if(CheckDoTarde){
+                DoTarde = 1;
+                DoInicialTimeTarde = document.getElementById("apptIDT").value
+                DoFinalTimeTarde = document.getElementById("apptFDT").value
+            }
+
+            
+          const supervisorAsign = $("#tpAsignado").val()
+            
+            const body = {
+                primer_apellido,
+                segundo_apellido,
+                primer_nombre,
+                segundo_nombre,
+                pais,
+                departamento,
+                municipio,
+                localidad,
+                zona,
+                profesion,
+                tipo_profesional,
+                especialidad,
+                tarjeta_profesional,
+                username,
+                tipo_id,
+                password,
+                nombre,
+                apellido,
+                yyyy_nacimiento,
+                mm_nacimiento,
+                dd_nacimiento,
+                ts_nacimiento,
+                genero_nacimiento,
+                identidad_sexual,
+                estado_civil,
+                direccion,
+                telefono,
+                email,
+                Sedes,
+                estado,
+                roles,
+                tipoRoles,
+                extraTipoRoles,
+                usuario,
+                horarioInicial,
+                horarioFinal,
+                LDiurno,
+                LInicialTimeDiurno,
+                LFinalTimeDiurno,
+                LTarde,
+                LInicialTimeTarde,
+                LFinalTimeTarde,
+                MaDiruno,
+                MaInicialTimeDiurno,
+                MaFinalTimeDiurno,
+                MaTarde,
+                MaInicialTimeTarde,
+                MaFinalTimeTarde,
+                MiDiruno,
+                MiInicialTimeDiurno,
+                MiFinalTimeDiurno,
+                MiTarde,
+                MiInicialTimeTarde,
+                MiFinalTimeTarde,
+                JDiruno,
+                JInicialTimeDiurno,
+                JFinalTimeDiurno,
+                JTarde,
+                JInicialTimeTarde,
+                JFinalTimeTarde,
+                VDiruno,
+                VInicialTimeDiurno,
+                VFinalTimeDiurno,
+                VTarde,
+                VInicialTimeTarde,
+                VFinalTimeTarde,
+                SDiruno,
+                SInicialTimeDiurno,
+                SFinalTimeDiurno,
+                STarde,
+                SInicialTimeTarde,
+                SFinalTimeTarde,
+                DoDiruno,
+                DoInicialTimeDiurno,
+                DoFinalTimeDiurno,
+                DoTarde,
+                DoInicialTimeTarde,
+                DoFinalTimeTarde,
+                supervisorAsign
+            }
+            // console.log(nacimiento_value);
+            // console.log(nacimiento_arr);
+             console.log(body);
+            console.log("tabla")
+
+            const url = '/api/profesionales';
+            const method = 'POST'
+
+            $.ajax({
+                    method: method,
+                    url: url,
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(body),
+                    success: function (response) {
+                            console.log(response);
+                            Materialize.toast('Usuario creado con éxito.', 4000, 'rounded green')
+                            setTimeout(function () {
+                        location.href = `/profesionales?sede=${Sedes}`
+                    }, 2000);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    const errors = jqXHR.responseJSON.error.errors;
+                    let htmlErrors = "";
+                    for (const err in errors) {
+                        if (errors.hasOwnProperty(err)) {
+                            const error = errors[err];
+                            htmlErrors += `<br>${error.message}`
+                        }
+                    }
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    Materialize.toast(
+                        `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                        10000, 'rounded red');
+                }
+            })
+
+        })
+    })
+
+    function getMunicipios(codigoDepa) {
+        return Municipios.filter(function(muni){
+            return muni.Cod_depa == codigoDepa
+
+        })
+    }
+
+    function getDataTable() {
+        let dataProfesional = []
+        diaHoy = moment(new Date()).format("MM-DD");
+ 
+        if(diaHoy<= '06-15'){
+            console.log("Estas 1")
+            fechaFin = new Date('2021-06-12')
+        }else if(diaHoy>'06-15'){
+            console.log("Estas 2")
+            fechaFin =new Date('2021-12-15')
+        }
+
+        $("#tableProfesional tbody tr").each(function (index) {
+            let fecha, consultorio, hora, tipoMes, tipoSem
+            $(this).children("td").each(function (index2) {
+                switch (index2) {
+                    case 0:
+                        fecha = $(this).find("input").val()
+                        break;
+                
+                    case 1:
+                        consultorio = $(this).find("input").val()
+                        break;
+                
+                    case 2:
+                        hora = $(this).find("input").val()
+                        break;
+                    case 3:
+                        tipoMes = $(this).find("input").val()
+                        break;
+                    case 4:
+                        tipoSem = $(this).find("input").val()
+                        break;
+                    default:
+                        break;
+                }
+                if(index2 === 5){
+                    dataProfesional.push({
+                        fecha,
+                        consultorio,
+                        hora,
+                        tipoMes,
+                        tipoSem
+                    })
+                    switch (tipoMes) {
+                        case "Todo el Mes":
+                            if(tipoSem === "Semanal")
+                            {
+                                let mes = 3//moment().endOf("week").format("YYYY-MM-DD")
+                                for(let i = 0; i < mes; i++){
+                                    let date = moment(fecha).add('days', 7);
+                                    if(date.day() === 0){
+                                        fecha = moment(date).format("YYYY-MM-DD");
+                                        continue;
+                                    } 
+                                    if(date>fechaFin){
+                                        return
+                                    }
+                                    dataProfesional.push({
+                                        fecha: date.format("YYYY-MM-DD"),
+                                        consultorio: consultorio,
+                                        hora: hora,
+                                        tipoMes: tipoMes,
+                                        tipoSem: tipoSem
+                                    })
+                                    fecha = date
+                                }
+                            }else {
+                                let mes = 1
+                                for(let i = 0; i < mes; i++){
+                                    let date = moment(fecha).add(14, 'days');
+                                    if(date>fechaFin){
+                                        return
+                                    }
+                                    dataProfesional.push({
+                                        fecha: date.format("YYYY-MM-DD"),
+                                        consultorio: consultorio,
+                                        hora: hora,
+                                        tipoMes: tipoMes,
+                                        tipoSem: tipoSem
+                                    })
+                                    fecha = date
+                                }
+                            }
+                            break;
+                        case "Todo el Semestre":
+                            if(tipoSem === "Semanal")
+                            {
+                                let mes = 21
+                                for(let i = 0; i < mes; i++){
+                                    let date = moment(fecha).add(7, 'days');
+                                    if(date.day() === 0){
+                                        fecha = moment(date).format("YYYY-MM-DD");
+                                        continue;
+                                    } 
+                                    if(date>fechaFin){
+                                        return
+                                    }
+                                    dataProfesional.push({
+                                        fecha: date.format("YYYY-MM-DD"),
+                                        consultorio: consultorio,
+                                        hora: hora,
+                                        tipoMes: tipoMes,
+                                        tipoSem: tipoSem
+                                    })
+                                    fecha = date
+                                }
+                            } else {
+                                let mes = 9
+                                for(let i = 0; i < mes; i++){
+                                    let date = moment(fecha).add(14, 'days');
+                                    if(date>fechaFin){
+                                        return
+                                    }
+                                    dataProfesional.push({
+                                        fecha: date.format("YYYY-MM-DD"),
+                                        consultorio: consultorio,
+                                        hora: hora,
+                                        tipoMes: tipoMes,
+                                        tipoSem: tipoSem
+                                    })
+                                    fecha = date
+                                }
+                            }
+                            break;
+                            case "Diario":
+                            if(tipoSem === "Semanal")
+                            {
+                                let mes = 1
+                                for(let i = 0; i < mes; i++){
+                                    let date = moment(fecha).add(7, 'days');
+                                    if(date.day() === 0){
+                                        fecha = moment(date).format("YYYY-MM-DD");
+                                        continue;
+                                    } 
+                                    if(date>fechaFin){
+                                        return
+                                    }
+                                    dataProfesional.push({
+                                        fecha: date.format("YYYY-MM-DD"),
+                                        consultorio: consultorio,
+                                        hora: hora,
+                                        tipoMes: tipoMes,
+                                        tipoSem: tipoSem
+                                    })
+                                    fecha = date
+                                }
+                            } else {
+                                let mes = 1
+                                for(let i = 0; i < mes; i++){
+                                    let date = moment(fecha).add(14, 'days');
+                                    if(date>fechaFin){
+                                        return
+                                    }
+                                    dataProfesional.push({
+                                        fecha: date.format("YYYY-MM-DD"),
+                                        consultorio: consultorio,
+                                        hora: hora,
+                                        tipoMes: tipoMes,
+                                        tipoSem: tipoSem
+                                    })
+                                    fecha = date
+                                }
+                            }
+                            break;
+                    }
+                }
+            })
+        })
+        return dataProfesional
+    }
+</script>
+
+<% include  ../../view_distribution/bot2.ejs%>

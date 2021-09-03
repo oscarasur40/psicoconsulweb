@@ -1,0 +1,109 @@
+<% include  ../view_distribution/top1.ejs%>
+<style>
+  .m-1 {
+    margin: 1em;
+  }
+</style>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+  <div class="container">
+    <div class="row">
+      <div class="col s12 m12 l12">
+        <h4 class="breadcrumbs-title"><%= title%> - <%= sede.nombre%><br><span style="font-size:0.8em"><%= servicio.nombre %></span></h4>
+        <div class="row center" id="profesionales_checkboxes">
+          <a href="#" class="btn blue m-1" id="marcar_todos"> <i class="material-icons right">check_box</i> Seleccionar Todos</a>
+          <a href="#" class="btn red m-1" id="desmarcar_todos"> <i class="material-icons right">check_box_outline_blank</i>
+            Deseleccionar todos</a>
+          <a href="#" class="btn green m-1" id="guardar"> <i class="material-icons right">save</i> Guardar</a>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<script>
+  const servicio = <%- JSON.stringify(servicio) %>;
+  const profAsginados = servicio.Profesionales
+  $(document).ready(function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sede = urlParams.get('sede');
+    const projectionProfsURI = 'nombre apellido tipo_profesional profesion especialidad tarjeta_profesional'
+    const getProfsURI = `/api/profesionales?limit=1000000&sede=${sede}&projection=${projectionProfsURI}`
+
+    $('.dropdown-trigger').dropdown();
+    
+    $("#marcar_todos").click(function(){
+      $('.profesional').prop('checked', true);
+    });
+    $("#desmarcar_todos").click(function(){
+      $('.profesional').prop('checked', false);
+    });
+
+    $('#guardar').click(function(){
+      const profs = []
+      $('.profesional:checked').each(function(pr){
+        profs.push($(this).val())
+      })
+      const body = {
+        "Profesionales" : profs
+      }
+      console.log(body);
+      $.ajax({
+        url: `/api/servicios/${servicio._id}`,
+        method: 'PATCH',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(body),
+        success: function () {
+          Materialize.toast('Profesionales asignados con éxito.', 4000, 'rounded green')
+          setTimeout(function () {
+              location.href = `/servicios?sede=${sede}`
+          }, 1000);
+        },
+        error: function (a, b, c) {
+          console.log(a, b, c);
+          Materialize.toast(
+              'Hubo un error en los datos proporcionados. Verificar e Intentar de nuevo.',
+              4000, 'rounded red');
+        }
+      })
+      console.log(profs)
+    })
+    $.ajax({
+      url: getProfsURI,
+      success: function (response) {
+        console.log(response)
+        for (let i = 0; i < response.length; i++) {
+          const prof = response[i];
+          console.log('profAsginados.includes(prof._id): ',profAsginados.includes(prof._id));
+          console.log('prof._id: ',prof._id);
+          $('#profesionales_checkboxes').append(`
+          <div class="col s12 m6 l4">
+            <div class="card-panel">
+              <h5>${prof.nombre}<br>${prof.apellido}</h5>
+              <h6>${prof.tipo_profesional == 'colegiado' ? 'Profesional Colegiado' : 'Auxiliar'}</h6>
+              <h6>${prof.profesion}</h6>
+              <h6>${prof.especialidad}</h6>
+              <h6>${prof.tarjeta_profesional}</h6>
+              <div class="switch">
+                <label>
+                  <input type="checkbox" value="${prof._id}" class="profesional" ${profAsginados.includes(prof._id) ? 'checked' : ''}>
+                  Asignar Profesional
+                  <span class="lever"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+          `)
+        }
+      }
+    })
+  })
+</script>
+<% include  ../view_distribution/bot2.ejs%>

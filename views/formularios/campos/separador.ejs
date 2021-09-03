@@ -1,0 +1,15 @@
+<% if (renderizar) { %>
+<div class="col s12 m<%= ancho %>" orden="<%= orden %>">
+  <hr style="border:1px solid #ffffff00" >
+  <h5 id="<%= id %>" ><%= nombre %></h5>
+  <%- value != undefined ? `<h6> ${value} </h6>` : "" %>
+  <hr style="border:1px solid #ffffff00" >
+</div>
+<% } else { %>
+_$div class="col s12 m_$%= ancho %$_"$_
+  _$hr style="border:1px solid #ffffff00" $_
+  _$h5 id="_$%= id %$_" $__$%= nombre %$__$/h5$_
+  _$%- value != undefined ? *_$h6$_ $[value} _$/h6$_* : "" %$_
+  _$hr style="border:1px solid #ffffff00" $_
+_$/div$_
+<% } %>

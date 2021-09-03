@@ -1,0 +1,523 @@
+<% include  ../view_distribution/top1.ejs%>
+<script src="https://cdn.jsdelivr.net/npm/ejs@3.1.3/ejs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+    <div class="container">
+        <h2><%= title %> </h2>
+        <h5><%= sede.nombre %></h5>
+        <div class="row">
+            <div class="col s12 m12 l6">
+                <div class="card light-blue lighten-5">
+                    <div class="card-content black-text">
+                        <div class="input-field">
+                            <input id="formulario_nombre" type="text" class="validate">
+                            <label for="formulario_nombre">Nombre del Formulario <span
+                                    style="color:red">*</span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m12 l6">
+                <div class="card light-blue lighten-5 agregar_pregunta modal-trigger" style="cursor: pointer;"
+                    href="#modalCrear">
+                    <div class="card-content black-text">
+                        <div class="input-field">
+                            <h5>
+                                Agregar Campo
+                                <a class="btn-floating waves-effect waves-light right red agregar_pregunta modal-trigger"
+                                    href="#modalCrear">
+                                    <i class="material-icons">add</i>
+                                </a>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m12">
+                <ul class="collapsible" data-collapsible="accordion">
+                    <li>
+                        <div class="collapsible-header">
+                            <i class="material-icons">delete</i> Eliminar Campos
+                        </div>
+                        <div class="collapsible-body row" id="vista_eliminar_campos">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header active">
+                            <i class="material-icons">color_lens</i> Vista Previa
+                        </div>
+                        <div class="collapsible-body row" id="vista_previa_campos">
+                            <h4 id="nombre_formulario" class="col s12"></h4>
+                            <hr class="col s12" style="border:1px solid #ffffff00">
+                            <div class="row" id="vista_previa_campos_agregados">
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">
+                            <i class="material-icons">save</i> Gestión y Guardar
+                        </div>
+                        <div class="collapsible-body row center" id="vista_eliminar_campos">
+                            <a class="waves-effect waves-light btn-large light-blue lighten-1" id="guardar_formulario">
+                                <i class="material-icons left">save</i>Guardar Formulario
+                            </a>
+                            <a class="waves-effect waves-light btn-large orange lighten-1" id="descargar_formulario">
+                                <i class="material-icons left">cloud_download</i>Exportar a JSON
+                            </a>
+                            <a href="" id="descargar_formulario_hidden" style="display: none;"></a>
+                            <div class="file-field input-field btn waves-effect waves-light btn-large green lighten-1"
+                                style="margin-top:0px;">
+                                <span><i class="material-icons left">file_upload</i>Importar desde JSON</span>
+                                <input type="file" id="importar_formulario" accept=".json">
+                            </div>
+
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal Structure -->
+<div id="modalCrear" class="modal bottom-sheet">
+    <div class="modal-content">
+        <h4>Agregar Campo</h4>
+        <hr>
+        <div class="row">
+            <div class="input-field col s12 m5">
+                <input id="nombre_campo" type="text" class="validate clean_on_create tooltipped" data-position="top"
+                    data-delay="50" data-tooltip="Nombre que se mostrará en pantalla.">
+                <label for="nombre_campo">Nombre del Campo <span style="color:red">*</span></label>
+            </div>
+            <div class="input-field col s12 m3">
+                <input id="ancho_campo" type="number" class="validate clean_on_create tooltipped" data-position="top"
+                    data-delay="50" min="1" max="12"
+                    data-tooltip="Este es el ancho que tendrá el campo en pantalla, de entre un máximo 12 columnas.">
+                <label for="ancho_campo">Ancho en pantalla <span style="color:red">*</span></label>
+            </div>
+            <div class="input-field col s12 m4">
+                <input id="id_campo" type="text" class="validate clean_on_create tooltipped" data-position="top"
+                    data-delay="50"
+                    data-tooltip="Este dato se utlizará el sistema para validar datos y generar reportes. NO debe llevar acentos o caracteres especiales.">
+                <label for="id_campo">Id del Campo <span style="color:red">*</span></label>
+            </div>
+            <div class="input-field col s12 m12">
+                <textarea id="value_campo" class="materialize-textarea clean_on_create tooltipped" tipo="parrafo"
+                    data-length="5000" data-position="top" data-delay="50"
+                    data-tooltip="Este campo es para los valores predetemrinado o los texto debajo de la firma o separador."></textarea>
+                <label for="value_campo">Valor del campo</label>
+            </div>
+            <div class="input-field col s12 m6">
+                <label><span style="color:red"></span></label>
+                <select class="browser-default" id="tipo_campo">
+                    <option value="" disabled selected>Tipo de campo <span style="color:red">*</span></option>
+                    <option value="texto">Texto</option>
+                    <option value="parrafo">Párrafo</option>
+                    <option value="numero">Número</option>
+                    <option value="separador">Separador</option>
+                    <option value="archivo">Archivo</option>
+                    <option value="imagen">Imagen</option>
+                    <option value="firma">Firma</option>
+                    <option value="selector">Selector</option>
+                    <option value="cie10">Clasificación Internacional de Enfermedades</option>
+                </select>
+            </div>
+            <div class="input-field col s12 m3">
+                <input id="insertar_campo" type="number" class="validate clean_on_create tooltipped" data-position="top"
+                    data-delay="50" min="1" data-tooltip="Usa este valor para ingresar el campo después de otro campo.">
+                <label for="insertar_campo">Insertar después de <span style="color:red"></span></label>
+            </div>
+            <div class="col s12 m3">
+                <button class="waves-effect waves-light btn-large" id="agregar_campo"><i
+                        class="material-icons left">save</i> Agregar Campo</button>
+            </div>
+        </div>
+        <hr>
+        <ul class="collapsible" data-collapsible="accordion">
+            <li>
+                <div class="collapsible-header"><i class="material-icons">filter_drama</i>Ejemplos de Tipos de Campo
+                </div>
+                <div class="collapsible-body">
+                    <ul class="collapsible" data-collapsible="accordion">
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">format_align_left</i>Texto Corto
+                            </div>
+                            <div class="collapsible-body">
+                                <%- include('../formularios/campos/texto.ejs',{renderizar: true, cerrado: false, nombre: 'Nombre del campo de texto corto', id : 'campotextoasdf', ancho: '12',  validar: 'campo', orden: 'ejemplo', value: 'Valor: Lorem ipsum dolores'}) %>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">format_align_justify</i>Párrafo
+                            </div>
+                            <div class="collapsible-body">
+                                <%- include('../formularios/campos/parrafo.ejs',{renderizar: true, cerrado: false, nombre: 'Nombre del campo de párrafo', id : 'campoparrafoasdf', ancho: '12', validar: 'campo', orden: 'ejemplo', value: 'Valor: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vel, vero. Est, adipisci quo! Expedita perspiciatis illum repellendus modi repellat voluptatibus consequuntur optio earum explicabo? Dolores eaque sint eius nisi perspiciatis.'}) %>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">add_circle_outline</i>Número</div>
+                            <div class="collapsible-body">
+                                <%- include('../formularios/campos/numero.ejs',{renderizar: true, cerrado: false, nombre: 'Nombre del campo de números', id : 'camponumeroasdf', ancho: '12', validar: 'campo', orden: 'ejemplo', value: 8}) %>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">border_top</i>Separador
+                            </div>
+                            <div class="collapsible-body">
+                                <%- include('../formularios/campos/separador.ejs',{renderizar: true, cerrado: false, nombre: 'Texto del Separador', id : 'camposeparadorasdf', ancho: '8', validar: 'campo', orden: 'ejemplo', value: 'Valor: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vel, vero. Est, adipisci quo! Expedita perspiciatis illum repellendus modi repellat voluptatibus consequuntur optio earum explicabo? Dolores eaque sint eius nisi perspiciatis.'}) %>
+                            </div>
+                        </li>
+                            <li>
+                                <div class="collapsible-header"><i class="material-icons">attach_file</i>Archivo
+                                </div>
+                                <div class="collapsible-body">
+                                    <%- include('../formularios/campos/archivo.ejs',{renderizar: true, cerrado: false, nombre: 'Nombre del campo de Archivo', id : 'campoarchivosdf', ancho: '12', validar: 'campo', orden: 'ejemplo', value: "Valor: Lorem ipsum dolor."}) %>
+                                </div>
+                            </li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">image</i>Imagen
+                            </div>
+                            <div class="collapsible-body">
+                                <%- include('../formularios/campos/imagen.ejs',{renderizar: true, cerrado: false, nombre: 'Nombre del campo de Imagen', id : 'campoimagenasdf', ancho: '12', validar: 'campo', orden: 'ejemplo', value: "Valor: Lorem ipsum dolor."}) %>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">create</i>Firma
+                            </div>
+                            <div class="collapsible-body">
+                                <%- include('../formularios/campos/firma.ejs',{renderizar: true, cerrado: false, nombre: 'Nombre del campo de Firma', id : 'campofirmaasdf', ancho: '12', validar: 'campo', orden: 'ejemplo', value: "Valor: Lorem ipsum dolor, sit amet consectetur adipisicing elit."}) %>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">clear_all</i>Selector
+                            </div>
+                            <div class="collapsible-body">
+                                <%- include('../formularios/campos/selector.ejs',{renderizar: true, cerrado: false, nombre: 'Nombre del campo selector', id : 'camposelectorasdf', ancho: '12', validar: 'campo', orden: 'ejemplo', value: "valor1,valor2,valor3, valor4, valor5"}) %>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">local_hospital</i>Clasificación Internacional de Enfermedades
+                            </div>
+                            <div class="collapsible-body">
+                                <%- include('../formularios/campos/cie10.ejs',{renderizar: true, cerrado: false, nombre: 'CIE10 Primario', id : 'campocie10asdf', ancho: '12', validar: 'campo', orden: 'ejemplo', value: "Valor: Lorem ipsum dolor."}) %>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cerrar</a>
+    </div>
+</div>
+
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<% include  ../scripts/convertEJS.ejs%>
+<%
+var cie10auto = Object({});
+for (let i = 0; i < cie10.length; i++) {
+  const cie = cie10[i];
+  cie10auto[(`${cie.codigo} | ${cie.descripcion}`)] = null
+}
+%>
+<script>
+    var objetosCount = 0;
+    var templateForm = [];
+    var importado = {};
+    var T_texto = convertEJS(`<%- include('../formularios/campos/texto.ejs',{renderizar: false}) %>`)
+    var T_parrafo = convertEJS(`<%- include('../formularios/campos/parrafo.ejs',{renderizar: false}) %>`)
+    var T_numero = convertEJS(`<%- include('../formularios/campos/numero.ejs',{renderizar: false}) %>`)
+    var T_separador = convertEJS(`<%- include('../formularios/campos/separador.ejs',{renderizar: false}) %>`)
+    var T_archivo = convertEJS(`<%- include('../formularios/campos/archivo.ejs',{renderizar: false}) %>`)
+    var T_imagen = convertEJS(`<%- include('../formularios/campos/imagen.ejs',{renderizar: false}) %>`)
+    var T_firma = convertEJS(`<%- include('../formularios/campos/firma.ejs',{renderizar: false}) %>`)
+    var T_cie10 = convertEJS(`<%- include('../formularios/campos/cie10.ejs',{renderizar: false}) %>`)
+    var T_selector = convertEJS(`<%- include('../formularios/campos/selector.ejs',{renderizar: false}) %>`)
+    var E_campo = convertEJS(`<div class="col s12 m4">
+        <div class="card small">
+            <div class="card-content">
+                <span class="card-title"><button class="btn-floating waves-effect waves-light right red btn_eliminar_campo" borrar="_$%= orden %$_"><i class="material-icons left">delete</i></button>_$%= orden %$_: _$%= nombre %$_</span>
+                <ul>
+                    <li><b>id:</b> _$%= id  %$_ </li>
+                    <li><b>ancho:</b> _$%= ancho  %$_ </li>
+                    <li><b>tipo:</b> _$%= tipo  %$_ </li>
+                    <li><b>value:</b> _$%= value  %$_ </li>
+                </ul>
+            </div>
+            <div class="card-action">
+                
+            </div>
+        </div>
+    </div>`)
+    $(document).ready(function () {
+        $('.modal').modal();
+        $('.tooltipped').tooltip({
+            delay: 50
+        });
+        $('#formulario_nombre').keyup(function (e) {
+            const nombre = $('#formulario_nombre').val();
+            $('#nombre_formulario').text(nombre);
+        });
+        $('#nombre_campo').keyup(function(){
+            var nombre_valor = $(this).val();
+            if (String(nombre_valor).length > 24) {
+                nombre_valor = nombre_valor.slice(0, 24)
+            }
+            var idEscribir = (nombre_valor.split(/[^A-Za-z0-9-]/).join('_')).toLowerCase();
+            
+            $('#id_campo').val(checkIdInTemplateForm(idEscribir, 0))
+            $('#id_campo').focus();
+            $('#nombre_campo').focus();
+        })
+        $('#nombre_campo').focusout(function(){
+            var nombre_valor = $(this).val();
+            if (String(nombre_valor).length > 24) {
+                nombre_valor = nombre_valor.slice(0, 24)
+            }
+            var idEscribir = (nombre_valor.split(/[^A-Za-z0-9(__)]/).join('_')).toLowerCase();
+            
+            $('#id_campo').val(checkIdInTemplateForm(idEscribir, 0))
+        })
+        
+        $('#agregar_campo').click(function (e) {
+            console.log($(this), e);
+            const nombre_campo = $('#nombre_campo').val()
+            const ancho_campo = $('#ancho_campo').val()
+            const id_campo = $('#id_campo').val()
+            const value_campo = $('#value_campo').val()
+            const tipo_campo = $('#tipo_campo').val()
+            const insertar_campo = $('#insertar_campo').val() || -1;
+            agregarCampo(nombre_campo, ancho_campo, id_campo, value_campo, tipo_campo, insertar_campo);
+        })
+        $('.btn_eliminar_campo').click(function (e) {
+            const orden = $(this).attr('borrar');
+            destroyCampo(orden)
+        })
+        $('#guardar_formulario').click(function (e) {
+            const sede_id = new URLSearchParams(window.location.search).get('sede');
+            const creador = $('#user_id_hidden').val();
+            const nombre = $('#formulario_nombre').val();
+            const preguntas = templateForm;
+            enviarFormulario(sede_id, creador, nombre, preguntas);
+        })
+        autocompleteCie10('input.autocomplete-cie10');
+        autocompleteSelectores()
+        validarTamanioImagen()
+        
+    })
+        /**
+     *  Funciones relativas a la creación del formulario. 
+     * 
+     * */
+    function autocompleteCie10 (input){
+        $(input).autocomplete({
+            minLength: 3,
+            limit: 20,
+            data: <%- JSON.stringify(cie10auto) %>
+        })
+    }
+    function autocompleteSelectores (){
+        $('.autocompleteinput').each(function () {
+        const dataAuto = $(this).attr('data-autocomplete')
+        var valor = dataAuto.split(', ').join(',').split(',')
+        var valores = Object({});
+        for (let i = 0; i < valor.length; i++) { const valorTXT=valor[i]; valores[(valorTXT)]=null }
+            $(this).autocomplete({ minLength: 1, limit: 20, data: valores }) })
+    }
+    function validarTamanioImagen(){
+        $('.campo_imagen').bind('change', function() {
+            if(this.files[0].size/1024/1024 > 1){
+                alert('La imagen es demaisado grande. (Tamaño Máximo: 1 MB)');
+                this.value = "";
+            };
+        });
+    }
+    function agregarCampo(nombre_campo, ancho_campo, id_campo, value_campo, tipo_campo, insertar_campo) {
+        if ((nombre_campo != undefined && nombre_campo != "") && (ancho_campo != undefined && ancho_campo != "") && (
+                id_campo != undefined && id_campo != "") && (tipo_campo != undefined && tipo_campo != "")) {
+            let templateJSON = {
+                nombre: nombre_campo,
+                id: id_campo,
+                ancho: ancho_campo,
+                value: value_campo,
+                tipo: tipo_campo
+            };
+            if (parseInt(insertar_campo) > -1 && parseInt(insertar_campo) < templateForm.length) {
+                templateForm.splice((parseInt(insertar_campo) + 1), 0, templateJSON);
+            } else {
+                templateForm.push(templateJSON);
+            }
+            generarFormulario(templateForm)
+            $('.clean_on_create').val('');
+            $('#modalCrear').modal('close');
+        } else {
+            Materialize.toast('Revisa los datos, falta alguno que es requerido.', 4000, 'rounded red')
+        }
+    }
+
+    function generarFormulario(template) {
+        $('#vista_previa_campos_agregados').html('')
+        $('#vista_eliminar_campos').html('')
+        setTimeout(function () {
+            for (let i = 0; i < template.length; i++) {
+                var campohtml = "";
+                var campo = template[i];
+                campo.validar = 'formulario';
+                campo.orden = i;
+                switch (campo.tipo) {
+                    case 'texto':
+                        campohtml = ejs.render(T_texto, campo)
+                        break;
+                    case 'parrafo':
+                        campohtml = ejs.render(T_parrafo, campo)
+                        break;
+                    case 'value':
+                        campohtml = ejs.render(T_value, campo)
+                        break;
+                    case 'numero':
+                        campohtml = ejs.render(T_numero, campo)
+                        break;
+                    case 'archivo':
+                        campohtml = ejs.render(T_archivo, campo)
+                        break;
+                    case 'imagen':
+                        campohtml = ejs.render(T_imagen, campo)
+                        break;
+                    case 'separador':
+                        campohtml = ejs.render(T_separador, campo)
+                        break;
+                    case 'firma':
+                        campohtml = ejs.render(T_firma, campo)
+                        break;
+                    case 'selector':
+                        console.log(T_selector,campo);
+                        campohtml = ejs.render(T_selector, campo)
+                        break;
+                    case 'cie10':
+                        campohtml = ejs.render(T_cie10, campo)
+                        break;
+                    default:
+                        Materialize.toast('Revisa los datos, el tipo no es válido.', 4000, 'rounded red')
+                        break;
+                }
+                if (campohtml != "") {
+                    $('#vista_previa_campos_agregados').append(campohtml)
+                    $('#vista_eliminar_campos').append(ejs.render(E_campo, campo))
+                }
+            }
+            $('.btn_eliminar_campo').click(function (e) {
+                const orden = $(this).attr('borrar');
+                destroyCampo(orden)
+            })
+            autocompleteCie10('input.autocomplete-cie10');
+            autocompleteSelectores()
+            validarTamanioImagen()
+        }, 250)
+    }
+
+    function destroyCampo(orden) {
+        const campo = parseInt(orden);
+        templateForm.splice(campo, 1)
+        generarFormulario(templateForm)
+    }
+
+    function enviarFormulario(sede_id, creador, nombre, preguntas) {
+        const data = JSON.stringify({
+            Sede: sede_id,
+            creador: creador,
+            nombre: nombre,
+            preguntas: preguntas
+        })
+        console.log(data);
+        $.ajax({
+            method: 'POST',
+            url: '/api/formularios',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: data,
+            success: function () {
+                Materialize.toast('Formulario creado con éxito.', 4000, 'rounded green')
+                setTimeout(function () {
+                    location.href = `/formularios?sede=${sede_id}`
+                }, 1000);
+            },
+            error: function (a, b, c) {
+                console.log(a, b, c);
+                Materialize.toast(
+                    'Hubo un error en los datos proporcionados. Verificar e Intentar de nuevo.',
+                    4000, 'rounded red');
+            }
+        })
+    }
+
+    function checkIdInTemplateForm(id, count){
+        count = Number(count) || 0;
+        var idReturn = '';
+        for (let i = 0; i < templateForm.length; i++) {
+            const temp = templateForm[i];
+            if (temp.id == id) {
+                idReturn = `${ id.split('__' + count).join('') }__${ count + 1 }`;
+                return checkIdInTemplateForm(idReturn, count + 1);
+                break;
+            }
+        }
+        return id;
+    }
+
+    document.getElementById('importar_formulario').addEventListener('change', (event) => {
+        const file = document.getElementById("importar_formulario").files[0];
+        const reader = new FileReader();
+        reader.onload = function (e) {}
+        reader.readAsText(file);
+        const error = reader.error;
+        const texte = reader.result;
+        importado = {
+            file,
+            reader,
+            error,
+            texte
+        }
+        console.log(importado)
+        console.log(importado.reader)
+        setTimeout(function () {
+            console.log(importado.reader.result)
+            const importadoJSON = JSON.parse(importado.reader.result)
+            const importadoNombre = importadoJSON.nombre;
+            templateForm = importadoJSON.preguntas;
+            $('#formulario_nombre').val(importadoNombre);
+            $('#formulario_nombre').focus();
+            $('#nombre_formulario').text(importadoNombre);
+            generarFormulario(templateForm);
+            Materialize.toast('Formulario importado con éxito.', 4000, 'rounded green lighten-1')
+
+        }, 1000)
+    });
+
+    document.getElementById('descargar_formulario').addEventListener('click', function (e) {
+        const nombre = $('#formulario_nombre').val();
+        const preguntas = templateForm;
+        const archivo = {
+            nombre,
+            preguntas
+        }
+        nombreArchivo = 'formulario.json'
+        if (nombre.split(' ').join('').length > 0) {
+            nombreArchivo = (nombre.split(' ').join('-').toLowerCase()) + '.json'
+        }
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(archivo, null, 2));
+        var dlAnchorElem = document.getElementById('descargar_formulario_hidden');
+        dlAnchorElem.setAttribute("href", dataStr);
+        dlAnchorElem.setAttribute("download", nombreArchivo);
+        dlAnchorElem.click();
+        dlAnchorElem.removeAttribute("href");
+        dlAnchorElem.removeAttribute("download");
+    })
+</script>
+<% include  ../view_distribution/bot2.ejs%>

@@ -1,0 +1,283 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+  <div class="container">
+    <div class="row">
+      <div class="col s12 m12 l12">
+        <h3 class="breadcrumbs-title"><%= title%></h3><br>
+        <ul class="collapsible popout" data-collapsible="expandable">
+          <li>
+            <div class="collapsible-header active"><i class="material-icons">recent_actors</i>
+              Elminiar y crear citas
+            </div>
+            <div class="collapsible-body">
+              <div class="row">
+                <div class="col s12 m4 l2"></div>
+                <div class="col s12 m4 l8"></div>
+                <div class="col s12 m4 l2">
+                </div>
+                <div class="col s6">
+                    <input type="hidden"  id="id_pra">
+                    <select id="data-practi" class="validate select browse-select">
+                        <option value="" disabled selected>Elige un practicante</option>
+                        <% for(i=0;i < practicantes.length; i++){
+                            var practi = practicantes[i]; %>
+                            <option value="<%= practi._id %>"> <%= practi.nombre %> <%= practi.apellido %></option>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="col s6">
+                    <select id="data-consultante" class="validate select browse-select">
+                        <option value="" disabled selected>Elige un consultante</option>
+                    </select>
+                </div><br><br>
+                <table id="example" class="bordered highlight responsive-table centered">
+                  <thead class="">
+                    <tr>
+                      <th>Fecha de la Cita</th>
+                      <th>Servicio</th>
+                      <th><i class="material-icons">settings</i></th>
+                    </tr>
+                  </thead>
+                  <tbody style="display: contents;" id="table_consul">
+
+                  </tbody>
+                </table>
+                <div class="col s2" style="text-align: end;">
+                  <a id="deletCita" class="modal-action input_dissable_cita waves-effect red btn">Eliminar cita</a>
+                </div>
+                <div class="col s2" style="text-align: end;" >
+                  <a class="btn modal-trigger waves-effect green" href="#modal-cita" id="ocultarButton" disabled>Crear cita</a>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</section>
+<div class="modal" id="modal-cita">
+  <div class="modal-content">
+    <h4>Crear Cita</h4>
+    <p>Ingrese los siguientes datos para programar una cita.</p>
+      <div class="row">
+        <div class="col s6">
+          <input type="hidden" id="paciente" value="">
+          <input type="hidden" id="paciente_nombre" value="">
+        </div>
+        <div class="col s6">
+          <input type="hidden" id="profesional" value="">
+          <input type="hidden" id="profesional_user" value="">
+        </div>
+      </div> 
+      <div class="col s8">
+        <input type="date" id="start_date">
+      </div>  
+      <div class="col s2" style="text-align: end;">
+        <a id="createCita" class="modal-action input_dissable_cita waves-effect green btn">Crear la cita</a>
+      </div>
+  </div>
+</div> 
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js"></script>
+<script>
+  var nuevaCita = Object({})
+      $(document).ready(function () {
+        $('.modal').modal();
+        $('#start_date').change(setInitialDates);
+        function setInitialDates() {
+        var start_value = moment($('#start_date').val()).format("YYYY-MM-DD");
+        if (moment(start_value).isBefore(moment(new Date()).format("YYYY-MM-DD"))) {
+            start_value = moment(new Date()).format("YYYY-MM-DD");
+            $('#start_date').val(start_value)
+        }
+       }
+        for (var n = 0; n < 1000; n++) {
+            var row = $("<tr>");
+            $("#example")
+            .find("thead th")
+            row.appendTo($("#example").find("tbody"));
+        }
+        $("#example").fancyTable({
+			sortColumn: 0,
+            pagination: true,
+            perPage: 5,
+            globalSearch: true,
+            inputPlaceholder: 'Filtra por fecha o por servicio'
+		});
+        $("#data-practi").select2()
+        $('#data-practi').material_select();
+        $("#data-consultante").select2()
+        $('#data-consultante').material_select();
+        var contador= 0
+        $('#data-practi').change(function() {
+            if(contador == 0){             
+            }else{
+                $("#data-consultante").html(`<option value="" disabled selected>Elige un consultante</option>`)
+            }
+            contador++
+            var profe = $(this).val()
+            $("#id_pra").val(profe)
+            $("#profesional").val(profe)
+            
+            $.ajax({
+                url: `/api/pacientes/getAllPacienteSup/60049afed00d9b43a49e4da7/${profe}`,
+                    success: function (response) {                    
+                for (let i = 0; i < response.length; i++) {
+                    const pacient = response[i];
+                    console.log(pacient)
+                    $(`#data-consultante`).append(`
+                    <option value="${pacient._id}">${pacient.nombre} ${pacient.apellido} </option>
+                    `)                   
+                }
+            }      
+        })   
+        })
+        $('#data-consultante').change(function() {
+            var consultante = $(this).val()
+            var Profesional = $("#id_pra").val()
+            $('#paciente').val(consultante)
+            $("#table_consul tr").remove();
+            $.ajax({
+            url: `/api/citas/getCitasSedeProfePaciente/60049afed00d9b43a49e4da7/${Profesional}/${consultante}`,
+            method: 'GET',
+                success: function (response) { 
+                  let datos_a_ordenar = response  
+                    datos_a_ordenar.sort(function compare(a, b) {
+                    var dateA = new Date(a.cita_start_timestamp);
+                    var dateB = new Date(b.cita_start_timestamp);
+                    return dateA - dateB;
+                    });   
+              
+                for (let i = 0; i < response.length; i++) {
+                    const cita = response[i];
+                    $("#profesional_user").val(cita.Profesional.username)
+                    $("#paciente_nombre").val(cita.Paciente[0].nombre)
+                    $(`#table_consul`).append(`
+                     <tr>
+                        <td>${moment(new Date(cita.start)).format("MM/DD/YYYY, h:mm a")}</td>
+                        <td>${cita.Servicio.cups_nombre}</td>
+                        <td>${cita.cita_start_timestamp > moment(new Date()).utc().unix() ? `<input name="group_1" type="radio" value="${cita._id}" id="Dispo${i}"/><label for="Dispo${i}"></label> ` : ''}</td>                      
+                     </tr>
+                    `)                   
+                }
+               $('#ocultarButton').removeAttr('disabled') 
+            }      
+        })   
+        })
+        function rWord(r){
+            var t,n="bcdfghjklmnpqrstvwxyz",a="aeiou",
+            e=function(r){
+                return Math.floor(Math.random()*r)},
+                o="";
+                r=parseInt(r,10),
+                n=n.split(""),
+                a=a.split("");
+                for(t=0;t<r/2;t++){
+                    var l=n[e(n.length)],
+                    p=a[e(a.length)];
+                    o+=0===t ? l.toUpperCase() : l,
+                    o+=2*t<r-1?
+                    p:""
+                }
+            return o
+        }
+        $('#deletCita').click(function () {
+          if($('input:radio[name = group_1]:checked').val() == undefined){
+            Materialize.toast(
+                    'No has seleccionado una cita',
+                    4000, 'rounded red');
+            return
+          }
+          var confirmacion = confirm("¿Seguro que quieres eliminar esta cita?")
+          if(confirmacion){
+          var citaId = $('input:radio[name = group_1]:checked').val()
+          var urlEnvio = `/api/citas/cancelarCitasU/${citaId}`
+          var methodEnvio = 'DELETE'
+          $.ajax({
+            url: urlEnvio,
+            method: methodEnvio,
+            success: function (r) {
+                console.log(r)  
+                Materialize.toast('Cita eliminada con exito',
+                    4000, 'rounded red') 
+                $('input:radio[name = group_1]:checked').closest("tr").remove();          
+            },
+            error: function (a, b, c) {
+                console.log(a, b, c);
+                Materialize.toast(
+                    'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                    4000, 'rounded red');
+            }
+            }) 
+          }
+        })
+        $('#createCita').click(function(){      
+          if($("#start_date").val() == ""){
+            alert("Fecha vacia, Seleccione una fecha"); return;
+          } 
+          $.ajax({
+            url: `/api/adminDatos/buscarDias/60049afed00d9b43a49e4da7/${$("#start_date").val()}`,
+            method: 'GET',
+            success: function (response) {
+                console.log(">>>>>>>>>>", response)
+                if(response == false){
+                    alert("Dia no laboral");
+                    return;
+                }else{
+
+          $('#createCita').attr('disabled', true) 
+          var fecha = $("#start_date").val() + "T12:00:00-05:00"
+          var usernameProfe = $("#profesional_user").val()
+          var nombre_paci = $("#paciente_nombre").val()
+          nuevaCita.Servicio = "6021805d2e97fb000748ee44"
+          nuevaCita.Paciente = $("#paciente").val()
+          nuevaCita.Sede = "60049afed00d9b43a49e4da7"
+          nuevaCita.Profesional = $("#profesional").val()
+          nuevaCita.title =
+          `${nombre_paci} | Sessión U| ${usernameProfe}`
+          nuevaCita.valor_cita = Number(0)
+          nuevaCita.link_chat = ""
+          nuevaCita.link_pago = ""
+          nuevaCita.start = fecha
+          nuevaCita.end = fecha
+          nuevaCita.cita_start_timestamp = moment(nuevaCita.start).utc().unix()
+          nuevaCita.cita_end_timestamp = moment(nuevaCita.end).utc().unix()
+          nuevaCita.motiveConsulta = ""
+          nuevaCita.consultorioNumber = "0"
+          nuevaCita.creado_timestamp = moment(new Date()).utc().unix()
+          console.log(nuevaCita)
+          $.ajax({
+                    url: '/api/citas/citasAutomatica',
+                    method: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(nuevaCita),
+                    success: function () {
+                        Materialize.toast('Cita creada con éxito.', 4000, 'rounded green')
+                        $('#modal-cita').modal('close');
+                        $('#createCita').attr('disabled', false)
+                      
+                    },
+                    error: function (a, b, c) {
+                        console.log(a, b, c);
+                        Materialize.toast(
+                            'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                            4000, 'rounded red');
+                    }
+                })
+              }
+              }
+          })
+        })
+        
+      })
+
+</script>

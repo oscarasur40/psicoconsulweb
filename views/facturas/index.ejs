@@ -1,0 +1,238 @@
+<% include  ../view_distribution/top1.ejs%>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment-with-locales.min.js"></script>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+  <div class="container">
+    <div class="row">
+       <div class="col s12 m12 l12">
+         <h3><%= title %></h3>
+         <h5><%= Sede.nombre %></h5>
+       </div>
+      <div class="col s12">
+        <div class="row">
+          <div class="input-field col s12">
+            <div class="input-field col l9 m12 s12">
+              <input type="text" id="Paciente" autocomplete="off" class="autocomplete input-cita">
+              <label for="Paciente">Búsqueda de Pacientes</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col s12">
+        <div class="row">
+          <ul class="collapsible popout" data-collapsible="expandable">
+            <li>
+              <div class="collapsible-header active"><i class="material-icons">money_off</i>
+                Citas sin Facturar
+              </div>
+              <div class="collapsible-body">
+                <div class="row">
+                  <table class="responsive-table">
+                    <thead>
+                      <th>Fecha y Hora de Cita</th>
+                      <th>Servicio</th>
+                      <th>Crear Factura</th>
+                    </thead>
+                    <tbody id="citas_facturar" class="facturas_tbody">
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="collapsible-header active"><i class="material-icons">monetization_on</i>
+                Citas Facturadas por Cobrar
+              </div>
+              <div class="collapsible-body">
+                <div class="row">
+                  <table class="responsive-table">
+                    <thead>
+                      <th>Fecha y Hora de Cita</th>
+                      <th>Servicio</th>
+                      <th>Cobrar Factura</th>
+                    </thead>
+                    <tbody id="facturas_cobrar" class="facturas_tbody">
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="collapsible-header active"><i class="material-icons">attach_money</i>
+                Facturas Cobradas
+              </div>
+              <div class="collapsible-body">
+                <div class="row">
+                  <table class="responsive-table">
+                    <thead>
+                      <th>Fecha y Hora de Cita</th>
+                      <th>Servicio</th>
+                      <th>Revisar Factura</th>
+                    </thead>
+                    <tbody id="facturas_cobradas" class="facturas_tbody">
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<% include  ../view_distribution/bot1.ejs%>
+<script>
+const sede_id = "<%- sede_id %>"
+var PacientesAutocomplete = Object({})
+$(document).ready(function(){
+  $.ajax({
+    method: 'GET',
+    url: `/api/pacientes?filter[sede]=${sede_id}&limit=1000000&projection=nombre+apellido+username+email+-Sedes+-Encargados+-SedeUserInfos`,
+    success: function (r) { 
+      console.log(189, r)
+      var AjaxPacientes = r;
+      for (let s = 0; s < AjaxPacientes.length; s++) {
+        const paciente = AjaxPacientes[s];
+        PacientesAutocomplete[`${paciente.username} | ${paciente.nombre} ${paciente.apellido}`] = null
+      }
+      $('#Paciente').autocomplete({
+        data: PacientesAutocomplete,
+        limit: 20,
+        minLength: 2,
+        onAutocomplete: function(val) {
+           $('.collapsible').collapsible('close', 0);
+           $('.collapsible').collapsible('close', 1);
+           $('.collapsible').collapsible('close', 2);
+          const paciente = val.split(' | ');
+          $.ajax({
+            method: 'GET',
+            url : `/api/pacientes/username/${paciente[0]}`,
+            success: function (rPaciente) {
+              $.ajax({
+                method: 'GET',
+                url:`/api/citas?filter[Paciente]=${rPaciente._id}&filter[Sede]=${sede_id}&filter[$or][0][estado][$ne]=Cancelada&filter[$or][1][facturado]=true&limit=1000000&skip=0&projection=-Sede+-Paciente+-Profesional+-creador`,
+                success: function (rCitas) {
+                  $('.facturas_tbody').html('')
+                  for (let c = rCitas.length - 1; c >=0; c--) {
+                    const cita = rCitas[c];
+                    let ServicioNombre = '';
+                    const CitaId = String(cita._id)
+                    console.log(CitaId)
+                    if (cita.Servicio == null) {
+                      ServicioNombre = 'Servicio Eliminado'
+                    } else {
+                      ServicioNombre = cita.Servicio.nombre
+                    }
+
+                    if (cita.facturado == null || cita.facturado == false) {
+                      $('#citas_facturar').append(`
+<tr>
+  <td>${moment.unix(cita.cita_start_timestamp).locale('es').format('LLL')}</td>
+  <td>${ServicioNombre}</td>
+  <td><a href="/facturas/crear?cita=${CitaId}">Factura</a></td>
+</td>
+                      `)
+                    } else if (cita.Factura.pagado != true) {
+                      $('#facturas_cobrar').append(`
+<tr>
+  <td>${moment.unix(cita.cita_start_timestamp).locale('es').format('LLL')}</td>
+  <td>${ServicioNombre}</td>
+  <td><a href="/facturas/crear?cita=${CitaId}" pagado="${cita.Factura.pagado}">Factura</a></td>
+</td>
+                      `)
+                    } else {
+                      $('#facturas_cobradas').append(`
+<tr>
+  <td>${moment.unix(cita.cita_start_timestamp).locale('es').format('LLL')}</td>
+  <td>${ServicioNombre}</td>
+  <td><a href="/facturas/impresion?factura=${cita.Factura._id}" pagado="${cita.Factura.pagado}" target="_blank">Factura</a></td>
+</td>
+                      `)
+                    }
+                  }
+                  $('.collapsible').collapsible('open', 0);
+                  $('.collapsible').collapsible('open', 1);
+                  $('.collapsible').collapsible('open', 2);
+
+                },
+                error: function (a, b, c) {
+                  console.log(a)
+                  console.log(b)
+                  console.log(c)
+                }
+              })
+            },
+            error: function (a, b, c) {
+              console.log(a)
+              console.log(b)
+              console.log(c)
+            }
+          })
+        },
+      })
+    }
+  })
+  $.ajax({
+    method: 'GET',
+    url:`/api/citas?&filter[Sede]=${sede_id}&filter[$or][0][estado][$ne]=Cancelada&filter[$or][1][facturado]=true&limit=1000000&skip=0&projection=-Sede+-Paciente+-Profesional+-creador`,
+    success: function (rCitas) {
+      $('.facturas_tbody').html('')
+      for (let c = rCitas.length - 1; c >=0; c--) {
+        const cita = rCitas[c];
+        let ServicioNombre = '';
+        const CitaId = String(cita._id)
+        console.log(CitaId)
+        if (cita.Servicio == null) {
+          ServicioNombre = 'Servicio Eliminado'
+        } else {
+          ServicioNombre = cita.Servicio.nombre
+        }
+
+        if (cita.facturado == null || cita.facturado == false) {
+          $('#citas_facturar').append(`
+<tr>
+  <td>${moment.unix(cita.cita_start_timestamp).locale('es').format('LLL')}</td>
+  <td>${ServicioNombre}</td>
+  <td><a href="/facturas/crear?cita=${CitaId}">Factura</a></td>
+</td>
+                      `)
+                    } else if (cita.Factura.pagado != true) {
+                      $('#facturas_cobrar').append(`
+<tr>
+  <td>${moment.unix(cita.cita_start_timestamp).locale('es').format('LLL')}</td>
+  <td>${ServicioNombre}</td>
+  <td><a href="/facturas/crear?cita=${CitaId}" pagado="${cita.Factura.pagado}">Factura</a></td>
+</td>
+                      `)
+                    } else {
+                      console.log('cita._id', cita._id)
+                      $('#facturas_cobradas').append(`
+<tr>
+  <td>${moment.unix(cita.cita_start_timestamp).locale('es').format('LLL')}</td>
+  <td>${ServicioNombre}</td>
+  <td><a href="/facturas/impresion?factura=${cita.Factura._id}" pagado="${cita.Factura.pagado}" target="_blank">Factura</a></td>
+</td>
+          `)
+        }
+      }
+      $('.collapsible').collapsible('open', 0);
+      $('.collapsible').collapsible('open', 1);
+      $('.collapsible').collapsible('open', 2);
+
+    },
+    error: function (a, b, c) {
+      console.log(a)
+      console.log(b)
+      console.log(c)
+    }
+  })
+})
+</script>
+<% include  ../view_distribution/bot2.ejs%>

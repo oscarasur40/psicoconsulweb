@@ -1,0 +1,108 @@
+<% include  ../view_distribution/top1.ejs%>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+  <div class="container">
+    <h3><%= formulario.nombre%></h3>
+    <hr>
+    <div class="row">
+      <%
+      for (let i = 0; i < formulario.preguntas.length; i++) {
+          var campo = formulario.preguntas[i];
+          campo.validar = 'vista-previa';
+          campo.orden = i;
+          campo.renderizar = true;
+          campo.cerrado = false;
+          switch (campo.tipo) {
+              case 'texto': %>
+              <%- include('../formularios/campos/texto.ejs',  campo) %>
+              <% break;
+              case 'parrafo': %>
+              <%- include('../formularios/campos/parrafo.ejs',  campo) %>
+              <% break;
+              case 'numero': %>
+              <%- include('../formularios/campos/numero.ejs',   campo) %>
+              <% break;
+              case 'archivo': %>
+              <%- include('../formularios/campos/archivo.ejs',  campo) %>
+              <% break;
+              case 'imagen': %>
+              <%- include('../formularios/campos/imagen.ejs',   campo) %>
+              <% break;
+              case 'separador': %>
+              <%- include('../formularios/campos/separador.ejs',  campo) %>
+              <% break;
+              case 'firma': %>
+              <%- include('../formularios/campos/firma.ejs',  campo) %>
+              <% break;
+              case 'cie10': %>
+              <%- include('../formularios/campos/cie10.ejs',  campo) %>
+              <% break;
+              case 'selector': %>
+              <%- include('../formularios/campos/selector.ejs',   campo) %>
+              <% break;
+              default:
+                  break;
+          }
+      }
+      %>
+      <hr style="border:1px solid #ffffff00">
+      <hr>
+    </div>
+  </div>
+</section>
+
+
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<%
+var cie10auto = Object({});
+for (let i = 0; i < cie10.length; i++) {
+  const cie = cie10[i];
+  cie10auto[(`${cie.codigo} | ${cie.descripcion}`)] = null
+}
+%>
+<script>
+  $(document).ready(function () {
+    autocompleteCie10('input.autocomplete-cie10');
+    autocompleteSelectores()
+    validarTamanioImagen()
+  })
+
+  function autocompleteCie10(input) {
+    $(input).autocomplete({
+      minLength: 3,
+      limit: 20,
+      data: <%- JSON.stringify(cie10auto) %>
+    })
+  }
+
+  function autocompleteSelectores() {
+    $('.autocompleteinput').each(function () {
+      const dataAuto = $(this).attr('data-autocomplete')
+      var valor = dataAuto.split(', ').join(',').split(',')
+      var valores = Object({});
+      for (let i = 0; i < valor.length; i++) {
+        const valorTXT = valor[i];
+        valores[(valorTXT)] = null
+      }
+      $(this).autocomplete({
+        minLength: 1,
+        limit: 20,
+        data: valores
+      })
+    })
+  }
+
+  function validarTamanioImagen() {
+    $('.campo_imagen').bind('change', function () {
+      if (this.files[0].size / 1024 / 1024 > 1) {
+        alert('La imagen es demaisado grande. (Tamaño Máximo: 1 MB)');
+        this.value = "";
+      };
+    });
+  }
+</script>
+<% include  ../view_distribution/bot2.ejs%>

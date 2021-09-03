@@ -1,0 +1,69 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+  <div class="container">
+    <div class="row">
+      <div class="col s12 m12 l12">
+        <h3 class="breadcrumbs-title"><%= title%> - <%= sede.nombre%>
+          <a href="/servicios/crear?sede=<%= sede._id %>"
+            class="btn-floating btn-large waves-effect waves-light red right"><i class="material-icons">add</i></a>
+        </h3>
+        <table class="bordered highlight responsive-table centered">
+          <thead class="">
+            <tr>
+              <th>Nombre</th>
+              <th>CUPS</th>
+              <th>Formulario</th>
+              <th>Valor</th>
+              <th><i class="material-icons">people</i></th>
+              <th><i class="material-icons">settings</i></th>
+            </tr>
+          </thead>
+          <tbody id="tabla_usuarios">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<script>
+  $(document).ready(function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sede = urlParams.get('sede');
+    const projectionURI = '-Sede -creador'
+    // -Formulario.nombre+Profesionales._id+cups_codigo+cups_nombre+nombre+valor_consulta
+    $('.dropdown-trigger').dropdown();
+    const url = `/api/servicios?filter[Sede]=${sede}&limit=1000&projection=${projectionURI}`
+
+    $.ajax({
+      url: url,
+      success: function (response) {
+        console.log(response)
+        for (let i = 0; i < response.length; i++) {
+          const servicio = response[i];
+          $('#tabla_usuarios').append(`
+                    <tr>
+                        <td> ${servicio.nombre} </td>
+                        <td class="tooltipped" data-position="right" data-tooltip="${servicio.cups_nombre}">
+                          ${servicio.cups_codigo} </td>
+                        <td> ${servicio.Formulario.nombre} </td>
+                        <td> ${servicio.valor_consulta} </td>
+                        <td> ${servicio.Profesionales.length} </td>
+                        <td>
+                        <a href="/servicios/profesionales?sede=${sede}&servicio=${servicio._id}" class="waves-effect green darken-1 waves-light btn"><i class="material-icons left">person</i>Profesionales</a>
+                    </tr>`)
+        }
+        $('.tooltipped').tooltip({
+          delay: 50
+        })
+      }
+    });
+  })
+</script>
+<% include  ../view_distribution/bot2.ejs%>

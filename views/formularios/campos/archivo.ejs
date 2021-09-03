@@ -1,0 +1,29 @@
+<% if (renderizar) { %>
+  <% if (cerrado) { %>
+  <div class="col s12 m<%= ancho %>" orden="<%= orden %>">
+    <a id="<%= id %>" href="#" target="_blank" tipo="archivo" class="btn green <%= validar %>"><i
+        class="material-icons left">file_download</i><span><%= nombre %></span></a>
+    <hr>
+  </div>
+  <% } else { %>
+    <div class="file-field input-field col s12 m<%= ancho %>" orden="<%= orden %>">
+      <div class="btn">
+        <span><%= nombre %></span>
+        <input type="file" accept="*/*" id="<%= id %>" tipo="archivo" class="campo_archivo <%= validar %>">
+      </div>
+      <div class="file-path-wrapper">
+        <input class="file-path validate" type="text" placeholder="<%= value %>">
+      </div>
+    </div>
+  <% } %>
+<% } else { %>
+_$div class="file-field input-field col s12 m_$%= ancho %$_" orden="_$%= orden %$_"$_
+  _$div class="btn"$_
+    _$span$__$%= nombre %$__$/span$_
+    _$input type="file" accept="*/*" id="_$%= id %$_" class="campo_archivo _$%= validar %$_"$_
+  _$/div$_
+  _$div class="file-path-wrapper"$_
+    _$input class="file-path validate" type="text" placeholder="_$%= value %$_"$_
+  _$/div$_
+_$/div$_
+<% } %>

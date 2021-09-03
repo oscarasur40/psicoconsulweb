@@ -1,0 +1,91 @@
+<li class="bold">
+  <a href="/" class="waves-effect waves-cyan">
+    <i class="material-icons">pie_chart_outlined</i>
+    <span class="nav-text">Dashboard</span>
+  </a>
+</li>
+
+<!-- Link Relacionados con Citas -->
+<% if (user.permisosUsers_CreateCitas == 1) {  %>
+<li class="bold">
+  <div class="collapsible-header"><i class="material-icons">perm_contact_calendar</i>Citas</div>
+  <div class="collapsible-body grey lighten-5">
+    <% if (user.Sedes.length > 0 && user.permisosUsers_CreateCitas == 1) { 
+      for (let i = 0; i < user.Sedes.length; i++) {
+        const sede = user.Sedes[i]; %>
+    <a href="/citas?sede=<%= sede._id %>" class="waves-effect collection-item waves-cyan"
+      style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">class</i>
+      <span class="nav-text"><%= sede.nombre %></span>
+    </a>
+    <% } 
+     } else { %>
+    <a href="#" class="waves-effect collection-item waves-cyan" style="padding-left: 20px; width: 95%;">
+      <i class="material-icons">close</i>
+      <span class="nav-text">No hay sedes asignadas</span>
+    </a>
+    <% } %>
+  </div>
+</li>
+<% } %>
+<!-- Link Relacionados con Cargue Documento -->
+<% if (user.permisosUsers_AnexarDocumento == 1) {  %>
+<li class="bold">
+  <div class="collapsible-header"><i class="material-icons">cloud_upload</i>Anexo</div>
+  <div class="collapsible-body grey lighten-5">
+    <a href="/cargue_documento" class="waves-effect waves-cyan">
+      <i class="material-icons">file_upload</i>
+      <span class="nav-text">Cargue Documento</span>
+    </a>
+  </div>
+</li>
+<% } %>
+
+<!-- Link Relacionados con Descargue Historial  -->
+<% if (user.permisosUsers_DescargaHistorialClinico == 1) {  %>
+  <li class="bold">
+    <div class="collapsible-header"><i class="material-icons">dehaze</i>Historial</div>
+    <div class="collapsible-body grey lighten-5">
+      <a href="/downloadHistory" class="waves-effect waves-cyan">
+        <i class="material-icons">file_download</i>
+        <span class="nav-text">Descargue Historial</span>
+      </a>
+    </div>
+  </li>
+<% } %>
+<% if (user.permisosUsers_DescargaCertificado == 1) {  %>
+  <li class="bold">
+    <div class="collapsible-header"><i class="material-icons">check_circle</i>Certificado</div>
+    <div class="collapsible-body grey lighten-5">
+      <a href="/certificado" class="waves-effect waves-cyan">
+        <i class="material-icons">print</i>
+        <span class="nav-text">Imprimir Certificados</span>
+      </a>
+    </div>
+  </li>
+<% } %>
+<% if (user.permisosUsers_DescargaRemisiones == 1) {  %>
+  <li class="bold">
+    <div class="collapsible-header"><i class="material-icons">folder_shared</i>Remision</div>
+    <div class="collapsible-body grey lighten-5">
+      <a href="/remision" class="waves-effect waves-cyan">
+        <i class="material-icons">print</i>
+        <span class="nav-text">Ver Remisión</span>
+      </a>
+    </div>
+  </li>
+<% } %>
+
+<!-- Link Relacionados con Firma Consentido  -->
+<% if (user.permisosUsers_FirmaConsentimiento == 1) {  %>
+  <li class="bold">
+    <div class="collapsible-header"><i class="material-icons">create</i>Firma</div>
+    <div class="collapsible-body grey lighten-5">
+      <a href="/firmaPaciente" class="waves-effect waves-cyan">
+        <i class="material-icons">create</i>
+        <span class="nav-text">Firma Documento</span>
+      </a>
+    </div>
+  </li>
+<% } %>
+

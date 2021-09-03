@@ -1,0 +1,711 @@
+<% include  ../view_distribution/top1.ejs%>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css">
+<style>
+    .fc-content td:hover {
+        background: #adf4fa;
+    }
+
+    /* UL padding override - see https://github.com/Dogfalo/materialize/issues/2786#issuecomment-234809753  */
+ul { padding-left: 20px; }
+.btn { font-size: .8em; }
+/* not sure why this is needed... */
+.material-icons { vertical-align: bottom; }
+</style>
+
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="row">
+                    <div class="col s12 m6 sl3">
+                        <h3 class="breadcrumbs-title"><%= title%></h3>
+                    </div>
+                    <% let itemProfesional = 0
+                    for (let h = 0; h < user.Sedes.length; h++) {
+                        itemProfesional = user.Sedes[h].nombre !== '2020' ? 1 : 0  %>
+                    <% } %>
+                    <% if(itemProfesional === 1) { %>
+                        <div class="col s12 m6 l3">
+                            Profesionales
+                            <select id="sProfesional" class="validate select browse-select">
+                                <option value="" disabled selected>Elige una opción</option>
+                            </select>
+                        </div>
+                    <%} else { %>
+                    <% } %> 
+                </div>
+                
+                <div id='calendar'></div>
+                <br>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_crear_cita" class="modal ">
+        <div class="modal-content">
+            <h4>Crear Cita</h4>
+            <p>Ingrese los siguientes datos para programar una cita.</p>
+            <div class="row">
+                <div class="input-field col l9 m12 s12">                                   
+                    <select id="servicios" class="validate select browse-select">
+                        <option value="" disabled>Elige una opción</option>
+                    </select>
+                    <!-- <input type="text" id="servicios" autocomplete="off" class="autocomplete input-cita"> -->
+                    <label for="servicios">Servicios</label>
+                </div>
+                <div class="input-field col l3 m12 s12">
+                    <input id="valor_cita" type="number" class="validate input-cita" value="0" disabled>
+                    <label for="valor_cita" class="">Valor de la Cita</label>
+                </div>
+                <div class="input-field col l12 m12 s12"> 
+                    <input disabled type="text" id="pacientes" value=" <%= user.username %> | <%= user.nombre %> <%= user.apellido %>" autocomplete="off" class="autocomplete input-cita">
+                    <label for="pacientes">Pacientes</label>
+                </div>
+                
+                <div class="input-field col l12 m12 s12">
+                    <select id="profesional" class="validate select browse-select">
+                        <option value="" disabled>Elige una opción</option>
+                    </select>
+                    <label for="profesional">Profesional</label>
+                </div>
+                <div class="input-field col l12 m12 s12">
+                    <input type="text" id="motiveConsulta" class="input-cita">
+                    <label for="motiveConsulta">Motivo Consulta</label>
+                </div>
+                <div class="input-field col l12 m12 s12">
+                    <input type="text" id="consultorioNumber" autocomplete="off" class="autocomplete input-cita">
+                    <label for="consultorioNumber">Consultorio</label>
+                </div>
+                <div class=" col l6 m12 s12">
+                    <label for="start_date">Inicio de la Cita</label>
+                    <input type="datetime-local" id="start_date">
+                </div>
+                <div class=" col l6 m12 s12">
+                    <label for="end_date">Fin de la Cita</label>
+                    <input type="datetime-local" id="end_date">
+                </div>
+                <div class="input-field col l6 m12 s12">
+                    <input id="link_pago" type="text" class="validate input-cita">
+                    <label for="link_pago">Link de Pago</label>
+                </div>
+                <div class="input-field col l6 m12 s12">
+                    <input id="link_chat" type="text" class="validate input-cita">
+                    <label for="link_chat">Link de Consulta en Línea</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="crear_cita" class="modal-action input_dissable_cita waves-effect waves-green btn">Crear</a>
+        </div>
+    </div>
+    <div id="modal_editar_cita" class="modal ">
+        <div class="modal-content">
+            <h4>Editar Cita</h4>
+            <p>Ingrese los siguientes datos para programar una cita.</p>
+            <div class="row">
+                <input type="hidden" id=editar_id value="__">
+                <div class="input-field col l9 m12 s12">                    
+                    <!-- <select id="servicios" class="validate select browse-select">
+                        <option value="" disabled>Elige una opción</option>
+                    </select> -->
+                    <input type="text" id="editar_servicios" value="__" autocomplete="off"
+                        class="autocomplete input-cita" disabled>
+                    <label for="editar_servicios">Servicios</label>
+                </div>
+                <div class="input-field col l3 m12 s12">
+                    <input id="editar_valor_cita" type="number" value="0" class="validate input-cita" value="0"
+                        disabled>
+                    <label for="editar_valor_cita" class="">Valor de la Cita</label>
+                </div>
+                <div class="input-field col l12 m12 s12">
+                    <input type="text" id="editar_pacientes" value="__" autocomplete="off"
+                        class="autocomplete input-cita" disabled>
+                    <label for="editar_pacientes">Pacientes</label>
+                </div>
+                <div class="input-field col l12 m12 s12">
+                    <input type="text" id="editar_profesional" value="__" autocomplete="off"
+                        class="autocomplete input-cita" disabled>
+                    <label for="editar_profesional">Profesional</label>
+                </div>
+                <div class="input-field col l12 m12 s12">
+                    <input type="text" id="editar_motiveConsulta" value="__" autocomplete="off"
+                        class="autocomplete input-cita" disabled >
+                    <label for="editar_motiveConsulta">Motivo Consulta</label>
+                </div>
+                <div class="input-field col l12 m12 s12">
+                    <input type="text" id="editar_consultorioNumber" value="__" autocomplete="off"
+                        class="autocomplete input-cita" disabled>
+                    <label for="editar_consultorioNumber">Consultorio</label>
+                </div>
+                <div class=" col l6 m12 s12">
+                    <label for="editar_start_date">Inicio de la Cita</label>
+                    <input type="datetime-local" id="editar_start_date" class="input_editar_cita">
+                </div>
+                <div class=" col l6 m12 s12">
+                    <label for="editar_end_date">Fin de la Cita</label>
+                    <input type="datetime-local" id="editar_end_date" class="input_editar_cita">
+                </div>
+                <div class="input-field col l6 m12 s12">
+                    <input id="editar_link_pago" type="text" value="__" class="input_editar_cita validate input-cita">
+                    <label for="editar_link_pago">Link de Pago</label>
+                </div>
+                <div class="input-field col l6 m12 s12">
+                    <input id="editar_link_chat" type="text" value="__" class="input_editar_cita validate input-cita">
+                    <label for="editar_link_chat">Link de Consulta en Línea</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer center-align">
+            <button id="cancelar_cita" class="actions_editar_cita modal-action waves-effect waves-red red btn">Cancelar
+                Cita</button>
+            <button id="reprogramar_cita"
+                class="actions_editar_cita modal-action waves-effect waves-orange orange btn">Reprogramar</button>
+        </div>
+    </div>
+
+</section>
+
+
+<% include  ../view_distribution/bot1.ejs%>
+<% include  ../view_distribution/bot2.ejs%>
+<script
+    src="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.3.0,npm/fullcalendar@5.3.0/locales-all.min.js,npm/moment@2.27.0/min/moment-with-locales.min.js">
+</script>
+
+<script>
+    const sede_id = new URLSearchParams(window.location.search).get('sede');
+    var nuevaCita = Object({})
+    var editarCita = Object({})
+
+    var AJAXServicios = []
+    var AJAXPacientes = []
+    var AJAXProfesionales = []
+    var ServiciosToAutoComplete = Object({})
+    var PacientesToAutoComplete = Object({})
+    var ProfesionalesToAutoComplete = Object({})
+    var ProfesionalesAdmitidos = Object([])
+    var objetosUsados = Object({})
+
+    var EditarServiciosToAutoComplete = Object({})
+    var EditarPacientesToAutoComplete = Object({})
+    var EditarProfesionalesToAutoComplete = Object({})
+    var EditarProfesionalesAdmitidos = Object([])
+    var EditarobjetosUsados = Object({})
+
+    function setInitialDates() {
+        var start_value = new Date($('#start_date').val());
+        if (moment(start_value).isBefore(moment(new Date()))) {
+            start_value = moment(new Date()).format().slice(0, 16);
+            $('#start_date').val(start_value)
+        }
+        var end_value = moment(start_value).add(30, 'minutes').format().slice(0, 16);
+        $("#end_date").val(end_value);
+    }
+
+    function setEditarInitialDates() {
+        console.log('Initial Editar');
+        // var start_value = new Date($('#editar_start_date').val());
+        // if (moment(start_value).isBefore(moment(new Date()))) {
+        //     start_value = moment(new Date()).format().slice(0, 16);
+        //     $('#editar_start_date').val(start_value)
+        // }
+        // var end_value = moment(start_value).add(30, 'minutes').format().slice(0, 16);
+        // $("#editar_end_date").val(end_value);
+    }
+    var calendar;
+    /* Configuración del calendario */
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        var calendarEl = document.getElementById('calendar');
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            navLinks: true,
+            initialView: 'timeGridWeek',
+            height: 'auto',
+            locale: 'es',
+            headerToolbar: {
+                left: 'title',
+                right: 'prev,next'
+            },
+            footerToolbar: {
+                left: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+                right: 'prev,next'
+            },
+            dateClick: function (info) {
+                var valuecomp = moment(info.date).add(1, 'days').fromNow()
+                if (valuecomp.slice(0, 2) === 'in') {
+                    $('#modal_crear_cita').modal('open');
+                    $('#start_date').val(moment(info.date).format().slice(0, 16))
+                    setInitialDates();
+                } else {
+                    alert('No puedes crear una cita en una fecha pasada.')
+                }
+            },
+            eventClick: function (info) {
+            },
+            events: {
+                url: '/api/citas/sedePaciente',
+                method: 'GET',
+                extraParams: {
+                    sede: sede_id,
+                    projection: '-Sede -creador'
+                },
+                failure: function () {
+                    alert('Hubo un error al conseguir la citas. Vuelve a intentarlo.');
+                },
+                color: '#6e7e86', // Color predeterminado de fondo de las citas
+                textColor: 'white' // Color de texto predeterminado de las citas
+            },
+        });
+        calendar.render();
+        $('.fc-event-title-container').each(function () {             $(this).remove();         });
+    });
+
+
+    $('.coc').on('mousedown', function (event) {
+        event.preventDefault();
+    })
+    $(document).ready(function () {
+        $('.fc-event-title-container').each(function () {             $(this).remove();         });
+        $('.modal').modal();
+        $('#servicios').val('')
+        $('#start_date').attr('min', moment(new Date()).format().slice(0, 16))
+        $('#end_date').attr('min', moment(new Date()).format().slice(0, 16))
+        $('#start_date').change(setInitialDates);
+        $('#editar_start_date').change(function () {
+            var start_value = new Date($('#editar_start_date').val());
+            if (moment(start_value).isBefore(moment(new Date()))) {
+                start_value = moment(new Date()).format().slice(0, 16);
+                $('#editar_start_date').val(start_value)
+            }
+            var end_value = moment(start_value).add(30, 'minutes').format().slice(0, 16);
+            $("#editar_end_date").val(end_value);
+        });
+        /*** Comportamientos de los datos de Nueva Cita.*/
+        /* Obtener Profesionales */
+        $.ajax({
+            method: 'GET',
+            url: `/api/profesionales?filter[sede]=${sede_id}&limit=1000000&projection=nombre+apellido+username+LDiurno+LInicialTimeDiurno+LFinalTimeDiurno+MaDiruno+MaInicialTimeDiurno+MaFinalTimeDiurno+MiDiruno+MiInicialTimeDiurno+MiFinalTimeDiurno+JDiruno+  JInicialTimeDiurno+JFinalTimeDiurno+VDiruno+VInicialTimeDiurno+VFinalTimeDiurno+SDiruno+SInicialTimeDiurno+SFinalTimeDiurno+DoDiruno+DoInicialTimeDiurno+  DoFinalTimeDiurno+LTarde+LInicialTimeTarde+LFinalTimeTarde+MaTarde+MaInicialTimeTarde+MaFinalTimeTarde+MiTarde+MiInicialTimeTarde+MiFinalTimeTarde+JTarde+JInicialTimeTarde+  JFinalTimeTarde+VTarde+VInicialTimeTarde+VFinalTimeTarde+STarde+SInicialTimeTarde+SFinalTimeTarde+DoTarde+DoInicialTimeTarde+DoFinalTimeTarde+-Sedes+-Encargados+-SedeUserInfos`,
+            success: function (r) {
+                AJAXProfesionales = r;
+                for (let i = 0; i < r.length; i++) {
+                  const formulario = r[i];
+                  $('#sProfesional').append(
+                      `<option value="${formulario._id}">${formulario.nombre} ${formulario.apellido}</option>`)
+              }
+              $('#sProfesional').material_select();
+            }
+        })
+
+        /*
+            DataTable
+        */
+        for (var n = 0; n < 1000; n++) {
+            var row = $("<tr>");
+            $("#example")
+            .find("thead th")
+            row.appendTo($("#example").find("tbody"));
+        }
+        $("#example").fancyTable({
+            /* Column number for initial sorting*/ 
+            sortColumn:0, 
+            /* Setting pagination or enabling */ 
+            pagination: true, 
+            /* Rows per page kept for display */ 
+            perPage:5, 
+            globalSearch:true 
+        });
+                
+        $('#servicios').change(function(){
+            
+            $('#profesional').empty()
+            $('#profesional').append(
+                    `<option value="" disabled>Elige una opción</option>`)
+            $('#profesional').val('')
+
+
+            const sPos = Number($(this).val().split(' | ')[0])
+            nuevaCita.Servicio = AJAXServicios[sPos]._id
+            objetosUsados.servicio = AJAXServicios[sPos]
+            $('#valor_cita').val(Number(AJAXServicios[sPos].valor_consulta))
+            nuevaCita.valor_cita = Number(AJAXServicios[sPos]
+                    .valor_consulta)
+            ProfesionalesToAutoComplete = Object({})
+            const ProfesionalesServicio = AJAXServicios[sPos].Profesionales
+            ProfesionalesAdmitidos = Object([])
+            for (let p = 0; p < AJAXProfesionales.length; p++) {
+                const profesional = AJAXProfesionales[p];
+                if (ProfesionalesServicio.includes(profesional._id)) {
+                    ProfesionalesAdmitidos.push(profesional)
+                }
+            }
+            
+            for (let p = 0; p < ProfesionalesAdmitidos.length; p++) {
+                const profesional = ProfesionalesAdmitidos[p];
+                ProfesionalesToAutoComplete[
+                    `${p} | ${profesional.username} | ${profesional.nombre} ${profesional.apellido}`
+                ] = null
+                //calendarProfesional(profesional)
+                $('#profesional').append(
+                    `<option value="${ProfesionalesAdmitidos[p]._id}">${p} | ${profesional.username} | ${profesional.nombre} ${profesional.apellido}</option>`)
+                        
+            }
+            
+            $('#profesional').material_select();
+            
+        })
+        /* Obtener Asignar Servicio y Valor de Consulta y Profesionales del Servicio. */
+        $.ajax({
+            method: 'GET',
+            url: `/api/servicios?filter[Sede]=${sede_id}&limit=1000000&projection=valor_consulta+nombre+Profesionales+cups_codigo`,
+            success: function (r) {
+                //console.log(189, r)
+                AJAXServicios = r;
+                for (let s = 0; s < AJAXServicios.length; s++) {
+                    const servicio = AJAXServicios[s];
+                    ServiciosToAutoComplete[`${s} | ${servicio.nombre}`] = null
+                    $('#servicios').append(
+                        `<option value="${s}">${s} | ${servicio.nombre}</option>`)
+                }
+                $('#servicios').material_select();
+            }
+        })
+
+        $(document).on("click", ".select-wrapper", function (event) {
+            event.stopPropagation();
+        });
+
+        $('#sProfesional').change(function(e){
+            console.log($(this).val())
+            const item = $(this).val()
+            $.ajax({
+                url: `/api/citas/sede_profesional/${sede_id}/${item}`,
+                method: 'GET',
+                success: function (response) {
+                    console.log(">>> Paso")
+                    // remove original source
+                    var orgSource = calendar.getEventSources();
+                    orgSource[0].remove();
+                    
+                    // add new source
+                    // new events will be immediately fetched from this source 
+                    // and placed on the calendar.
+                    calendar.addEventSource(response);
+ 
+                },
+                error: function () {
+                    alert('Hubo un error al conseguir la citas. Vuelve a intentarlo.');
+                }
+            })
+        })
+        $('#profesional').change(function() {
+            nuevaCita.Profesional = $(this).val()
+            for(let i = 0; i < ProfesionalesAdmitidos.length; i++){
+                if(ProfesionalesAdmitidos[i].id === nuevaCita.Profesional){
+                    console.log(ProfesionalesAdmitidos[i])
+                    objetosUsados.profesional = ProfesionalesAdmitidos[i]
+                }
+            }            
+        });
+
+        $('#crear_cita').click(function () {
+            try
+            {
+                
+                if(objetosUsados.profesional === undefined){
+                    Materialize.toast('Escoger un profesional.', 4000, 'rounded red')
+                    return;
+                }
+                let status = validarTimeProfesional(objetosUsados.profesional)
+                console.log(status)
+                if(status == false){
+                    alert("No Puedes crear Cita a esa hora"); return;
+                } 
+
+                const usuario = <%-JSON.stringify(user) %>
+                
+                $('.input_dissable_cita').attr('disabled', true)
+                nuevaCita.Sede = sede_id
+                nuevaCita.Paciente = usuario._id
+                nuevaCita.title =
+                    `${usuario.nombre} ${usuario.apellido}| ${$("#servicios").val()} | ${objetosUsados.profesional.username}`
+                nuevaCita.valor_cita = Number($('#valor_cita').val())
+                nuevaCita.link_chat = String($('#link_chat').val())
+                nuevaCita.link_pago = String($('#link_pago').val())
+                nuevaCita.start = moment(String($('#start_date').val())).format()
+                nuevaCita.end = moment(String($('#end_date').val())).format()
+                nuevaCita.cita_start_timestamp = moment(nuevaCita.start).utc().unix()
+                nuevaCita.cita_end_timestamp = moment(nuevaCita.end).utc().unix()
+                nuevaCita.motiveConsulta = String($('#motiveConsulta').val())
+                nuevaCita.consultorioNumber = String($('#consultorioNumber').val())
+                console.log(nuevaCita);
+                
+                $.ajax({
+                    url: '/api/citas',
+                    method: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(nuevaCita),
+                    success: function () {
+                        Materialize.toast('Cita creada con éxito.', 4000, 'rounded green')
+                        calendar.refetchEvents()
+                        $('#modal_crear_cita').modal('close');
+                        $('.input-cita').val('');
+                        $('.input_dissable_cita').removeAttr('disabled')
+                    },
+                    error: function (a, b, c) {
+                        console.log(a, b, c);
+                        Materialize.toast(
+                            'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                            4000, 'rounded red');
+                    }
+                })
+
+            }catch(e){
+                console.error(e)
+                Materialize.toast(
+                    'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                    4000, 'rounded red');
+                $('.input_dissable_cita').removeAttr('disabled')
+
+            }
+        })
+        $('#reprogramar_cita').click(function () {
+            const cita_id = $('#editar_id').val();
+            editarCita.valor_cita = Number($('#editar_valor_cita').val());
+            editarCita.link_chat = String($('#editar_link_chat').val());
+            editarCita.link_pago = String($('#editar_link_pago').val());
+            editarCita.start = moment(String($('#editar_start_date').val())).format();
+            editarCita.end = moment(String($('#editar_end_date').val())).format();
+            editarCita.cita_start_timestamp = moment(editarCita.start).utc().unix();
+            editarCita.cita_end_timestamp = moment(editarCita.end).utc().unix();
+            editarCita.estado = 'Reprogramada'
+            editarCita.color = '#d28407'
+            const urlEnvio = `/api/citas/${cita_id}`
+            const methodEnvio = 'PATCH'
+            $.ajax({
+                url: urlEnvio,
+                method: methodEnvio,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(editarCita),
+                success: function () {
+                    Materialize.toast('Cita reprogramada con éxito.', 4000, 'rounded green')
+                    calendar.refetchEvents()
+                    $('#modal_editar_cita').modal('close');
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                    Materialize.toast(
+                        'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                        4000, 'rounded red');
+                }
+            })
+        })
+        $('#cancelar_cita').click(function () {
+            const cita_id = $('#editar_id').val();
+            const urlEnvio = `/api/citas/${cita_id}`
+            const methodEnvio = 'PATCH'
+            editarCita = {
+                estado: 'Cancelada',
+                color: '#d21807'
+            }
+            $.ajax({
+                url: urlEnvio,
+                method: methodEnvio,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(editarCita),
+                success: function () {
+                    Materialize.toast('Cita cancelada con éxito.', 4000, 'rounded green')
+                    calendar.refetchEvents()
+                    $('#modal_editar_cita').modal('close');
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                    Materialize.toast(
+                        'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                        4000, 'rounded red');
+                }
+            })
+        })
+        $('#atender_cita').click(function () {
+            let servicios = $('#editar_servicios').val();
+            let dateF = $('#editar_start_date').val().split("T")
+            let a = new Date(dateF).getDate()
+            let b = new Date().getDate()
+            let arraySede = ''
+            
+            $.ajax({
+                url: `/api/sedes/${sede_id}`,
+                method: 'GET',
+                success: function (r) {
+                    if(r.nombre === '2020'){
+                        if("prueba 1" === servicios){
+                            const cita_id = $('#editar_id').val();
+                            const urlEnvio = `/citas/formularioPrimeraVez?cita=${cita_id}`
+                            location.href = urlEnvio;
+                        } else if ("prueba 2" === servicios){
+                            const cita_id = $('#editar_id').val();
+                            const urlEnvio = `/citas/sessionU?cita=${cita_id}`
+                            location.href = urlEnvio;                            
+                        }
+                    } else if(a === b){
+                        const cita_id = $('#editar_id').val();
+                        const urlEnvio = `/citas/atender?cita=${cita_id}`
+                        location.href = urlEnvio;
+                    } else{
+                        Materialize.toast(
+                            'No se atienden Citas futuras.',
+                            4000, 'rounded red');
+                    }
+                    
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                    Materialize.toast(
+                        'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                        4000, 'rounded red');
+                }
+            })
+        })
+    })
+    function validarTimeProfesional(profesional) {
+        console.log(profesional)
+        let day = moment().format('dddd')
+        let hours = moment(String($('#start_date').val())).format("HH"+":00")
+        let d = moment(String($('#start_date').val())).format('dddd')
+        console.log(hours)
+        switch (d) {
+            case "Monday":
+                if(profesional.LDiurno == 1 && hours<'12:00'){
+                    if(profesional.LInicialTimeDiurno <= hours && profesional.LFinalTimeDiurno >= hours){
+                        return true
+                    }else {
+                        return false
+                    } 
+                }else if(profesional.LTarde == 1 && hours>='12:00'){
+                    if(profesional.LInicialTimeTarde <= hours && profesional.LFinalTimeTarde >= hours){
+                        return true
+                    }else {
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            case "Tuesday":
+                if(profesional.MaDiruno == 1 && hours<'12:00'){
+                    if(profesional.MaInicialTimeDiurno <= hours && profesional.MaFinalTimeDiurno >= hours){
+                        return true
+                    }else {
+                        return false
+                    } 
+                }else if(profesional.MaTarde == 1 && hours>='12:00'){
+                    if(profesional.MaInicialTimeTarde <= hours && profesional.MaFinalTimeTarde >= hours){
+                        return true
+                    }else {
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            case "Wednesday":
+                if(profesional.MiDiruno == 1 && hours<'12:00' ){
+                    if(profesional.MiInicialTimeDiurno <= hours && profesional.MiFinalTimeDiurno >= hours){
+                        return true
+                    }else {
+ 
+                        return false
+                    } 
+                }else if(profesional.MiTarde == 1 && hours>='12:00'){
+                    if(profesional.MiInicialTimeTarde<= hours && profesional.MiFinalTimeTarde >= hours){
+                    }else {
+ 
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            case "Thursday":
+                if(profesional.JDiruno == 1 && hours<'12:00'){
+                    if(profesional.JInicialTimeDiurno <= hours && profesional.JFinalTimeDiurno >= hours){
+                        return true
+                    }else {
+  
+                         return false
+                    } 
+                }else if(profesional.JTarde == 1 && hours>='12:00'){
+                    if(profesional.JInicialTimeTarde <= hours && profesional.JFinalTimeTarde >= hours){
+                    }else {
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            case "Friday":
+                if(profesional.VDiruno == 1 && hours<'12:00'){
+                    if(profesional.VInicialTimeDiurno <= hours && profesional.VFinalTimeDiurno >= hours){
+                            return true
+                        } 
+                    else {
+                        return false
+                    } 
+                }else if(profesional.VTarde == 1 && hours>='12:00'){
+                    if(profesional.VInicialTimeTarde <= hours && profesional.VFinalTimeTarde >= hours){
+                        return true
+                    }else {
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            case "Saturday":
+                if(profesional.SDiruno == 1 && hours<'12:00'){
+                    if(profesional.SInicialTimeDiurno <= hours && profesional.SFinalTimeDiurno >= hours){
+                        return true
+                    }else {
+                        return false
+                    } 
+                }else if(profesional.VTarde == 1 && hours>='12:00'){
+                    if(profesional.SInicialTimeTarde <= hours && profesional.SFinalTimeTarde >= hours){
+                        return true
+                    }else {
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            case "Sunday":
+                if(profesional.DoDiruno == 1 && hours<'12:00'){
+                    if(profesional.DoInicialTimeDiurno <= hours && profesional.DoFinalTimeDiurno >= hours){
+                        return true
+                    }else {
+                        return false
+                    } 
+                }else if(profesional.DoTarde == 1 && hours>='12:00'){
+                    if(profesional.DoInicialTimeTarde <= hours && profesional.DoFinalTimeTarde >= hours){
+                        return true
+                    }else {
+                        return false
+                    }
+                }else{
+                    return false
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    function rWord(r){var t,n="bcdfghjklmnpqrstvwxyz",a="aeiou",e=function(r){return Math.floor(Math.random()*r)},o="";r=parseInt(r,10),n=n.split(""),a=a.split("");for(t=0;t<r/2;t++){var l=n[e(n.length)],p=a[e(a.length)];o+=0===t?l.toUpperCase():l,o+=2*t<r-1?p:""}return o}
+
+
+</script>

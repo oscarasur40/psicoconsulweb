@@ -1,0 +1,74 @@
+<% include  ../view_distribution/top1.ejs%>
+<script src="https://cdn.jsdelivr.net/npm/ejs@3.1.3/ejs.min.js"></script>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <h3 class="breadcrumbs-title"><%= title%>
+                    <a href="/formularios/crear?sede=<%= sede._id%>" class="btn-floating waves-effect waves-light red">
+                        <i class="material-icons">add</i>
+                    </a>
+                </h3>
+                <h5><%= sede.nombre%></h5>
+                <table class="bordered highlight responsive-table centered">
+                    <thead>
+                        <th>Nombre</th>
+                        <th>Cantidad de Campos</th>
+                        <th><i class="material-icons left">remove_red_eye</i></th>
+                    </thead>
+                    <tbody id="tabla_formulario">
+                    <tbody>
+                        <!-- <td>Cuestionario de Prueba</td>
+                        <td>5</td>
+                        <td>
+                            <a href="/users/ver?id=" class="waves-effect blue darken-1 waves-light btn"><i
+                                    class="material-icons left">remove_red_eye</i>Ver</a>
+                        </td> -->
+                    </tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<% include  ../scripts/convertEJS.ejs%>
+<script>
+    const sede_id = new URLSearchParams(window.location.search).get('sede');
+    let plantilla = convertEJS(
+`<tr>
+    <td>_$%= nombre %$_</td>
+    <td>_$%= preguntas.length %$_</td>
+    <td><a href="/formularios/vista-previa?formulario=_$%= id %$_" class="btn"><i class="material-icons left">remove_red_eye</i> Vista Previa</a></td>
+</tr>`)
+    $(document).ready(function () {
+        $.ajax({
+            method: 'GET',
+            url: `/api/formularios?filter[Sede]=${sede_id}&limit=1000000&projection=nombre+preguntas`,
+            success: function (response) {
+                console.log(response);
+                for (let i = 0; i < response.length; i++) {
+                    const r = response[i];
+                    const nombre = r.nombre;
+                    const preguntas = r.preguntas;
+                    const id = r._id;
+                    $('#tabla_formulario').append(ejs.render(plantilla, {nombre, preguntas, id}))
+                }
+
+            },
+            error: function (a, b, c) {
+                console.log(a, b, c);
+                Materialize.toast(
+                    'Hubo un error al buscar los formularios. Verificar e Intentar de nuevo.',
+                    4000, 'rounded red');
+            }
+        })
+    })
+</script>
+<% include  ../view_distribution/bot2.ejs%>

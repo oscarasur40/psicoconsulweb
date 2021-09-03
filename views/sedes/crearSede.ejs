@@ -1,0 +1,748 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="card light-blue lighten-5">
+                <div class="col s12">
+                    <div class="card-content black-text">
+                        <h4 class="">Crear Sede</h4>
+                        <ul class="collapsible popout" data-collapsible="expandable">
+                            <li>
+                                <div class="collapsible-header active"><i class="material-icons">dehaze</i> Datos
+                                    Obligatorios
+                                </div>
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <input id="propietario" value="<%= user._id%>" type="hidden" class="validate">
+                                        <div class="input-field col l12 s12">
+                                            <input id="nombre_IPS" type="text" class="validate">
+                                            <label for="nombre_IPS">Nombre De IPS O Consultorio <span style="color:red">*</span></label>
+                                        </div>
+
+                                        
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col l6 s12">
+                                            <select id="tipo_id" class="validate select browse-select">
+                                                <option value="" disabled selected>Elige una opción</option>
+                                                <option value="NIT">Número de Identificación Tributaria</option>
+                                                <option value="CC">Cédula De Ciudadanía</option>
+                                             
+                                            </select>
+                                            <label>Tipo de Identifiación: <span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="input-field col l6 s12">
+                                            <input id="numID" type="number" class="validate">
+                                            <label for="numID">Numero <span style="color:red">*</span></label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        
+                                        <div class="input-field col l6 s12">
+                                            <input id="phone" name="phone" type="tel" placeholder="Teléfono 1 : " class="intlTelInput">
+                                            <!-- <label for="phone">Teléfono: </label> -->
+                                        </div>
+                                        <div class="input-field col l6 s12">
+                                            <input id="phone2" name="phone2" type="tel" placeholder="Teléfono 2 : " class="intlTelInput">
+                                            <!-- <label for="phone">Teléfono: </label> -->
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col l4 s12">
+                                            <select id="paisobl" class="form-select" aria-label="Default select example" onChange="mostrar(this.value);" >
+                                                <option selected>Seleccionar pais</option>
+                                                
+                                                <% 
+                                       
+                                                    for (let i = 0; i < paises.length; i++) {
+                                                    const paises2 = paises[i]; 
+                                                        
+                                                %>
+                                                    <option value="<%= paises2.code %>"><%= paises2.name %></option>
+                                                <% } %>
+                                                
+                                              </select>
+                                        </div>
+                                            
+                                                <div id="switchdep" class="input-field col l4 s12" style="display: none;">
+                                                    <select id="departamentoobl"  class="form-select" aria-label="Default select example" onChange="mostrarcityd(this.value);">
+                                                        <option value="" selected>Seleccionar Departamento</option>
+                                                        <% 
+                                                            departamentos.sort(function (a, b) {
+                                                                if (a.Nombre > b.Nombre) {
+                                                                    return 1
+                                                                } else if (a.Nombre < b.Nombre) {
+                                                                    return -1
+                                                                } else {
+                                                                    return 0
+                                                                }
+                                                            })
+                                                            for (let i = 0; i < departamentos.length; i++) {
+                                                                const depa = departamentos[i]; %>
+                                                                <option value="<%= depa.Codigo %>"><%= depa.Nombre %></option>
+                                                            <% } %>
+                                                        
+                                                    </select>
+                                                </div>
+        
+                                            
+                                                <div id="ocultarprov" class="input-field col l4 s12" style="display: none;">
+                                                    <select id="provincia"  class="form-select" aria-label="Default select example" onChange="mostrarcityp(this.value);">
+                                                        <option value="" selected>Seleccionar Provincia</option>
+                                                        <% 
+                                                        provincia.sort(function (a, b) {
+                                                                if (a.Nombre > b.Nombre) {
+                                                                    return 1
+                                                                } else if (a.Nombre < b.Nombre) {
+                                                                    return -1
+                                                                } else {
+                                                                    return 0
+                                                                }
+                                                            })
+                                                            for (let i = 0; i < provincia.length; i++) {
+                                                                const prov = provincia[i]; %>
+                                                                <option value="<%= prov.Codigo %>"><%= prov.Nombre %></option>
+                                                            <% } %>
+                                                        
+                                                    </select>
+                                                </div>
+                                            
+                                                <div id="otrospaises" class="input-field col l4 s12">
+                                                    <input value="" type="text" placeholder="Estado">
+                                                </div>
+
+                                        <div id="swithMunicipio" class="input-field col l4 s12" style="display: none;">
+                                            <select id="municipioobl" class="form-select" aria-label="Default select example">
+                                                
+                                            </select>
+                                        </div>
+
+                                        <div id="swithCanton" class="input-field col l4 s12" style="display: none;">
+                                            <select id="cantonobl" class="form-select" aria-label="Default select example">
+                                                
+                                                
+                                            </select>
+                                        </div>
+
+                                        <div id="otroCity" class="input-field col l4 s12">
+                                                    <input value="" id="otrocity" type="text" placeholder="Ciudad">
+                                         </div>
+                                       
+                                    </div>
+
+                                    <div id="switch_prestacion_servicio" class="row" style="display: none;">
+                                        <div  class="input-field col l6 s12" >
+                                            <input value="" id="codigo_servicio" type="text" class="validate tooltipped"
+                                                data-position="top" data-delay="50"
+                                                data-tooltip="Si esta obligado a generar RIPS, debe Ingresar ese campo.">
+                                            <label for="codigo_servicio">Código de Prestación de Servicios</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="input-field col l12 s12">
+                                            <input id="direccion" type="text" class="validate">
+                                            <label for="direccion">Dirección</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        
+                                        <div class="input-field col m12 s12">
+                                            <input id="correo" type="email" >
+                                            <label for="correo">Correo <span style="color:red">*</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="collapsible-header"><i class="material-icons">dehaze</i> Datos Reglamentarios
+                                </div>
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        
+                                        <div class="input-field col l4 s12">
+                                            <input id="representante_nombre" type="text" class="validate">
+                                            <label for="representante_nombre">Nombre de Representante Legal</label>
+                                        </div>
+                                        <div class="input-field col l4 s12">
+                                            <select id="representante_identificacion_tipo"
+                                                class="validate select browse-select">
+                                                <option value="CC" selected> Cédula de Ciudadanía
+                                                </option>
+                                                <option value="NI">Número de identificación tributaria – NIT</option>
+                                                <option value="CE">Cédula de Extranjería</option>
+                                                <option value="CD">Carné diplomático</option>
+                                                <option value="PA">Pasaporte</option>
+                                                <option value="PE">Permiso Especial de Permanencia</option>
+                                            </select>
+                                            <label>Tipo de identificación: <span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="input-field col l4 s12">
+                                            <input id="representante_identificacion" type="text" class="validate">
+                                            <label for="representante_identificacion">Número de Identificación</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="input-field col l4 s12">
+                                            <select id="paisreg" class="form-select" aria-label="Default select example" onChange="mostrarreg(this.value);" >
+                                                <option selected>Seleccionar pais</option>
+                                                
+                                                <% 
+                                       
+                                                    for (let i = 0; i < paises.length; i++) {
+                                                    const paises2 = paises[i]; 
+                                                        
+                                                %>
+                                                    <option value="<%= paises2.code %>"><%= paises2.name %></option>
+                                                <% } %>
+                                                
+                                            </select>
+                                        </div>
+
+                                        <div id="switchdepreg" class="input-field col l4 s12" style="display: none;">
+                                                    <select id="departamentooblreg"  class="form-select" aria-label="Default select example" onChange="mostrarcitydreg(this.value);">
+                                                        <option value="" selected>Seleccionar Departamento</option>
+                                                        <% 
+                                                            departamentos.sort(function (a, b) {
+                                                                if (a.Nombre > b.Nombre) {
+                                                                    return 1
+                                                                } else if (a.Nombre < b.Nombre) {
+                                                                    return -1
+                                                                } else {
+                                                                    return 0
+                                                                }
+                                                            })
+                                                            for (let i = 0; i < departamentos.length; i++) {
+                                                                const depa = departamentos[i]; %>
+                                                                <option value="<%= depa.Codigo %>"><%= depa.Nombre %></option>
+                                                            <% } %>
+                                                        
+                                                    </select>
+                                                </div>
+        
+                                            
+                                                <div id="ocultarprovreg" class="input-field col l4 s12" style="display: none;">
+                                                    <select id="provinciareg"  class="form-select" aria-label="Default select example" onChange="mostrarcitypreg(this.value);">
+                                                        <option value="" selected>Seleccionar Provincia</option>
+                                                        <% 
+                                                        provincia.sort(function (a, b) {
+                                                                if (a.Nombre > b.Nombre) {
+                                                                    return 1
+                                                                } else if (a.Nombre < b.Nombre) {
+                                                                    return -1
+                                                                } else {
+                                                                    return 0
+                                                                }
+                                                            })
+                                                            for (let i = 0; i < provincia.length; i++) {
+                                                                const prov = provincia[i]; %>
+                                                                <option value="<%= prov.Codigo %>"><%= prov.Nombre %></option>
+                                                            <% } %>
+                                                        
+                                                    </select>
+                                                </div>
+                                            
+                                                <div id="otrospaisesreg" class="input-field col l4 s12">
+                                                    <input value="" id="otrospaisesreg2" type="text" placeholder="Estado">
+                                                </div>
+
+                                        <div id="swithMunicipioreg" class="input-field col l4 s12" style="display: none;">
+                                            <select id="municipiooblreg" class="form-select" aria-label="Default select example">
+                                                
+                                            </select>
+                                        </div>
+
+                                        <div id="swithCantonreg" class="input-field col l4 s12" style="display: none;">
+                                            <select id="cantonoblreg" class="form-select" aria-label="Default select example">
+                                                
+                                                
+                                            </select>
+                                        </div>
+
+                                        <div id="otroCityreg" class="input-field col l4 s12">
+                                                    <input value="" id="otrocityreg" type="text" placeholder="Ciudad">
+                                         </div>
+
+                                       
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col l12 s12">
+                                            <input id="direccionreg" type="text" class="validate">
+                                            <label for="direccionreg">Dirección</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        
+                                        <div class="input-field col l6 s12">
+                                            <input id="phone3" name="phone3" type="tel" placeholder="Teléfono 1 : " class="intlTelInput">
+                                            <!-- <label for="phone">Teléfono: </label> -->
+                                        </div>
+                                        <div class="input-field col l6 s12">
+                                            <input id="phone4" name="phone4" type="tel" placeholder="Teléfono 2 : " class="intlTelInput">
+                                            <!-- <label for="phone">Teléfono: </label> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="input-field col l12 s12">
+                                            <input id="emailreg" type="text" class="validate">
+                                            <label for="emailreg">Correo Electrónico</label>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <br>
+                        <button class="col l12 m12 s12 btn btn-large waves-effect green waves-light" id="enviar_data">
+                            <i class="material-icons">save</i>
+                            <span style="position: relative; bottom: 4px;">Guardar</span>
+                        </button>
+                        <br>
+                        <br><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+
+<script>
+
+    var input1 = document.querySelector("#phone");
+    window.intlTelInput(input1, {
+        // allowDropdown: false,
+        // autoHideDialCode: false,
+        // autoPlaceholder: "off",
+        // dropdownContainer: document.body,
+        // excludeCountries: ["us"],
+        // formatOnDisplay: false,
+        // geoIpLookup: function(callback) {
+        //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+        //     var countryCode = (resp && resp.country) ? resp.country : "";
+        //     callback(countryCode);
+        //   });
+        // },
+        // hiddenInput: "full_number",
+        // initialCountry: "auto",
+        // localizedCountries: { 'de': 'Deutschland' },
+        nationalMode: false,
+        // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+        placeholderNumberType: "MOBILE",
+        preferredCountries: ['co', 'gt'],
+        separateDialCode: false,
+        utilsScript: "https://cdnmetamedic.s3.amazonaws.com/js/intl-input/utils.js",
+    });
+    var input2 = document.querySelector("#phone2");
+    window.intlTelInput(input2, {
+        // allowDropdown: false,
+        // autoHideDialCode: false,
+        // autoPlaceholder: "off",
+        // dropdownContainer: document.body,
+        // excludeCountries: ["us"],
+        // formatOnDisplay: false,
+        // geoIpLookup: function(callback) {
+        //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+        //     var countryCode = (resp && resp.country) ? resp.country : "";
+        //     callback(countryCode);
+        //   });
+        // },
+        // hiddenInput: "full_number",
+        // initialCountry: "auto",
+        // localizedCountries: { 'de': 'Deutschland' },
+        nationalMode: false,
+        // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+        placeholderNumberType: "MOBILE",
+        preferredCountries: ['co', 'gt'],
+        separateDialCode: false,
+        utilsScript: "https://cdnmetamedic.s3.amazonaws.com/js/intl-input/utils.js",
+    });
+
+    var input3 = document.querySelector("#phone3");
+    window.intlTelInput(input3, {
+        // allowDropdown: false,
+        // autoHideDialCode: false,
+        // autoPlaceholder: "off",
+        // dropdownContainer: document.body,
+        // excludeCountries: ["us"],
+        // formatOnDisplay: false,
+        // geoIpLookup: function(callback) {
+        //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+        //     var countryCode = (resp && resp.country) ? resp.country : "";
+        //     callback(countryCode);
+        //   });
+        // },
+        // hiddenInput: "full_number",
+        // initialCountry: "auto",
+        // localizedCountries: { 'de': 'Deutschland' },
+        nationalMode: false,
+        // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+        placeholderNumberType: "MOBILE",
+        preferredCountries: ['co', 'gt'],
+        separateDialCode: false,
+        utilsScript: "https://cdnmetamedic.s3.amazonaws.com/js/intl-input/utils.js",
+    });
+
+    var input4 = document.querySelector("#phone4");
+    window.intlTelInput(input4, {
+        // allowDropdown: false,
+        // autoHideDialCode: false,
+        // autoPlaceholder: "off",
+        // dropdownContainer: document.body,
+        // excludeCountries: ["us"],
+        // formatOnDisplay: false,
+        // geoIpLookup: function(callback) {
+        //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+        //     var countryCode = (resp && resp.country) ? resp.country : "";
+        //     callback(countryCode);
+        //   });
+        // },
+        // hiddenInput: "full_number",
+        // initialCountry: "auto",
+        // localizedCountries: { 'de': 'Deutschland' },
+        nationalMode: false,
+        // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+        placeholderNumberType: "MOBILE",
+        preferredCountries: ['co', 'gt'],
+        separateDialCode: false,
+        utilsScript: "https://cdnmetamedic.s3.amazonaws.com/js/intl-input/utils.js",
+    });
+
+    $('.datepicker').pickadate({
+        monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+            'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'
+        ],
+        monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov',
+            'Dic'
+        ],
+        weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+        selectMonths: true,
+        selectYears: 200, // Puedes cambiarlo para mostrar más o menos años
+        min: new Date(1940, 1, 1),
+        max: true, // `true` sets it to today. `false` removes any limits.
+        today: 'Hoy',
+        clear: 'Limpiar',
+        close: 'Ok',
+        labelMonthNext: 'Siguiente mes',
+        labelMonthPrev: 'Mes anterior',
+        labelMonthSelect: 'Selecciona un mes',
+        labelYearSelect: 'Selecciona un año',
+        container: undefined, // ex. 'body' will append picker to body
+
+    });
+    $('#enviar_data').click(function () {
+        const url = '/api/sedes';
+        const method = 'POST'
+
+        const propietario = $("#propietario").val() || "";
+        const nombre = $("#nombre_IPS").val() || "";
+        const codigo_servicios = $('#codigo_servicio').val()
+        const tipo_id = $("#tipo_id").val()
+        const numID = $("#numID").val();
+        const telefono = $('#phone').val()
+        const telefono2 = $('#phone2').val()
+
+        let paisobl = $("#paisobl").val();
+        let paisreg = $("#paisreg").val();
+        let departamentoobl = "";
+        let departamentoreg = "";
+        let ciudadobl = "";
+        let ciudadreg = "";
+
+        let a = $("#otrospaisesreg2").val();
+        let b = $("#provinciareg").val();
+        let c = $("#departamentooblreg").val();
+        
+        
+        if(c !== "" && c !== null ){
+            departamentoreg = $("#departamentooblreg").val();
+            
+        }
+        
+        if(b !== "" && b !== null){
+            departamentoreg = $("#provinciareg").val();
+            
+        }
+        if(a !== "" && a !== null ){
+            departamentoreg = $("#otrospaisesreg2").val();
+            
+        }
+        let d = $("#otrospaises").val();
+        let e = $("#provincia").val();
+        let f = $("#departamentoobl").val();
+        //departamentos obligatorios
+        if(e !== "" && e !== null ){
+            departamentoobl = $("#provincia").val();
+        }
+        if(f !== "" && f !== null ){
+            departamentoobl = $("#departamentoobl").val();
+        }
+        if(d !== "" && d !== null ){
+            departamentoobl = $("#otrospaises").val();
+        }
+
+        let g = $("#municipioobl").val();
+        let h = $("#cantonobl").val();
+        let i = $("#otrocity").val();
+        
+        if(g !== "" && g !== null ){
+            ciudadobl = $("#municipioobl").val();
+        }
+        if(h !== "" && h !== null ){
+            ciudadobl = $("#cantonobl").val();
+        }
+        if(i !== "" && i !== null ){
+            ciudadobl = $("#otrocity").val();
+        }
+
+        let j = $("#municipiooblreg").val();
+        let k = $("#cantonoblreg").val();
+        let l = $("#otrocityreg").val();
+        if(j !== "" && j !== null ){
+            ciudadreg = $("#municipiooblreg").val();
+        }
+        if(k !== "" && k !== null ){
+            ciudadreg = $("#cantonoblreg").val();
+        }
+        if(l !== "" && l !== null ){
+            ciudadreg = $("#otrocityreg").val();
+        }
+
+        
+
+        const direccion = $("#direccion").val() || "";
+        const correo = $("#correo").val() || "";
+        const code = $('.iti__selected-dial-code').html()
+        
+        const representante_nombre = $('#representante_nombre').val()
+        const representante_identificacion_tipo = $('#representante_identificacion_tipo').val()
+        const representante_identificacion = $('#representante_identificacion').val()
+
+        
+
+        const direccionreg = $("#direccionreg").val();
+        const phone3 = $("#phone3").val();
+        const phone4 = $("#phone4").val();
+        const emailreg = $("#emailreg").val();
+
+        const body = {
+            propietario,
+            nombre,
+            codigo_servicios,
+            tipo_id,
+            numID,
+            telefono,
+            telefono2,
+
+            paisobl,
+            departamentoobl,
+
+            direccion,
+            correo,
+            //code,
+
+            representante_nombre,   
+            representante_identificacion_tipo,
+            representante_identificacion,
+
+            paisreg,
+            departamentoreg,
+            
+            ciudadobl,
+            ciudadreg,
+
+            direccionreg,
+            phone3,
+            phone4,
+            emailreg
+            
+
+        }
+        console.log(body);
+         $.ajax({
+            method: method,
+            url: url,
+            data: body,
+            success: function (response) {
+                console.log(response);
+                Materialize.toast('Sede creada con éxito.', 4000, 'rounded green')
+                setTimeout(function () {
+                    location.href = "/sedes"
+                }, 2000);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+                Materialize.toast(
+                    'Hubo un error en los datos proporcionados. Verificar e Intentar de nuevo.',
+                    4000, 'rounded red');
+            }
+        }) 
+    })
+
+    $('.datepicker').on('mousedown', function (event) {
+        event.preventDefault();
+    })
+    $(document).on("click", ".select-wrapper", function (event) {
+        event.stopPropagation();
+    });
+    
+
+
+    function mostrar(id){
+
+        if(id !== "EC" && id !== "CO"){
+            $("#switchdep").hide();
+            $("#ocultarprov").hide();
+            $("#otrospaises").show();
+            
+            $("#swithMunicipio").hide();
+            $("#swithCanton").hide();
+            $("#otroCity").show();
+
+            $("#switch_prestacion_servicio").fadeOut(3000);
+            $("#switch_prestacion_servicio").val("");
+
+        }
+
+        if(id === "CO"){
+            $("#switchdep").show();
+            $("#ocultarprov").hide();
+            $("#otrospaises").hide();
+            $("#switch_prestacion_servicio").fadeIn(3000);
+            
+            $("#swithMunicipio").show();
+            $("#swithCanton").hide();
+            $("#otroCity").hide();
+        }
+        if(id === "EC"){
+            $("#switchdep").hide();
+            $("#ocultarprov").show();
+            $("#otrospaises").hide();
+            
+            $("#swithMunicipio").hide();
+            $("#swithCanton").show();
+            $("#otroCity").hide();
+
+            $("#switch_prestacion_servicio").fadeOut(3000);
+            $("#switch_prestacion_servicio").val("");
+        }
+        
+    }
+    var Municipios = <%- JSON.stringify(municipios) %>;
+    function mostrarcityd(valor){
+       let mun = Municipios.filter(word => word.Cod_depa ==valor );
+       $('#municipioobl').html(`<option value=""  selected>Elige una opción</option>`);
+       mun.sort(function (a, b) {
+            if (a.mun > b.mun) {
+                return 1
+            } else if (a.mun < b.mun) { return -1 } else { return 0 } })
+            for (let i = 0; i < mun.length; i++) {
+                const munici = mun[i];
+                
+                $('#municipioobl').append(`<option value="${munici.Cod_muni}">${munici.Municipio}</option>`);
+            }
+            $('#municipioobl').material_select();
+    }
+
+    
+    var Canton = <%- JSON.stringify(canton) %>;
+    function mostrarcityp(valor){
+       let mun = Canton.filter(word => word.Codigo_prov ==valor );
+       $('#cantonobl').html(`<option value=""  selected>Elige una opción</option>`);
+       mun.sort(function (a, b) {
+            if (a.mun > b.mun) {
+                return 1
+            } else if (a.mun < b.mun) { return -1 } else { return 0 } })
+            for (let i = 0; i < mun.length; i++) {
+                const canto = mun[i];
+                
+                $('#cantonobl').append(`<option value="${canto.Codigo_cat}">${canto.canton_name}</option>`);
+            }
+            $('#cantonobl').material_select();
+    }
+    
+
+  
+
+
+
+    function mostrarreg(id){
+
+        if(id !== "EC" && id !== "CO"){
+            $("#switchdepreg").hide();
+            $("#ocultarprovreg").hide();
+            $("#otrospaisesreg").show();
+            
+            $("#swithMunicipioreg").hide();
+            $("#swithCantonreg").hide();
+            $("#otroCityreg").show();
+
+        }
+
+        if(id === "CO"){
+            $("#switchdepreg").show();
+            $("#ocultarprovreg").hide();
+            $("#otrospaisesreg").hide();
+            
+            $("#swithMunicipioreg").show();
+            $("#swithCantonreg").hide();
+            $("#otroCityreg").hide();
+        }
+        if(id === "EC"){
+            $("#switchdepreg").hide();
+            $("#ocultarprovreg").show();
+            $("#otrospaisesreg").hide();
+            
+            $("#swithMunicipioreg").hide();
+            $("#swithCantonreg").show();
+            $("#otroCityreg").hide();
+        }
+
+        }
+        var Municipios = <%- JSON.stringify(municipios) %>;
+        function mostrarcitydreg(valor){
+        let mun = Municipios.filter(word => word.Cod_depa ==valor );
+        $('#municipiooblreg').html(`<option value=""  selected>Elige una opción</option>`);
+        mun.sort(function (a, b) {
+            if (a.mun > b.mun) {
+                return 1
+            } else if (a.mun < b.mun) { return -1 } else { return 0 } })
+            for (let i = 0; i < mun.length; i++) {
+                const munici = mun[i];
+                
+                $('#municipiooblreg').append(`<option value="${munici.Cod_muni}">${munici.Municipio}</option>`);
+            }
+            $('#municipiooblreg').material_select();
+        }
+
+
+        var Canton = <%- JSON.stringify(canton) %>;
+        function mostrarcitypreg(valor){
+        let mun = Canton.filter(word => word.Codigo_prov ==valor );
+        $('#cantonoblreg').html(`<option value=""  selected>Elige una opción</option>`);
+        mun.sort(function (a, b) {
+            if (a.mun > b.mun) {
+                return 1
+            } else if (a.mun < b.mun) { return -1 } else { return 0 } })
+            for (let i = 0; i < mun.length; i++) {
+                const canto = mun[i];
+                
+                $('#cantonoblreg').append(`<option value="${canto.Codigo_cat}">${canto.canton_name}</option>`);
+            }
+            $('#cantonoblreg').material_select();
+        }
+
+</script>
+
+<% include  ../view_distribution/bot2.ejs%>

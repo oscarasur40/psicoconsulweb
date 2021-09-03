@@ -1,0 +1,144 @@
+<% include  ../../view_distribution/top1.ejs%>
+<% include  ../../view_distribution/top2.ejs%>
+<% include  ../../view_distribution/sidebar-left.ejs%>
+
+
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <ul class="collapsible popout" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i>Consentimiento Nino</div>
+                        <div class="collapsible-body">
+                          <div class="row">
+                            <div class="col s12 m4 l2"></div>
+                            <div class="col s12 m4 l8"></div>
+                            <input id="sedesRecepcion" type="hidden" value="<%= user.Sedes[0]._id %>" />
+                            <textarea id="consentimiento_children" class="materialize-textarea clean_on_create tooltipped" tipo="parrafo"
+                                data-length="15000" data-position="top" data-delay="50"
+                                data-tooltip="Consentimiento para nino."
+                                style="width: 100%;"></textarea>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                          <div class="collapsible-header active"><i class="material-icons">dehaze</i>Consentimiento Adulto</div>
+                          <div class="collapsible-body">
+                            <div class="row">
+                              <div class="col s12 m4 l2"></div>
+                              <div class="col s12 m4 l8"></div>
+                              <input id="sedesRecepcion" type="hidden" value="<%= user.Sedes[0]._id %>" />
+                              <textarea id="consentimiento_person" class="materialize-textarea clean_on_create tooltipped" tipo="parrafo"
+                                data-length="15000" data-position="top" data-delay="50"
+                                data-tooltip="Consentimiento para adulto."
+                                style="width: 100%;"></textarea>
+                                <p>Ultima vez editado: </p><p id="fechaSystem"></p>
+                            </div>
+                          </div>
+                        </li>
+                </ul>
+            </div>
+            <div class="col m12 m12 s12 text-center">
+                <button class="col m12 m12 s12 btn waves-effect green waves-light" id="enviar_data">
+                    <i class="material-icons">save</i>
+                    <span style="position: relative; bottom: 4px;"> Guardar</span>
+                </button>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment-with-locales.min.js"></script>
+<% include  ../../view_distribution/sidebar-right.ejs%>
+<% include  ../../view_distribution/bot1.ejs%>
+<% include  ../../scripts/convertEJS.ejs%>
+
+<script>
+
+  $(document).ready(function () {
+        console.log('Preparado para enviar');
+        var id = <%- JSON.stringify(user._id) %>;
+        
+        console.log(id)
+        $.ajax({
+            url: `/api/consentimiento/${id}`,
+            method: 'GET',
+            success: function(response){
+             console.log(response)
+             for (let index = 0; index < response.length; index++) {
+                 const element = response[index];
+                 $('#consentimiento_children').val(element.textoConsentimientoChildren) 
+                 $('#consentimiento_person').val(element.textoConsentimientoadulto) 
+                 $("#fechaSystem").html(moment(element.fecha).locale('es').format('LLL'))
+             }
+             
+            },error: function (jqXHR, textStatus, errorThrown) {
+            const errors = jqXHR.responseJSON.error.errors;
+            let htmlErrors = "";
+            for (const err in errors) {
+                if (errors.hasOwnProperty(err)) {
+                    const error = errors[err];
+                    htmlErrors += `<br>${error.message}`
+                }
+            }
+            console.log(textStatus);
+            console.log(errorThrown);
+            Materialize.toast(
+                `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                10000, 'rounded red');
+        }
+        })
+        $('#enviar_data').click(function () {
+
+
+            const Profesional = <%- JSON.stringify(user._id) %>;
+            const textoConsentimientoChildren = $('#consentimiento_children').val()
+            const textoConsentimientoadulto = $('#consentimiento_person').val()
+            const fecha = new Date()
+            
+            const body = {
+              Profesional,
+              textoConsentimientoChildren,
+              textoConsentimientoadulto,
+              fecha
+            }
+            const url = `/api/consentimiento/${Profesional}`;
+            const method = 'PATCH'
+            $.ajax({
+                method: method,
+                url: url,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(body),
+                success: function (response) {
+                    console.log(response);
+                    Materialize.toast('texto guardado con éxito.', 4000, 'rounded green')
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    const errors = jqXHR.responseJSON.error.errors;
+                    let htmlErrors = "";
+                    for (const err in errors) {
+                        if (errors.hasOwnProperty(err)) {
+                            const error = errors[err];
+                            htmlErrors += `<br>${error.message}`
+                        }
+                    }
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    Materialize.toast(
+                        `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                        10000, 'rounded red');
+                }
+            })
+        });
+
+  })
+
+</script>

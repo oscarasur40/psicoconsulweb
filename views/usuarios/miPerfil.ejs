@@ -1,0 +1,191 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <h3 class="breadcrumbs-title">
+                    <a id="permitir_edicion" class="btn-floating  waves-effect waves-light red"><i
+                            class="material-icons">edit</i></a>
+                    <%= title%>
+                </h3>
+
+                <div class="col s12 m12 l4">
+                </div>
+                <div class="col s12 m12 l8">
+                    <ul class="collapsible" data-collapsible="accordion">
+                        <li>
+                            <div class="collapsible-header active"><i class="material-icons">account_circle</i>Mis datos
+                                personales</div>
+                            <div class="collapsible-body">
+                                <h3 class="center"> <span><%= user.nombre %></span> <%= user.apellido %> </h3>
+                                <p class="center"> <%= user.direccion %> </p>
+                                <p class="center"> <%= user.genero_nacimiento %> || <%= user.identidad_sexual %></p>
+                                <p class="center"> <%= user.estado_civil %> || <%= user.ocupacion %></p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">edit</i>Editar datos</div>
+                            <div class="collapsible-body">
+                                <div class="row">
+                                    <input id="user_id" type="hidden" value="<%= user._id%>">
+
+                                    <div class="input-field col l6 s12">
+                                        <input id="nombre" type="text" value="<%= user.nombre %>" class="validate">
+                                        <label for="nombre">Nombre <span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="input-field col l6 s12">
+                                        <input id="apellido" type="text" value="<%= user.apellido %>" class="validate">
+                                        <label for="apellido">Apellido <span style="color:red">*</span></label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col l12 s12">
+                                        <input id="direccion" type="text" value="<%= user.direccion %>"
+                                            class="validate">
+                                        <label for="direccion">Dirección</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col l6 s12">
+                                        <select id="genero_nacimiento" class="validate select browse-select">
+                                            <option value="" disabled selected><%= user.genero_nacimiento %></option>
+                                            <option value="Femenino">Femenino</option>
+                                            <option value="Masculino">Masculino</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                        <label>Género de Nacimiento</label>
+                                    </div>
+                                    <div class="input-field col l6 s12">
+                                        <input id="identidad_sexual" type="text" value="<%= user.identidad_sexual%>"
+                                            class="validate">
+                                        <label for="identidad_sexual">Identidad Sexual</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col l6 s12">
+                                        <input id="estado_civil" type="text" value="<%= user.estado_civil%>"
+                                            class="validate">
+                                        <label for="estado_civil">Estado Civil</label>
+                                    </div>
+                                    <div class="input-field col l6 s12">
+                                        <input id="ocupacion" type="text" value="<%= user.ocupacion %>"
+                                            class="validate">
+                                        <label for="ocupacion">Ocupación</label>
+                                    </div>
+                                    <div class="col l12 m12 s12 text-center">
+                                        <button class="col l12 m12 s12 btn waves-effect green waves-light"
+                                            id="enviar_data">
+                                            <i class="material-icons">save</i>
+                                            <span style="position: relative; bottom: 4px;"> Guardar</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<script>
+    var posible_editar = false;
+
+    $(document).ready(function () {
+        $('#permitir_edicion').click(function () {
+            $('.validate').attr('disabled', posible_editar)
+            posible_editar = !posible_editar
+        })
+        $(document).on("click", ".select-wrapper", function (event) {
+            event.stopPropagation();
+        });
+
+        $('.validate').keyup(function () {
+            console.log(this.id);
+        })
+
+        $('#enviar_data').click(function () {
+
+            $(this).html(`<div class="preloader-wrapper small active">
+                <div class="spinner-layer spinner-blue-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>`)
+
+            const url = '/api/me/update';
+            const method = 'PATCH'
+
+            const nombre = $("#nombre").val() || null;
+            const apellido = $("#apellido").val() || null;
+            const direccion = $("#direccion").val() || "";
+            // const code = $('.iti__selected-dial-code').html()
+            // const phone = $('#phone').val()
+            // const telefono = code.substring(4, 1) + phone
+            const genero_nacimiento = $("#genero").val() || "";
+            const identidad_sexual = $("#id_sex").val() || "";
+            const estado_civil = $("#estado_civil").val() || "";
+            const ocupacion = $("#ocupacion").val() || "";
+
+            const body = {
+                nombre,
+                apellido,
+                ocupacion,
+                direccion,
+                genero_nacimiento,
+                identidad_sexual,
+                estado_civil,
+            }
+            console.log(body);
+
+            $.ajax({
+                method: method,
+                url: url,
+                data: body,
+                success: function (response) {
+                    console.log(response);
+                    $('#enviar_data').html(`<i class="material-icons">save</i><span style="position: relative; bottom: 4px;">Guardar</span>`)
+
+                    Materialize.toast('Datos modificados con éxito.', 4000, 'rounded green')
+                    setTimeout(function () {
+                        location.href = "/mi-perfil"
+                    }, 2000);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    for (const err in errors) {
+                        if (errors.hasOwnProperty(err)) {
+                            const error = errors[err];
+                            htmlErrors += `<br>${error.message}`
+                        }
+                    }
+                    $('#enviar_data').html(`<i class="material-icons">save</i><span style="position: relative; bottom: 4px;">Guardar</span>`)
+                    console.log(textStatus);
+                    console.log(jqXHR);
+                    console.log(errorThrown);
+                    Materialize.toast(
+                        `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                        10000, 'rounded red');
+                }
+            })
+
+        })
+
+    })
+</script>
+<% include  ../view_distribution/bot2.ejs%>

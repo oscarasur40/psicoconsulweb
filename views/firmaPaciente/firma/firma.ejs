@@ -1,0 +1,459 @@
+<% include  ../../view_distribution/top1.ejs%>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+<style>
+    input:disabled,
+    textarea:disabled {
+        color: #303030 !important
+    }
+</style>
+<% include  ../../view_distribution/top2.ejs%>
+<% include  ../../view_distribution/sidebar-left.ejs%>
+<%
+    const formulario = HistoriaClinica.formulario
+    const servicio = HistoriaClinica.Servicio
+    const paciente = HistoriaClinica.Paciente[0]
+    const profesional = HistoriaClinica.Profesional
+%>
+<input type="hidden" id="sede_id" value="<%= HistoriaClinica.Sede._id %>">
+<input type="hidden" id="hc_id" value="<%= HistoriaClinica._id %>">
+<input type="hidden" id="paciente_id" value="<%= paciente._id %>">
+<input type="hidden" id="profesional_id" value="<%= profesional._id %>">
+<input type="hidden" id="cita_id" value="<%= HistoriaClinica.Cita._id %>">
+
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <h3 class="breadcrumbs-title"><%= title%>
+                    <% if (HistoriaClinica.cerrado == true) { %>
+                    <a href="/historias-clinicas/impresion?historia=<%= HistoriaClinica._id %>" target="_blank"
+                        class="btn-floating btn-large waves-effect waves-light right green"><i
+                            class="material-icons">print</i></a>
+                    <% } %>
+                </h3>
+                <ul class="collapsible popout" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">assignment_ind</i>
+                            Datos Personales
+                        </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <input disabled id="user_id" type="hidden" value="<%= paciente._id%>" class="validate">
+
+                                <div class="input-field col m6 s12">
+                                    <input disabled id="primer_nombre" type="text" class="validate"
+                                        value="<%= paciente.primer_nombre%>">
+                                    <label for="primer_nombre">Primer Nombre <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <input disabled id="segundo_nombre" type="text" class="validate"
+                                        value="<%= paciente.segundo_nombre || " " %>">
+                                    <label for="segundo_nombre">Segundo Nombre</label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <input disabled id="primer_apellido" type="text" class="validate"
+                                        value="<%= paciente.primer_apellido%>">
+                                    <label for="primer_apellido">Primer Apellido <span
+                                            style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <input disabled id="segundo_apellido" type="text" class="validate"
+                                        value="<%= paciente.segundo_apellido%>">
+                                    <label for="segundo_apellido">Segundo Apellido <span
+                                            style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col m5 s12">
+                                    <select disabled id="tipo_id" class="validate select browse-select">
+                                        <option value="" disabled>Elige una opción</option>
+                                        <option value="CC" <%- paciente.tipo_id == 'CC' ? 'selected' : '' %>>Cédula De
+                                            Ciudadanía</option>
+                                        <option value="CE" <%- paciente.tipo_id == 'CE' ? 'selected' : '' %>>Cédula De
+                                            Extranjería</option>
+                                        <option value="CD" <%- paciente.tipo_id == 'CD' ? 'selected' : '' %>>Carné
+                                            Diplomático</option>
+                                        <option value="PA" <%- paciente.tipo_id == 'PA' ? 'selected' : '' %>>Pasaporte
+                                        </option>
+                                        <option value="PE" <%- paciente.tipo_id == 'PE' ? 'selected' : '' %>>Permiso
+                                            Especial De Permanencia</option>
+                                        <option value="RC" <%- paciente.tipo_id == 'RC' ? 'selected' : '' %>>Registro
+                                            Civil</option>
+                                        <option value="TI" <%- paciente.tipo_id == 'TI' ? 'selected' : '' %>>Tarjeta De
+                                            Identidad</option>
+                                        <option value="CN" <%- paciente.tipo_id == 'CN' ? 'selected' : '' %>>Certificado
+                                            De Nacido Vivo</option>
+                                        <option value="AS" <%- paciente.tipo_id == 'AS' ? 'selected' : '' %>>Adulto Sin
+                                            Identificar</option>
+                                        <option value="MS" <%- paciente.tipo_id == 'MS' ? 'selected' : '' %>>Menor Sin
+                                            Identificar</option>
+                                    </select>
+                                    <label>Tipo de Identifiación: <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input disabled id="identificacion" type="text" value="<%= paciente.username %>"
+                                        class="validate">
+                                    <label for="identificacion">Número de Identifiación <span
+                                            style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m3 s12">
+                                    <select disabled id="estado_civil" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="soltero"
+                                            <%- paciente.estado_civil == 'soltero' ? 'selected' : '' %>>Soltero(a)
+                                        </option>
+                                        <option value="casado"
+                                            <%- paciente.estado_civil == 'casado' ? 'selected' : '' %>>Casado(a)
+                                        </option>
+                                        <option value="union_libre"
+                                            <%- paciente.estado_civil == 'union_libre' ? 'selected' : '' %>>Unión libre
+                                        </option>
+                                        <option value="separado"
+                                            <%- paciente.estado_civil == 'separado' ? 'selected' : '' %>>Separado(a)
+                                        </option>
+                                        <option value="divorciado"
+                                            <%- paciente.estado_civil == 'divorciado' ? 'selected' : '' %>>Divorciado(a)
+                                        </option>
+                                        <option value="viudo" <%- paciente.estado_civil == 'viudo' ? 'selected' : '' %>>
+                                            Viudo(a)</option>
+                                    </select>
+                                    <label>Estado Civil: <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col m8 s12">
+                                    <input value="<%= paciente.email %>" disabled id="email" type="email"
+                                        class="validate">
+                                    <label for="email">Email <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m4 s12">
+                                    <input disabled id="phone" name="phone" type="tel"
+                                        value="+<%= paciente.telefono %>">
+                                    <!-- <label for="phone">Teléfono: </label> -->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col m3 s12">
+                                    <input disabled type="text" id="fecha_nacimiento" class="datepicker"
+                                        value="<%=paciente.dd_nacimiento%>/<%=paciente.mm_nacimiento%>/<%=paciente.yyyy_nacimiento%>">
+                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                                </div>
+                                <!-- <div class="input-field col m2 s12">
+                                        <input disabled id="edad" type="text" class="validate" value="0 años"
+                                            disabled>
+                                        <label for="edad">Edad</label>
+                                    </div> -->
+                                <div class="input-field col m3 s12">
+                                    <select disabled id="genero" class="validate select browse-select">
+                                        <option value="" disabled>Elige una opción</option>
+                                        <option value="Femenino"
+                                            <%- paciente.genero_nacimiento == 'Femenino' ? 'selected' : '' %>>Femenino
+                                        </option>
+                                        <option value="Masculino"
+                                            <%- paciente.genero_nacimiento == 'Masculino' ? 'selected' : '' %>>Masculino
+                                        </option>
+                                        <option value="Otro"
+                                            <%- paciente.genero_nacimiento == 'Otro' ? 'selected' : '' %>>Otro</option>
+                                    </select>
+                                    <label>Género de Nacimiento</label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    <input disabled id="ocupacion" type="text" class="validate"
+                                        value="<%= paciente.ocupacion %>">
+                                    <label for="ocupacion">Ocupación: <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">assignment</i>
+                            <%= formulario.nombre %>
+                        </div>
+                        <div class="collapsible-body">
+
+                            <div class="row">
+                                <input type="hidden" id="historia_clinica_id" value="<%= HistoriaClinica._id %>">
+                                <%
+                                for (let i = 0; i < formulario.preguntas.length; i++) {
+                                    var campo = formulario.preguntas[i];
+                                    campo.validar = 'historia-clinica-input';
+                                    campo.orden = i;
+                                    campo.renderizar = true;
+                                    campo.cerrado = true;
+                                    switch (campo.tipo) {
+                                        case 'texto': %>
+                                <%- include('../../formularios/campos/texto.ejs', campo) %>
+                                <% break;
+                                        case 'parrafo': %>
+                                <%- include('../../formularios/campos/parrafo.ejs', campo) %>
+                                <% break;
+                                        case 'numero': %>
+                                <%- include('../../formularios/campos/numero.ejs',  campo) %>
+                                <% break;
+                                        case 'archivo': %>
+                                <%- include('../../formularios/campos/archivo.ejs', campo) %>
+                                <% break;
+                                        case 'imagen': %>
+                                <%- include('../../formularios/campos/imagen.ejs',  campo) %>
+                                <% break;
+                                        case 'separador': %>
+                                <%- include('../../formularios/campos/separador.ejs', campo) %>
+                                <% break;
+                                        case 'firma': %>
+                                <%- include('../../formularios/campos/firma.ejs', campo) %>
+                                <% break;
+                                        case 'cie10': %>
+                                <%- include('../../formularios/campos/cie10.ejs', campo) %>
+                                <% break;
+                                        case 'selector': %>
+                                <%- include('../../formularios/campos/selector.ejs',  campo) %>
+                                <% break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                                %>
+                                <hr style="border:1px solid #ffffff00">
+                                <hr>
+                            </div>
+                        </div>
+                    </li>
+                    <% if (!HistoriaClinica.cerrado) { %>
+
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i>
+                            <i class="material-icons">save</i> Gestión de Historia Clínica
+                        </div>
+                        <div class="collapsible-body">
+                            <% if (user.tipo_profesional == 'colegiado' || user.tipo == 'adminsede') { %>
+                            <a class="waves-effect waves-light btn-large red lighten-1 center" id="cerrar_historia">
+                                <i class="material-icons left">save</i> Cerrar Historia Clínica
+                            </a>
+                            <% } else { %>
+                            <a class="waves-effect waves-light btn-large light-blue lighten-1 center"
+                                id="guardar_historia">
+                                <i class="material-icons left">save</i> Guardar Firma
+                            </a>
+                            <% } %>
+                        </div>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<% include  ../../view_distribution/sidebar-right.ejs%>
+<% include  ../../view_distribution/bot1.ejs%>
+<% include  ../../scripts/convertEJS.ejs%>
+<%
+var cie10auto = Object({});
+for (let i = 0; i < cie10.length; i++) {
+  const cie = cie10[i];
+  cie10auto[(`${cie.codigo} | ${cie.descripcion}`)] = null
+}
+%>
+<script
+    src="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.3.0,npm/fullcalendar@5.3.0/locales-all.min.js,npm/moment@2.27.0/min/moment-with-locales.min.js">
+</script>
+<script>
+    var sede_id = $('#sede_id').val();
+    var HC_id = $('#hc_id').val();
+    var paciente_id = $('#paciente_id').val();
+    var profesional_id = $('#profesional_id').val();
+    var HC_datos = <%-JSON.stringify(HistoriaClinica.datos_formulario) || "{}" %>;
+    var HC_firmas = Object({})
+    var HC_cerrado = <%-JSON.stringify(HistoriaClinica.cerrado) || 'false' %>;
+    var cita_id = $('#cita_id').val()
+    if (HC_cerrado) {
+        $('.historia-clinica-input').each(function () {
+            const campo_id = $(this).attr('id');
+            if ($(this).attr('tipo') != 'archivo') {
+                $(this).attr('disabled', true)
+            }
+        })
+    }
+    $(document).ready(function () {
+        autocompleteCie10('input.autocomplete-cie10');
+        autocompleteSelectores()
+        validarTamanio()
+        tipoFirmaConsentimiento()
+        $('.historia-clinica-input').each(function () {
+            const campo_id = $(this).attr('id');
+            if ($(this).attr('tipo') == 'firma') {
+                console.log('Econtre un tipo Firma', $(this).attr('id'));
+                if (HC_datos[campo_id] != undefined && String(HC_datos[campo_id]).length != 0) {
+                    console.log(typeof HC_datos[campo_id], HC_datos[campo_id].length, campo_id,
+                        HC_datos[campo_id] == null)
+                    eval(`signaturePad${campo_id}`).fromData(HC_datos[campo_id])
+                }
+            } else if ($(this).attr('tipo') == 'archivo') {
+                console.log('Econtre un FIle', $(this).attr('id'));
+                if (HC_cerrado) {
+                    document.getElementById(campo_id).href = HC_datos[campo_id]['data']['location']
+                }
+            } else if ($(this).attr('type') != 'file') {
+                console.log('Econtre un no FIle', $(this).attr('id'), $(this).attr('type'));
+                $(this).val(HC_datos[campo_id])
+            }
+        })
+    })
+
+    function tipoFirmaConsentimiento(){
+        var firma = <%-JSON.stringify(Cita.firma) || "" %>;
+        var canvas<%- id %> = document.getElementById("<%- id %>");
+        var signaturePad<%- id %> = new SignaturePad(canvas<%- id %>, {
+            backgroundColor: 'rgb(215, 215, 215)'
+        });
+        if(firma !== ''){
+            eval(`signaturePad`).fromData(firma)
+        }
+    }
+    function autocompleteCie10(input) {
+        $(input).autocomplete({
+            minLength: 3,
+            limit: 20,
+            data: <%-JSON.stringify(cie10auto)%>
+        })
+    }
+
+    function autocompleteSelectores() {
+        $('.autocompleteinput').each(function () {
+            const dataAuto = $(this).attr('data-autocomplete')
+            var valor = dataAuto.split(', ').join(',').split(',')
+            var valores = Object({});
+            for (let i = 0; i < valor.length; i++) {
+                const valorTXT = valor[i];
+                valores[(valorTXT)] = null
+            }
+            $(this).autocomplete({
+                minLength: 1,
+                limit: 20,
+                data: valores
+            })
+        })
+    }
+
+    function validarTamanio() {
+        $('.campo_imagen').bind('change', function () {
+            if (this.files[0].size / 1024 / 1024 > 1) {
+                alert('La imagen es demaisado grande. (Tamaño Máximo: 1 MB)');
+                this.value = "";
+            } else {
+                Materialize.toast('Subiendo Imagen.', 4000, 'rounded blue')
+                console.log('Imagen Aceptada');
+                const campo_id = $(this).attr('id');
+                const sede_id = $('#sede_id').val();
+                const tipo = 'historia-clinica'
+                const tipo_id = $('#hc_id').val();
+                var archivo = document.getElementById(campo_id).files[0]
+                var formData = new FormData();
+                formData.append('archivo', document.getElementById(campo_id).files[0]);
+                const urlEnvio =
+                    `/api/archivos?sede=${sede_id}&tipo=${tipo}&tipo_id=${tipo_id}&campo_id=${campo_id}`
+                $.ajax({
+                    url: urlEnvio,
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // tell jQuery not to process the data
+                    contentType: false, // tell jQuery not to set contentType
+                    enctype: 'multipart/form-data',
+                    success: function (data) {
+                        Materialize.toast('Imagen subida con éxito.', 4000, 'rounded green')
+                        console.log(data);
+                        HC_datos[campo_id] = data
+                    },
+                    error: function (a, b, c) {
+                        Materialize.toast('Hubo un error al subir el archivo.', 4000,
+                            'rounded blue')
+                        console.error(a, b, c)
+                    }
+                });
+            };
+        });
+
+        function enviarHistoria(cerradoValue) {
+            const urlEnvio = `/api/historias-clinicas/${HC_id}`
+            $('.historia-clinica-input').each(function () {
+                const campo_id = $(this).attr('id');
+                if ($(this).attr('tipo') == 'firma') {
+                    console.log('Firma', `signaturePad${campo_id}`, eval(`signaturePad${campo_id}`).toData());
+                    HC_datos[campo_id] = eval(`signaturePad${campo_id}`).toData()
+                } else if ($(this).attr('type') != 'file') {
+                    HC_datos[campo_id] = $(this).val();
+                    $(this).val(HC_datos[campo_id])
+                }
+            })
+            const dataEnviar = {
+                datos_formulario: HC_datos,
+                cerrado: cerradoValue
+            }
+            $.ajax({
+                url: urlEnvio,
+                type: 'PATCH',
+                data: dataEnviar,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(dataEnviar),
+                success: function (data) {
+                    Materialize.toast('Firma Guardada con éxito.', 4000, 'rounded green')
+                    console.log(data);
+                    location.href = "/firmaPaciente"
+                },
+                error: function (a, b, c) {
+                    Materialize.toast('Hubo un error al Guardar el la Historia Clínica.', 4000,
+                        'rounded blue')
+                    console.error(a, b, c)
+                }
+            });
+        }
+        $('.campo_archivo').bind('change', function () {
+            if (this.files[0].size / 1024 / 1024 > 5) {
+                alert('La imagen es demaisado grande. (Tamaño Máximo: 5 MB)');
+                this.value = "";
+            } else {
+                Materialize.toast('Subiendo Archivo.', 4000, 'rounded blue')
+                console.log('Imagen Aceptada');
+                const campo_id = $(this).attr('id');
+                const sede_id = $('#sede_id').val();
+                const tipo = 'historia-clinica'
+                const tipo_id = $('#hc_id').val();
+                var archivo = document.getElementById(campo_id).files[0]
+                var formData = new FormData();
+                formData.append('archivo', document.getElementById(campo_id).files[0]);
+                const urlEnvio =
+                    `/api/archivos?sede=${sede_id}&tipo=${tipo}&tipo_id=${tipo_id}&campo_id=${campo_id}`
+                $.ajax({
+                    url: urlEnvio,
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // tell jQuery not to process the data
+                    contentType: false, // tell jQuery not to set contentType
+                    enctype: 'multipart/form-data',
+                    success: function (data) {
+                        Materialize.toast('Archivo subido con éxito.', 4000, 'rounded green')
+                        console.log(data);
+                        HC_datos[campo_id] = data
+                    },
+                    error: function (a, b, c) {
+                        Materialize.toast('Hubo un error al subir el archivo.', 4000,
+                            'rounded blue')
+                        console.error(a, b, c)
+                    }
+                });
+            };
+        });
+        $('#guardar_historia').click(function () {
+            enviarHistoria(false);
+        })
+        $('#cerrar_historia').click(function () {
+            enviarHistoria(true);
+        })
+
+    }
+</script>
+
+
+<% include  ../../view_distribution/bot2.ejs%>

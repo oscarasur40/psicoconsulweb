@@ -1,0 +1,11 @@
+<% if (renderizar) { %>
+<div class="input-field col s12 m<%= ancho %>" orden="<%= orden %>">
+  <input id="<%= id %>" type="number" tipo="numero" class="validate <%= validar %>" <%- value != undefined ? `value="${value}"` : "" %> >
+  <label for="<%= id %>"><%= nombre %></label>
+</div>
+<% } else { %>
+_$div class="input-field col s12 m_$%= ancho %$_" orden="_$%= orden %$_"$_
+_$input id="_$%= id %$_" type="number" tipo="numero" class="validate _$%= validar %$_" _$%- value != undefined ? *value="$[value}"\* : "" %$_ $_
+_$label for="_$%= id %$_"$__$%= nombre %$__$/label$_
+_$/div$_
+<% } %>

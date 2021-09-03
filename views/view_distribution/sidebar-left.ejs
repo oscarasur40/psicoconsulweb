@@ -1,0 +1,68 @@
+        <aside id="left-sidebar-nav">
+            <ul id="slide-out" class="side-nav fixed leftside-navigation">
+                <li class="user-details cyan darken-2">
+                    <div class="row">
+                        <div class="col col s4 m4 l4">
+                            <img src="<%= user.foto_perfil != null ? user.foto_perfil.location : 'https://cdnmetamedic.s3.amazonaws.com/images/avatar/avatar-7.png' %>" alt=""
+                                class="circle responsive-img valign profile-image cyan" id="proF">
+                        </div>
+                        <div class="col col s8 m8 l8">
+                            <ul id="profile-dropdown-nav" class="dropdown-content">
+                                <li>
+                                    <a href="/mi-perfil" class="grey-text text-darken-1">
+                                        <i class="material-icons">person_pin</i> Mi Perfil</a>
+                                </li>
+                                <li>
+                                    <a href="/logout" class="grey-text text-darken-1">
+                                        <i class="material-icons">keyboard_tab</i> Logout</a>
+                                </li>
+                            </ul>
+                            <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn" href="#"
+                                data-activates="profile-dropdown-nav"><%= user.nombre %><i
+                                    class="mdi-navigation-arrow-drop-down right"></i></a>
+                            <p class="user-roal"><%= user.tipo %> </p>
+                            <input type="hidden" id="user_id_hidden" value="<%= user._id %>">
+                        </div>
+                    </div>
+                </li>
+                <li class="no-padding">
+                    <ul class="collapsible" data-collapsible="accordion">
+                        <% switch (user.tipo) {
+                            case 'superadmin': %>
+                            <% include navs/superadmin.ejs %>
+                        <%  break;
+                            case 'adminsede': %>
+                            <% include navs/adminsede.ejs %>
+                        <%  break;
+                            case 'profesional': %>
+                            <% include navs/profesional.ejs %>
+                        <%  break;
+                            case 'paciente': %>
+                            <% include navs/paciente.ejs %>
+                        <%  break;
+                            default: %>
+                            <li class="bold">
+                                <a href="/logout" class="waves-effect waves-cyan">
+                                    <i class="material-icons">pie_chart_outlined</i>
+                                    <span class="nav-text">Cerrar Sesión</span>
+                                </a>
+                            </li>
+                        <%  break;
+                        } %>
+                    </ul>
+                </li>
+            </ul>
+          <button href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only">
+            <i class="material-icons">menu</i>
+          </button>
+        </aside>
+        <script>
+
+    var d2 = new Date(); 
+    var im3= document.getElementById("proF").src;
+    document.getElementById("proF").src = 
+       im3 + "?v=" + 
+       d2.getTime();
+ 
+
+       </script>

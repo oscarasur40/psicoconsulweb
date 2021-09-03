@@ -1,0 +1,489 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <h3 class="breadcrumbs-title"><%= title%> <%= user.nombre %> </h3>
+                <ul class="collapsible popout" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">dehaze</i>Firma Documentos</div>
+                        <div class="collapsible-body">
+                          <div class="row">
+                            <div class="col s12 m4 l2"></div>
+                            <div class="col s12 m4 l8"></div>
+                            <input id="sedesRecepcion" type="hidden" value="<%= user.Sedes[0]._id %>" />
+                            <table class="bordered highlight responsive-table centered">
+                              <thead class="">
+                                <tr>
+                                  <th>Profesional</th>
+                                  <th>Servicio</th>
+                                  <th>Fecha Servicio</th>
+                                  <th>Firmar</th>
+                                </tr>
+                              </thead>
+                              <tbody id="table_documentPacient" style="display: contents">
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment-with-locales.min.js"></script>
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<% include  ../scripts/convertEJS.ejs%>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+<script>
+
+var HC_firmas = Object({})
+var HC_datos = {};
+
+  $(document).ready(function () {
+    $.ajax({
+        method: "GET",
+        url: `/api/firmaDocument/`,
+        success: function (response) {
+          let idOut = ''
+          for (let i = 0; i < response.length; i++) {
+            const r = response[i];
+            //console.log(r)
+            const Profesional = r.Cita.Profesional.nombre;
+            const Servicio = r.Cita.Servicio.nombre;
+            const firmaCita = r.Cita
+            const fechServicio = moment.unix(r.Cita.cita_start_timestamp).format("YYYY-MM-DD");;
+            const id = r._id;
+            const formulario = r.formulario
+            const firma = r.Cita.firma
+            
+            console.log(">>> firma: ", firma, firmaCita.consentimientoAdulto)
+            if(firma !== ""){
+              continue;
+            }
+          
+          
+
+          if(firmaCita.consentimientoAdulto === 1){
+              $('#table_documentPacient').append(`
+                <tr>
+                  <td>
+                    ${Profesional} 
+                  </td>
+                  <td>
+                    ${Servicio} 
+                  </td>
+                  <td>
+                    ${fechServicio} 
+                  </td>
+                  <td>
+                    <button data-target="modal_${i}" class="btn edit_data modal-trigger waves-effect btn-flat btn waves-effect primary waves-light">Abrir</button>
+                    <div id="modal_${i}" class="modal modal-fixed-footer">
+                      <div class="modal-content">
+                        <div class="row">
+                            <div class="input-field col m6 s12">
+                                <input id="nombre_paciente_firma" type="text" class="validate">
+                                <label for="nombre_paciente_firma">Nombre </label>
+                            </div>
+                            <div class="input-field col m6 s12">
+                                <input id="cedula_paciente_firma" type="text" class="validate">
+                                <label for="cedula_paciente_firma">Cedula</label>
+                            </div>
+                        </div>
+                        <div class='row'>                          
+                          <textarea id="consentimiento_children_${i}" class="materialize-textarea clean_on_create tooltipped" tipo="parrafo"
+                            data-length="5000" data-position="top" data-delay="50"
+                            data-tooltip="Consentimiento para nino."
+                              style="width: 100%; height: 620px;" readonly></textarea>
+                          <div class="signature-pad--body">
+                            <input type="hidden" value='${firmaCita._id}' id='item_${i}' />
+                            <label for="item_${i}"></label>
+                            <canvas id="${id}" tipo="firma" class="formulario"></canvas>
+
+                            <div class="signature-pad--footer">
+                              <div class="description"><b>Firma Consnetimiento Children</div>
+                                <div class="signature-pad--actions">
+                                  <div>
+                                    <button type="button" class="button edit_clear" id="clear_sign_${id}">Limpiar</button>
+                                    <button type="button" class="button edit_undo" id="undo_sign_${id}">Deshacer</button>
+                                  </div>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>                      
+                      <div class="modal-footer">
+                        <a class="modal-action edit_close modal-close waves-effect waves-green btn-flat ">Close</a>
+                        <a class="modal-action edit_save waves-effect waves-green btn-flat ">Guardar</a>
+                      </div>
+                    </div>
+                  </td> 
+                </tr>
+                `)
+                
+                $("body").on("click", '.edit_clear', function (event) {
+                  var signaturePad = new SignaturePad(document.getElementById(`${id}`), {
+                    backgroundColor: 'rgb(215, 215, 215)'
+                  });
+                  signaturePad.clear();
+                });
+              
+                $("body").on("click", '.edit_undo', function (event) {
+                  
+                  var signaturePad = new SignaturePad(document.getElementById(`${id}`), {
+                      backgroundColor: 'rgb(215, 215, 215)'
+                    });
+                  var data = signaturePad.toData();
+                
+                  if (data) {
+                    data.pop();
+                    signaturePad.fromData(data);
+                  }
+                });
+
+                var signaturePad = new SignaturePad(document.getElementById(`${id}`), {
+                  backgroundColor: 'rgb(215, 215, 215)'
+                });
+                
+            }
+          if(firmaCita.consentimientoChildren === 1){
+              $('#table_documentPacient').append(`
+                <tr>
+                  <td>
+                    ${Profesional} 
+                  </td>
+                  <td>
+                    ${Servicio} 
+                  </td>
+                  <td>
+                    ${fechServicio} 
+                  </td>
+                  <td>
+                    <button data-target="modal_${i}" class="btn edit_data modal-trigger waves-effect btn-flat btn waves-effect primary waves-light">Abrir</button>
+                    <div id="modal_${i}" class="modal modal-fixed-footer">
+                      <div class="modal-content">
+                        
+                        <div class="row">
+                            <div class="input-field col m6 s12">
+                                <input id="nombre_paciente_firma" type="text" class="validate">
+                                <label for="nombre_paciente_firma">Nombre </label>
+                            </div>
+                            <div class="input-field col m6 s12">
+                                <input id="cedula_paciente_firma" type="text" class="validate">
+                                <label for="cedula_paciente_firma">Cedula</label>
+                            </div>
+                        </div>
+                        <div class='row'>                          
+                          <textarea id="consentimiento_children_${i}" class="materialize-textarea clean_on_create tooltipped" tipo="parrafo"
+                            data-length="5000" data-position="top" data-delay="50"
+                            data-tooltip="Consentimiento para nino."
+                              style="width: 100%; height: 620px;" readonly></textarea>
+                          <div class="signature-pad--body">
+                            <input type="hidden" value='${firmaCita._id}' id='item_${i}' />
+                            <label for="item_${i}"></label>
+                            <canvas id="${id}" tipo="firma" class="formulario"></canvas>
+
+                            <div class="signature-pad--footer">
+                              <div class="description"><b>Firma Consnetimiento Children</div>
+                                <div class="signature-pad--actions">
+                                  <div>
+                                    <button type="button" class="button edit_clear" id="clear_sign_${id}">Limpiar</button>
+                                    <button type="button" class="button edit_undo" id="undo_sign_${id}">Deshacer</button>
+                                  </div>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>                      
+                      <div class="modal-footer">
+                        <a class="modal-action edit_close modal-close waves-effect waves-green btn-flat ">Close</a>
+                        <a class="modal-action edit_save waves-effect waves-green btn-flat ">Guardar</a>
+                      </div>
+                    </div>
+                  </td> 
+                </tr>
+              `)
+
+                $("body").on("click", '.edit_clear', function (event) {
+                  var signaturePad = new SignaturePad(document.getElementById(`${id}`), {
+                    backgroundColor: 'rgb(215, 215, 215)'
+                  });
+                  signaturePad.clear();
+                });
+              
+                $("body").on("click", '.edit_undo', function (event) {
+                  
+                  var signaturePad = new SignaturePad(document.getElementById(`${id}`), {
+                      backgroundColor: 'rgb(215, 215, 215)'
+                    });
+                  var data = signaturePad.toData();
+                
+                  if (data) {
+                    data.pop();
+                    signaturePad.fromData(data);
+                  }
+                });
+
+                var signaturePad = new SignaturePad(document.getElementById(`${id}`), {
+                  backgroundColor: 'rgb(215, 215, 215)'
+                });
+            }
+
+            $("body").on('click', '.edit_data', function () {
+              $.ajax({
+                method: "GET",
+                url: `/api/consentimiento/${r.Cita.Profesional._id}`,
+                success: function (response) {
+                  console.log(response)
+                  if(firmaCita.consentimientoChildren === 1){
+
+                    $(`#consentimiento_children_${i}`).val(response[0].textoConsentimientoChildren)
+                  }
+                  if(firmaCita.consentimientoAdulto === 1){
+                    
+                  $(`#consentimiento_children_${i}`).val(response[0].textoConsentimientoadulto)
+                  }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    const errors = jqXHR.responseJSON.error.errors;
+                    let htmlErrors = "";
+                    for (const err in errors) {
+                        if (errors.hasOwnProperty(err)) {
+                            const error = errors[err];
+                            htmlErrors += `<br>${error.message}`
+                        }
+                    }
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    Materialize.toast(
+                        `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                        10000, 'rounded red');
+                }
+
+              })
+              $('.modal').modal();
+              $(`#modal_${i}`).openModal;
+            });
+            
+            $("body").on('click', '.edit_close', function () {
+              $('.modal').modal();
+              $(`#modal_${i}`).close;
+            });
+
+            $("body").on('click', '.edit_save', function () {
+              
+              enviarHistoria($(`#item_${i}`).val(), signaturePad.toDataURL('image/png', 100))
+              $('.modal').modal();
+              $(`#modal_${i}`).close;
+            });
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            const errors = jqXHR.responseJSON.error.errors;
+            let htmlErrors = "";
+            for (const err in errors) {
+                if (errors.hasOwnProperty(err)) {
+                    const error = errors[err];
+                    htmlErrors += `<br>${error.message}`
+                }
+            }
+            console.log(textStatus);
+            console.log(errorThrown);
+            Materialize.toast(
+                `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                10000, 'rounded red');
+        }
+    })
+      
+  });
+
+  
+  function getInfoCita() {
+    $.ajax({
+        method: "GET",
+        url: `/api/firmaDocument/`,
+        success: function (response) {
+          let idOut = ''
+          for (let i = 0; i < response.length; i++) {
+            const r = response[i];
+            const Profesional = r.Cita.Profesional.nombre;
+            const Servicio = r.Cita.Servicio.nombre;
+            const firmaCita = r.Cita
+            const fechServicio = moment.unix(r.Cita.cita_start_timestamp).format("YYYY-MM-DD");;
+            const id = r._id;
+            const formulario = r.formulario
+
+            if(firmaCita.consentimientoAdulto === 1){
+                $('#table_documentPacient').append(`
+                  <tr>
+                    <td>
+                      ${Profesional} 
+                    </td>
+                    <td>
+                      ${Servicio} 
+                    </td>
+                    <td>
+                      ${fechServicio} 
+                    </td>
+                    <td>
+                    
+                      <button data-target="modal_${i}" class="btn edit_data modal-trigger waves-effect btn-flat col m12 m12 s12 btn waves-effect primary waves-light">Abrir</button>
+                      <div id="modal_${i}" class="modal modal-fixed-footer">
+                        <div class="modal-content">
+                          <div class="col s12 m6">
+                            <div class="signature-pad--body">
+                              <input type="hidden" value='${firmaCita._id}' id='item_${i}' />
+                              <canvas id="${id}" tipo="firma" class="historia-clinica-input"></canvas>
+                            </div>
+                            <div class="signature-pad--footer">
+                              <div class="description"><b>Firma Consnetimiento Adulto</div>
+                                <div class="signature-pad--actions">
+                                  <div>
+                                    <button type="button" class="button clear" id="clear_sign_${id}">Limpiar</button>
+                                    <button type="button" class="button" id="undo_sign_${id}">Deshacer</button>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                      <div class="modal-footer">
+                        <a class="modal-action edit_close modal-close waves-effect waves-green btn-flat ">Close</a>
+                        <a class="modal-action edit_save waves-effect waves-green btn-flat ">Guardar</a>
+                      </div>
+                    </td>
+                  </tr>
+                  `)
+                  
+              }
+            if(firmaCita.consentimientoChildren === 1){
+                $('#table_documentPacient').append(`
+                  <tr>
+                    <td>
+                      ${Profesional} 
+                    </td>
+                    <td>
+                      ${Servicio} 
+                    </td>
+                    <td>
+                      ${fechServicio} 
+                    </td>
+                    <td>
+                      <button data-target="modal_${i}" class="btn edit_data modal-trigger waves-effect btn-flat col m12 m12 s12 btn waves-effect primary waves-light">Abrir</button>
+                      <div id="modal_${i}" class="modal modal-fixed-footer">
+                        <div class="modal-content">
+                          <div class="signature-pad--body">
+                            <input type="hidden" value='${firmaCita._id}' id='item_${i}' />
+                              <canvas id="${id}" tipo="firma" class="formulario"></canvas>
+                            </div>
+                            <div class="signature-pad--footer">
+                              <div class="description"><b>Firma Consnetimiento Children</div>
+                                <div class="signature-pad--actions">
+                                  <div>
+                                    <button type="button" class="button clear" id="clear_sign_${id}">Limpiar</button>
+                                    <button type="button" class="button" id="undo_sign_${id}">Deshacer</button>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                      <div class="modal-footer">
+                        <a class="modal-action edit_close modal-close waves-effect waves-green btn-flat ">Close</a>
+                        <a class="modal-action edit_save waves-effect waves-green btn-flat ">Guardar</a>
+                      </div>
+                    </td> 
+                  </tr>
+                `) 
+              }
+
+            $(document).on('click', '.edit_data', function () {
+              $('.modal').modal();
+              $(`#modal_${i}`).openModal;
+            });
+            $(document).on('click', '.edit_close', function () {
+              $('.modal').modal();
+              $(`#modal_${i}`).close;
+            });
+            $(document).on('click', '.edit_save', function () {
+              var signaturePad = new SignaturePad(document.getElementById(`${id}`), {
+                backgroundColor: 'rgb(215, 215, 215)'
+              });
+              console.log(signaturePad.toDataURL('image/png', 100))
+              $('.historia-clinica-input').each(function () {
+                //const campo_id = id;
+                if ($(this).attr('tipo') == 'firma') {
+                  console.log('Firma', `signaturePad`, eval(`signaturePad`).toData());
+                }
+              });
+
+              enviarHistoria($(`#item_${i}`).val(), signaturePad)
+
+              $('.modal').modal();
+              $(`#modal_${i}`).close;
+            });
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            const errors = jqXHR.responseJSON.error.errors;
+            let htmlErrors = "";
+            for (const err in errors) {
+                if (errors.hasOwnProperty(err)) {
+                    const error = errors[err];
+                    htmlErrors += `<br>${error.message}`
+                }
+            }
+            console.log(textStatus);
+            console.log(errorThrown);
+            Materialize.toast(
+                `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                10000, 'rounded red');
+        }
+    })
+
+  }
+
+  function enviarHistoria(cerradoValue, firma) {
+    if(cerradoValue === undefined)
+      return
+    
+    const nombrePacienteFirma = $("#nombre_paciente_firma").val();
+    const cedulaPacienteFirma = $("#cedula_paciente_firma").val();
+    const consentimientoFirmado = $(".clean_on_create").val();
+    const urlEnvio = `/api/citas/${cerradoValue}`
+    const methodEnvio = 'PATCH'
+    
+    const dataEnviar = {
+        firma: firma,
+        nombrePacienteFirma,
+        cedulaPacienteFirma,
+        consentimientoFirmado
+    }
+    
+    $.ajax({
+        url: urlEnvio,
+        type: 'PATCH',
+        data: dataEnviar,
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(dataEnviar),
+        success: function (data) {
+            Materialize.toast('Firma Guardada con éxito.', 4000, 'rounded green')
+            location.href = "/firmaPaciente"
+        },
+        error: function (a, b, c) {
+            Materialize.toast('Hubo un error al Guardar el la Historia Clínica.', 4000,
+                'rounded blue')
+            console.error(a, b, c)
+        }
+    });
+  }
+</script>

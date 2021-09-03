@@ -1,0 +1,11 @@
+<% if (renderizar) { %>
+<div class="input-field col s12 m<%= ancho %>" orden="<%= orden %>">
+  <input type="text" id="<%= id %>" class="autocompleteinput <%= validar %>" data-autocomplete='<%= value %>'>
+  <label for="<%= id %>"><b><%= nombre %></b></label>
+</div>
+<% } else { %>
+_$div class="input-field col s12 m_$%= ancho %$_" orden="_$%= orden %$_"$_
+  _$input type="text" id="_$%= id %$_" class="autocompleteinput _$%= validar %$_" data-autocomplete='_$%= value %$_' $_
+  _$label for="_$%= id %$_"$__$b$__$%= nombre %$__$/b$__$/label$_
+_$/div$_
+<% } %>

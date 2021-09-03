@@ -1,0 +1,90 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+<section id="content">
+  <div class="container">
+    <div class="row">
+      <div class="col s12 m12 l12">
+        <h3 class="breadcrumbs-title"><%= title%> <%= paciente.nombre %>  </h3>
+        <ul class="collapsible popout" data-collapsible="expandable">
+          <li>
+            <div class="collapsible-header active"><i class="material-icons">check_circle</i>
+              Certificado
+            </div>
+            <div class="collapsible-body">
+              <div class="row">
+                <div class="col s12 m4 l2"></div>
+                <div class="col s12 m4 l8"></div>
+                <div class="col s12 m4 l2">
+                </div>
+                <table id="tabla_historias" class="bordered highlight responsive-table centered">
+                  <thead class="">
+                    <tr>
+                      <th>Profesional</th>
+                      <th>Fecha de la Cita</th>
+                      <th>Servicio</th>
+                      <th>Estado</th>
+                      <th><i class="material-icons">settings</i></th>
+                    </tr>
+                  </thead>
+                  <tbody style="display: contents;">
+                    <% for (let h = 0; h < historias.length; h++) {
+                      const historia = historias[h]; 
+                      const servicio = historias[h].Cita.Servicio %>
+                      <tr>
+                        <td><%= historia.Profesional.nombre %> <%= historia.Profesional.apellido %></td>
+                        <td><%= moment(historia.Cita.start).locale('es').format('LLL') %></td>
+                        <td><%= servicio != null ? servicio.nombre : 'Servicio Eliminado' %></td>
+                        <td><i class="material-icons"><%- historia.cerrado ? 'lock' : 'lock_open' %></i></td>
+                        <td> <a href="/certificado/ver?cita=<%= historia.Cita._id %>" target="_blank"><i
+                              class="material-icons">print</i> Imprimir </a> </td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+
+<script>
+        $('#downloadHistory').click(function(){
+        var values = {};
+
+        $('#tabla_historias').find('input[type=checkbox]').each(function(i) {
+          var checkbox = $(this);
+          if(checkbox.is(':checked')){
+            values[i] = [];
+            values[i].push($(this).attr('id'));
+          }
+        });
+
+        var body = {
+          user_id: $("#user_id").val() || null,
+          sede: $("#sedesRecepcion").val(),
+          id: values
+        }
+          console.log(body)
+
+        $.ajax({
+          method: 'POST',
+          url: `/api/historias-clinicas/print`,
+          dataType: 'json',
+          contentType: 'application/json',
+          data: JSON.stringify(body),
+          success: function (r) {
+              console.log(">>>> print: ", r)
+          }
+        })
+      });
+
+</script>

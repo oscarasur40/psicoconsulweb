@@ -1,0 +1,83 @@
+<% if (renderizar) { %>
+<div class="col s12 m<%= ancho %>">
+<div class="signature-pad--body">
+  <canvas id="<%= id %>" tipo="firma" class="<%= validar %>"></canvas>
+</div>
+<div class="signature-pad--footer">
+  <div class="description"><b><%= nombre %></b><br><%- value != undefined ? value : "" %></div>
+  <% if (true) { %>
+    <div class="signature-pad--actions">
+      <div>
+        <button type="button" class="button clear" id="clear_sign_<%= id %>">Limpiar</button>
+        <button type="button" class="button" id="undo_sign_<%= id %>">Deshacer</button>
+      </div>
+    </div>
+  <% } %>
+</div>
+<script>
+
+  var canvas<%- id %> = document.getElementById("<%- id %>");
+  var signaturePad<%- id %> = new SignaturePad(canvas<%- id %>, {
+    backgroundColor: 'rgb(215, 215, 215)'
+  });
+  <% if (true) { %>
+
+  var clearButton<%- id %> = document.getElementById("clear_sign_<%- id %>");
+  var undoButton<%- id %> = document.getElementById("undo_sign_<%- id %>");
+  clearButton<%- id %>.addEventListener("click", function (event) {
+    signaturePad<%- id %>.clear();
+  });
+  
+  undoButton<%- id %>.addEventListener("click", function (event) {
+    var data = signaturePad<%- id %>.toData();
+  
+    if (data) {
+      data.pop();
+      signaturePad<%- id %>.fromData(data);
+    }
+  });
+<% } else { %>
+  signaturePad<%- id %>.off();
+<% } %>
+
+</script>
+</div>
+<% } else { %>
+_$div class="col s12 m_$%= ancho %$_"$_
+_$div class="signature-pad--body"$_
+  _$canvas id="_$%= id %$_" tipo="firma" class="_$%= validar %$_" $__$/canvas$_
+_$/div$_
+_$div class="signature-pad--footer"$_
+  _$div class="description"$__$b$__$%= nombre %$__$/b$__$br$__$%- value != undefined ? value : "" %$__$/div$_
+  _$div class="signature-pad--actions"$_
+    _$div$_
+      _$button type="button" class="button clear" id="clear_sign__$%= id %$_"$_Limpiar_$/button$_
+      _$button type="button" class="button" id="undo_sign__$%= id %$_"$_Deshacer_$/button$_
+    _$/div$_
+  _$/div$_
+_$/div$_
+_$script$_
+
+var clearButton_$%- id %$_ = document.getElementById("clear_sign__$%- id %$_");
+var undoButton_$%- id %$_ = document.getElementById("undo_sign__$%- id %$_");
+var canvas_$%- id %$_ = document.getElementById("_$%- id %$_");
+var signaturePad_$%- id %$_ = new SignaturePad(canvas_$%- id %$_, {
+  backgroundColor: 'rgb(215, 215, 215)'
+});
+
+clearButton_$%- id %$_.addEventListener("click", function (event) {
+  signaturePad_$%- id %$_.clear();
+});
+
+undoButton_$%- id %$_.addEventListener("click", function (event) {
+  var data = signaturePad_$%- id %$_.toData();
+
+  if (data) {
+    data.pop();
+    signaturePad_$%- id %$_.fromData(data);
+  }
+});
+
+_$/script$_
+_$/div$_
+<% } %>

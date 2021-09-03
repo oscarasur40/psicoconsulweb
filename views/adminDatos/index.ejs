@@ -1,0 +1,404 @@
+<% include  ../view_distribution/top1.ejs%>
+<% include  ../view_distribution/top2.ejs%>
+<% include  ../view_distribution/sidebar-left.ejs%>
+
+
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <input id="sedesRecepcion" type="hidden" value="<%= sede_id %>" />
+                <ul class="collapsible popout" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header active"><i class="material-icons">airline_seat_flat</i>Consultorios</div>
+                        <div class="collapsible-body">
+                          <div class="row">
+                            <div class="input-field col m3 s12">
+                                <select id="name" class="validate select browse-select">
+                                    <option value="" disabled >Elige una opción</option>
+                                    <option value="Consultorio">Consultorio</option>
+                                </select>
+                                <label for="name">Consultorio</label>
+                            </div>  
+                            <div class="input-field col m4 s12">
+                              <input type="number" id="number" min="0" value=""> 
+                              <label for="number">Selecione un numero para el consultorio</label>
+                            </div>
+                            <div class="col s4 text-center">
+                                <button class="col s4 btn waves-effect green waves-light input_dissable_cita" id="enviar_data">
+                                    <i class="material-icons">save</i>
+                                    <span style="position: relative; bottom: 4px;"> Crear consultorio</span>
+                                </button>
+                            </div>
+                            <table id="example" class="bordered highlight responsive-table centered">
+                                <thead class="">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Consultorio</th>
+                                        <th>Activo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_consultorios">
+                                </tbody>
+                            </table>
+
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="collapsible-header active"><i class="material-icons">event</i>Dias no laborales</div>
+                        <div class="collapsible-body">
+                          <div class="row"> 
+                            <div class=" col m4 s12">
+                                <legend for="number">Selecione un dia </legend>
+                                <input type="date" id="start_date">                
+                            </div>
+                            <div class="col s4 text-center">
+                                <button class="col s4 btn waves-effect green waves-light input_dissable_cita" id="enviar_data_fecha">
+                                    <i class="material-icons">save</i>
+                                    <span style="position: relative; bottom: 4px;">Crear Dia</span>
+                                </button>
+                                <input type="hidden" name="" id="" class="col s2">
+                                <button class="col s4 btn waves-effect red waves-light input_dissable_cita" id="deletDias">
+                                    <i class="material-icons">delete</i>
+                                    <span style="position: relative; bottom: 4px;" >Elimiar Dia</span>
+                                </button>
+                            </div>
+
+                            
+                            <table id="example" class="bordered highlight responsive-table centered">
+                                <thead class="">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Dias no laborales</th>
+                                        <th><i class="material-icons">settings</i></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_dias">
+                                </tbody>
+                            </table>
+
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="collapsible-header active"><i class="material-icons">timer</i>Duración de la cita</div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="col s4">
+                                    <legend for="number"><b>Los datos estan en minutos</b></legend>
+                                    <input type="number" placeholder="30" id="time_cita">
+                                </div> 
+                                <div class="col s8">
+                                    <p><b>Nota:</b> Elija el tiempo de duración de la consulta aquí, dependiento de la sede.</p>
+                                </div>  
+                                <div class="col s4">
+                                    <button class="btn waves-effect green waves-light input_dissable_cita" id="enviar_time">
+                                        <i class="material-icons">save</i>
+                                        <span style="position: relative; bottom: 4px;">Guardar</span>
+                                    </button>   
+                                </div>          
+                            </div>
+                        </div>
+                      </li>  
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment-with-locales.min.js"></script>
+<% include  ../view_distribution/sidebar-right.ejs%>
+<% include  ../view_distribution/bot1.ejs%>
+<% include  ../scripts/convertEJS.ejs%>
+
+<script>
+
+
+  $(document).ready(function () {
+   /*Aqui inicia lo de consultorio*/
+    var Sede = $("#sedesRecepcion").val()
+        console.log('Preparado para enviar');
+        $.ajax({
+          method: 'GET',
+          url: `/api/adminDatos/${Sede}`,
+          success: function (r) {
+                console.log(">>>> terapeuta: ", r)
+                var numero = 1
+                    for(i=0;i<r.length;i++){
+                        Consul = r[i]
+                        $("#tabla_consultorios").append(`
+                    <tr>
+                            <td>
+                            ${numero}
+                            </td>
+                            <td>
+                            ${Consul.Consultorio}
+                            </td>
+                            <td>
+                                <input ${Consul.Activo == 'true' ? "checked" : false} name="group_${i}" class="example_${i}" type="checkbox" value="" data-id="${Consul._id}" id="Dispo${i}" /><label for="Dispo${i}"></label>                    
+                        </td>
+                    </tr>
+                    
+                    `)
+                    numero++
+                    $(`.example_${i}`).click(function () {
+                        var value = $(this).is(':checked');
+                        var id = $(this).attr('data-id')
+                        console.log(">>>>>",value," >>>id", id)
+                        if(value === true){
+                            var Activo = true
+                        }else{
+                            var Activo = false
+                        }
+                        
+                        var body = {
+                            Activo
+                        }
+                        $.ajax({
+                            method: 'PATCH',
+                            url: `/api/adminDatos/${id}`,
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            data: JSON.stringify(body),
+                            success: function (response) {
+                                Materialize.toast('Consultorio actualizado con éxito.', 4000, 'rounded green')
+                               
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                const errors = jqXHR.responseJSON.error.errors;
+                                let htmlErrors = "";
+                                for (const err in errors) {
+                                    if (errors.hasOwnProperty(err)) {
+                                        const error = errors[err];
+                                        htmlErrors += `<br>${error.message}`
+                                    }
+                                }
+                                console.log(textStatus);
+                                console.log(errorThrown);
+                                Materialize.toast(
+                                    `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                                    10000, 'rounded red');
+                            }
+                        })
+                    })
+                    }
+          }
+      })
+
+    $('#enviar_data').click(function () {
+        if($("#number").val() ==""){
+            alert("Debes selecionar un numero"); 
+            return;
+        } 
+        $('.input_dissable_cita').attr('disabled', true)
+        const url = '/api/adminDatos';
+        const method = 'POST'
+        var Consultorio = $("#name").val() + " "+ $("#number").val() 
+        var Sede = $("#sedesRecepcion").val()
+        var Activo = true
+        const body ={
+            Consultorio,
+            Sede,
+            Activo,
+        }
+        $.ajax({
+            method: method,
+            url: url,
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(body),
+            success: function (response) {
+                console.log(response);
+                Materialize.toast('Consultorio creado con éxito.', 4000, 'rounded green')
+                $('.input_dissable_cita').attr('disabled', false)
+                location.reload()  
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                const errors = jqXHR.responseJSON.error.errors;
+                let htmlErrors = "";
+                for (const err in errors) {
+                    if (errors.hasOwnProperty(err)) {
+                        const error = errors[err];
+                        htmlErrors += `<br>${error.message}`
+                    }
+                }
+                console.log(textStatus);
+                console.log(errorThrown);
+                Materialize.toast(
+                    `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                    10000, 'rounded red');
+                    $('.input_dissable_cita').attr('disabled', false)
+            }
+        })
+    });
+    /*Aqui finaliza lo de consultorio*/
+    /*Aqui empienza lo de dias*/
+    $('#enviar_data_fecha').click(function(){
+        $('#enviar_data_fecha').attr('disabled', false)
+       console.log($("#start_date").val())
+       var url = '/api/adminDatos/createDias';
+       var method = 'POST'
+       var Sede = $("#sedesRecepcion").val()
+       var dia_no_laboral = $("#start_date").val()
+       var fechaSytem = moment(new Date(dia_no_laboral)).utc().unix()
+       var body = {
+            Sede,
+            dia_no_laboral,
+            fechaSytem
+       }
+       $.ajax({
+            method: method,
+            url: url,
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(body),
+            success: function (response) {
+                console.log(response);
+                Materialize.toast('Dia creado con éxito.', 4000, 'rounded green')
+                $('#enviar_data_fecha').attr('disabled', false)
+                $.ajax({
+                method: 'GET',
+                url: `/api/adminDatos/getDias/${Sede}`,
+                success: function (response) {
+                    $(`#tabla_dias tr`).remove()
+                    var contador = 1
+                    for (let i = 0; i < response.length; i++) {
+                        var dias = response[i];
+                        $(`#tabla_dias`).append(`
+                            <tr>
+                            <td>${contador}</td>
+                            <td>${moment(dias.dia_no_laboral).locale('es').format("LL")}</td>
+                            <td><input name="group_1" type="radio" value="${dias._id}" id="Dia${i}"/><label for="Dia${i}"></label> </td>                      
+                            </tr>
+                        `)        
+                        contador++           
+                    }
+                }
+            })
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                const errors = jqXHR.responseJSON.error.errors;
+                let htmlErrors = "";
+                for (const err in errors) {
+                    if (errors.hasOwnProperty(err)) {
+                        const error = errors[err];
+                        htmlErrors += `<br>${error.message}`
+                    }
+                }
+                console.log(textStatus);
+                console.log(errorThrown);
+                Materialize.toast(
+                    `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                    10000, 'rounded red');
+                    $('#enviar_data_fecha').attr('disabled', false)
+            }
+        })
+       
+    })
+    $.ajax({
+        method: 'GET',
+          url: `/api/adminDatos/getDias/${Sede}`,
+          success: function (response) {
+              var contador = 1
+            for (let i = 0; i < response.length; i++) {
+                var dias = response[i];
+                $(`#tabla_dias`).append(`
+                    <tr>
+                    <td>${contador}</td>
+                    <td>${moment(dias.dia_no_laboral).locale('es').format("LL")}</td>
+                    <td><input name="group_1" type="radio" value="${dias._id}" id="Dia${i}"/><label for="Dia${i}"></label> </td>                      
+                    </tr>
+                `)        
+                contador++           
+            }
+        }
+    })
+    $('#deletDias').click(function () {
+          if($('input:radio[name = group_1]:checked').val() == undefined){
+            Materialize.toast(
+                    'No has seleccionado ningun dia',
+                    4000, 'rounded red');
+            return
+          }
+          var confirmacion = confirm("¿Seguro que quieres eliminar este dia?")
+          if(confirmacion){
+          var dia = $('input:radio[name = group_1]:checked').val()
+          console.log(dia)
+          var urlEnvio = `/api/adminDatos/deleteDias/${dia}`
+          var methodEnvio = 'DELETE'
+          $.ajax({
+            url: urlEnvio,
+            method: methodEnvio,
+            success: function (r) {
+                console.log(r)  
+                Materialize.toast('Dia eliminado con exito',
+                    4000, 'rounded green') 
+                $('input:radio[name = group_1]:checked').closest("tr").remove();          
+            },
+            error: function (a, b, c) {
+                console.log(a, b, c);
+                Materialize.toast(
+                    'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                    4000, 'rounded red');
+            }
+            }) 
+          }
+    })
+    $('#enviar_time').click(function(){
+        var time = $("#time_cita").val()
+        var Sede = $("#sedesRecepcion").val()
+        var fechaSytem = new Date()
+        var body = {
+            time,
+            Sede,
+            fechaSytem
+        }
+        var url = `/api/adminDatos/createTime/${Sede}`;
+        var method = 'PATCH'
+        $.ajax({
+            method: method,
+            url: url,
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(body),
+            success: function (response) {
+                console.log(response);
+                Materialize.toast('Tiempo guardado con exito',
+                    4000, 'rounded green') 
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                const errors = jqXHR.responseJSON.error.errors;
+                let htmlErrors = "";
+                for (const err in errors) {
+                    if (errors.hasOwnProperty(err)) {
+                        const error = errors[err];
+                        htmlErrors += `<br>${error.message}`
+                    }
+                }
+                console.log(textStatus);
+                console.log(errorThrown);
+                Materialize.toast(
+                    `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
+                    10000, 'rounded red');
+                   
+            }
+        })
+    })
+    $.ajax({
+        method: 'GET',
+          url: `/api/adminDatos/getTime/${Sede}`,
+          success: function (response) {
+            $("#time_cita").val(response[0].time)
+        }
+    })
+  })
+
+
+</script>

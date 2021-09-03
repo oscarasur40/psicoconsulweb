@@ -1,0 +1,1365 @@
+<% include  view_distribution/top1.ejs%>
+<% include  view_distribution/top2.ejs%>
+<% include  view_distribution/sidebar-left.ejs%>
+<style>
+  .tableCitas {
+    margin-right: 5px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+  }
+  .statusCita {
+    width: 24%;
+    float: left;
+    padding: 11px;
+    text-align: center;
+    margin-right: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    color: #fff;
+  }
+
+  .statusCita-color1 {
+    background-color: #0790d2;
+  }
+
+  .statusCita-color2 {
+    background-color: #0bb305;
+  }
+
+  .statusCita-color3 {
+    background-color: #d21807;
+  }
+
+  .statusCita-color4 {
+    background-color: #d28407;
+  }
+
+  .statusCita-color5 {
+    background-color: silver;
+  }
+</style>
+<section id="content">
+  <input type="hidden" id="user_id" value="<%= user._id %>">
+  <% if (user.tipo == "profesional" || user.tipo == "adminsede") { %> 
+  <div class="container" id="">
+    <% if (sede != "") { %>
+    <input type="hidden" id="sede" value="<%= user.Sedes[0]._id %>">
+    <input type="hidden" id="sede_2" value="<%= sede[0]._id %>">
+    <% } %>
+  <input type="hidden" id="user_data" value="<%= user %>">
+
+    <div class="container">
+      <div class="row">
+        <div class="col l7 m12 card-panel ">
+          <% let historia = 0
+          for (let h = 0; h < user.Sedes.length; h++) {
+              historia = user.Sedes[h].nombre === '2020' ? 1 : 0  %>
+          <% } %>
+          <% if(historia === 1) { %>
+            <h4 class="center">Citas para hoy <%= moment( new Date ).locale('es').format('LL')%></h4>
+            <!-- <div class="container">
+              <div class="row" >
+                <div class="statusCita statusCita-color1">Programada</div>
+                <div class="statusCita statusCita-color2">Atendida</div>
+                <div class="statusCita statusCita-color3">Nape</div>
+                <div class="statusCita statusCita-color4">Reprogramada</div>
+                <div class="statusCita statusCita-color5">Caso fallido</div>
+              </ul>
+              </div>
+            </div> -->
+            <!-- style="background-color: #949090; color: white;" -->
+          <% }else{ %>
+            <h4 class="center">Próximas citas</h4>
+            <div class="container">
+              <div class="statusCita statusCita-color1">Programada</div>
+              <div class="statusCita statusCita-color2">Atendida</div>
+              <div class="statusCita statusCita-color3">Canceladas</div>
+              <div class="statusCita statusCita-color4">Reprogramada</div>
+            </div>
+          <% } %>
+          <table class="bordered highlight centered">
+            <thead>
+              <th>Tipo</th>
+              <th>Nº</th>
+              <th>Nombre del Paciente</th>
+              <th>Horario</th>
+              <th><i class="material-icons">settings</i></th>
+            </thead>
+            <tbody id="tabla_citas">
+            </tbody>
+          </table><br>
+        </div>
+        <% if(user.roles == 'SP'){ %>
+        <div class="col l5 m12 s12">
+          <div class="card-panel">
+            Practicante
+            <select id="UniProfesional" class="validate select browse-select">
+                <option value="" disabled selected>Elige una opción</option>
+            </select>
+          </div>
+      </div>
+      <% } %>
+        <div class="col l5 m12 s12">
+          <div class="card-panel">
+            <div id="chart_genero" style="height: 370px; width: 100%;">
+            </div>
+            <br><br>
+          </div>
+          <div class="card-panel">
+            <div id="chart_efectividad_citas" style="height: 370px; width: 100%;">
+            </div>
+          </div>
+          <% if(historia === 1) { %>
+          <!-- <div class="card-panel">
+            <div id="chart_estadistica_consulta" style="height: 370px; width: 100%;">
+            </div>
+          </div> -->
+         <% } else{ %>
+          <div class="card-panel">
+            <div id="chart_estadistica_consulta" style="height: 370px; width: 100%;">
+            </div>
+          </div>
+        <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modalInformeRemision">
+    <div class="modal-header"></div>
+    <div class="modal-content">
+      <div class="row">
+        <div class="col s12 m6 offset-m3 center">
+          <h5>
+            <b>RECEPCIÓN</b>
+          </h5>
+        </div>
+      </div> 
+      <div class="row">
+        <div class="col s2">
+          Fecha
+        </div>
+        <div class="col s6">
+          <input type="text" name="" id="fechaRecep" value="" readonly>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s3">
+          Caso Remitido:
+        </div>
+        <div class="col s3">
+          <input type="text" name="" id="casoRemi" value="" readonly>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s3">
+          Motivo Consulta
+        </div>
+        <div class="col m10 s10">
+            <textarea id="motiveConsulta" class="materialize-textarea" data-length="350" readonly></textarea>
+            <label for="motiveConsulta"></label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s10">
+          Anotaciones relevantes para el abordaje del caso: 
+          (A quién se ha consultado, eventos relacionados con la situación de la consulta, ha recibido anteriormente atención en el SAP)
+        </div>
+        <div class="col m10 s10">
+            <textarea id="anotacion_caso" class="materialize-textarea" data-length="350" readonly></textarea>
+            <label for="anotacion_caso"></label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s10">
+          Comprensión clínica del entrevistador: 
+          (De la demanda, del motivo de la consulta y del contexto relacional)
+        </div>
+        <div class="col m10 s10">
+            <textarea id="comprension_entrevistador" class="materialize-textarea" data-length="350" readonly></textarea>
+            <label for="comprension_entrevistador"></label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s10">
+          Acuerdos establecidos para el primer encuentro de intervención: 
+          (sistemas convocados y consideraciones en relación con ello) y sobre el procedimiento de remisión.
+        </div>
+        <div class="col m10 s10">
+            <textarea id="acuerdo_intervencion" class="materialize-textarea" data-length="350" readonly></textarea>
+            <label for="acuerdo_intervencion"></label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s10">
+          Observaciones.
+          (entre otros, confirmar fecha y hora para primer encuentro, recordar documentos solicitados para entregar en el primer encuentro, 
+          recibió y tiene conocimiento del consentimiento y/o asentimiento informado)
+        </div>
+        <div class="col m10 s10">
+            <textarea id="observacion" class="materialize-textarea" data-length="350" readonly></textarea>
+            <label for="observacion"></label>
+        </div>
+      </div>
+      <div class="modal-footer">
+            <div class="row">
+              <div class="col s4">
+                <input type="hidden" id="idPrimeraVez">
+                <input type="hidden" id="nombreServi">
+                <input type="hidden" id="idDelUsuario">
+                <button class="waves-effect btn-flat col m12 m12 s12 btn waves-effect green waves-light antenderCita " id="IdCita" >
+                  <i class="material-icons">airline_seat_flat</i>
+                  <span style="position: relative; bottom: 4px;">Confirmar Atención</span>
+                </button>
+              </div>
+              <div class="col s4">
+                <button class="waves-effect btn-flat col m12 m12 s12 btn waves-effect red waves-light napeCita" id="#">
+                  <i class="material-icons">highlight_off</i>
+                  <span style="position: relative; bottom: 4px;">Nape</span>
+                </button>
+              </div>
+              <div class="col s4">
+                <button style="background-color: silver;" class="waves-effect btn-flat col m12 m12 s12 btn waves-effect casoFallido waves-light">
+                  <i class="material-icons">lock</i>
+                  <span style="position: relative; bottom: 4px;">Caso Fallido</span>
+                </button>
+              </div>
+            </div>
+      </div><br>
+      <div class="row" id="OcultarTextCaso">
+        <div class="col s12">
+          <textarea id="MotivoCasoFallido" class="materialize-textarea" data-length="5000" placeholder="Explique Por Que Considera Que Es Caso Fallido"></textarea>
+          <label for="MotivoCasoFallido"></label>
+        </div>
+        <div class="col s4">
+
+        </div>
+        <div class="col s4">
+          <button class="waves-effect btn-flat col m12 m12 s12 btn waves-effect green waves-light EnviarCasoFallido">
+            <i class="material-icons">save</i>
+            <span style="position: relative; bottom: 4px;">Enviar</span>
+          </button>
+        </div>
+        <div class="col s4">
+          <button class="waves-effect btn-flat col m12 m12 s12 btn waves-effect cerraTextCaso red waves-light">
+            <i class="material-icons">highlight_off</i>
+            <span style="position: relative; bottom: 4px;">Cancelar</span>           
+          </button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+<% } else if (user.tipo == "superadmin") { %> 
+
+<% } else { %> 
+
+<% } %> 
+</section>
+<% include  view_distribution/sidebar-right.ejs%>
+<% include  view_distribution/bot1.ejs%>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js"></script>
+<script>
+  let data_user = $('#user_data').val()
+  $('#OcultarTextCaso').hide()
+  function escribirCanva1() {
+    
+    // ESCRIBIR GRAFICA DE CHART_GENERO
+    let sede_id =  $('#sede').val()
+    console.log(sede_id);
+    var chart = new CanvasJS.Chart("chart_genero", {
+      animationEnabled: true,
+      theme: "light2", // "light1", "light2", "dark1", "dark2"
+      title: {
+        text: sede_id === '60049afed00d9b43a49e4da7' ? 'Consultantes Asignados' : 'Usuarios Registrados'
+      },
+      axisY: {
+        title: ""
+      },
+      data: [{
+        type: "pie",
+        showInLegend: false,
+        indexLabel: "{label} - {y}",
+        dataPoints: canva_usuarios
+      }]
+    });
+    
+    chart.render();
+  }
+
+  function escribirCanva2() {
+    CanvasJS.addColorSet("color_efectividad",
+      [ //colorSet Array
+        "#0790d2",
+        "#d28407",
+        "#0bb305",
+        "#d21807",
+        "silver"
+      ]);
+    // ESCRIBIR GRAFICA DE EFECTIVIDAD_DE_CITAS
+    var chart = new CanvasJS.Chart("chart_efectividad_citas", {
+      colorSet: "color_efectividad",
+      animationEnabled: true,
+      theme: "light1", // "light1", "light2", "dark1", "dark2"
+      title: {
+        text: "Efectividad de Citas"
+      },
+      axisY: {
+        title: ""
+      },
+      data: [{
+        type: "pie",
+        showInLegend: false,
+        indexLabel: "{label} - {y}",
+        dataPoints: canva_efectividad
+      }]
+    });
+    chart.render();
+  }
+
+  function escribirCanva3() {
+    CanvasJS.addColorSet("color_estadistica_consulta",
+      [ //colorSet Array
+        "#4573c3",
+        "#70ad46",
+        "#ee7c36",
+        "#5c9ad5",
+        "#ffc100",
+        "#df7970",
+        "#a5a5a5"
+      ]);
+    // ESCRIBIR GRAFICA DE EFECTIVIDAD_DE_CITAS
+    var chart = new CanvasJS.Chart("chart_estadistica_consulta", {
+      colorSet: "color_estadistica_consulta",
+      animationEnabled: true,
+      theme: "light1", // "light1", "light2", "dark1", "dark2"
+      title: {
+        text: "Estadisticas de consulta"
+      },
+      axisY: {
+        title: "Growth Rate (in %)",
+        suffix: "%"
+      },
+
+      axisY: {
+        title: ""
+      },
+      data: [{
+        type: "column",
+        showInLegend: false,
+        indexLabel: "{y}",
+        dataPoints: canva_estadistica_consulta
+      }]
+    });
+    chart.render();
+
+  }
+
+
+  // 1. número de pacientes registrados
+  // 2. Citas del día
+  // 3. Facturación del consultorio
+  // 4. Estadística de consultas atendidas
+  // 5. Estadística de canceladas
+  let sede = $('#sede').val()
+  let sede_2 = $('#sede_2').val()
+  let user_id = $('#user_id').val()
+  var usuarios = {}
+  var canva_usuarios = []
+  let hoy = new Date()
+
+  fecha = moment(hoy).format('DD-MM-YYYY')
+
+  // USUARIOS REGISTRADOS
+
+if (sede != "") {
+  if(sede == '60049afed00d9b43a49e4da7' || sede_2 == "60049afed00d9b43a49e4da7"){
+        var profesianal = <%- JSON.stringify(user) %>;
+        console.log(profesianal)
+        if(profesianal.roles == 'PG'){
+            var url = `/api/pacientes/getAllProfesional?filter[sede]=${sede}&filter[idProfesional]=${profesianal._id}&limit=1000000&projection=-Sedes+-Encargados+-SedeUserInfos`
+            $.ajax({
+                url: url,
+                success: function (response) {
+                  console.log(response);
+                  // ESCRIBIR GRAFICA DE CHART_GENERO
+
+                  let femenino = 0
+                  let masculino = 0
+                  for (let i = 0; i < response.length; i++) {
+                    const genero = response[i].genero_nacimiento
+                    if (genero == "Femenino") {
+                      femenino++
+                    } else {
+                      masculino++
+                    }
+                  }
+
+                  let rows1 = {
+                    y: femenino,
+                    exploded: true,
+                    label: "Femenino",
+                  }
+                  let rows2 = {
+                    y: masculino,
+                    label: "Masculino"
+                  }
+
+                  canva_usuarios.push(rows1, rows2)
+                  // console.log(usuarios);
+                  escribirCanva1()
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  console.log(textStatus);
+                  console.log(jqXHR);
+                  console.log(errorThrown);
+                },
+              });
+          }else if(profesianal.roles == 'SP'){
+            $.ajax({
+                    method: 'GET',
+                    url: `/api/profesionales/getAllProfesionalesSuper/${sede}/${profesianal._id}`,
+                    success: function (r) {
+                        for (let i = 0; i < r.length; i++) {
+                          const formulario = r[i];
+                          $('#UniProfesional').append(
+                              `<option value="${formulario._id}">${formulario.nombre} ${formulario.apellido}</option>`)
+                      }
+                      $('#UniProfesional').material_select();
+                    }
+                })
+                  $('#UniProfesional').change(function(){
+                    canva_usuarios = []
+                     let idPorfe = $(this).val() 
+                     var url = `/api/pacientes/getAllProfesional?filter[sede]=${sede}&filter[idProfesional]=${idPorfe}&limit=1000000&projection=-Sedes+-Encargados+-SedeUserInfos`
+                      $.ajax({
+                          url: url,
+                          success: function (response) {
+                            console.log(response);
+                            // ESCRIBIR GRAFICA DE CHART_GENERO
+                            let femenino = 0
+                            let masculino = 0
+                            for (let x = 0; x < response.length; x++) {
+                              const genero = response[x].genero_nacimiento
+                              if (genero == "Femenino") {
+                                femenino++
+                              } else {
+                                masculino++
+                              }
+                            }
+                            let rows1 = {
+                              y: femenino,
+                              exploded: true,
+                              label: `Femenino `,
+                            }
+                            let rows2 = {
+                              y: masculino,
+                              label: `Masculino `,
+                            }
+                              canva_usuarios.push(rows1, rows2)     
+                              escribirCanva1()
+                                      
+                          },
+                          error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus);
+                            console.log(jqXHR);
+                            console.log(errorThrown);
+                          },
+                        });   
+                  })                        
+        }else{
+          var url = `/api/pacientes?filter[sede]=${sede}&limit=1000000&projection=-Sedes+-Encargados+-SedeUserInfos`
+          $.ajax({
+            url: url,
+            success: function (response) {
+              console.log(response);
+              // ESCRIBIR GRAFICA DE CHART_GENERO
+
+              let femenino = 0
+              let masculino = 0
+              for (let i = 0; i < response.length; i++) {
+                const genero = response[i].genero_nacimiento
+                if (genero == "Femenino") {
+                  femenino++
+                } else {
+                  masculino++
+                }
+              }
+
+              let rows1 = {
+                y: femenino,
+                exploded: true,
+                label: "Femenino",
+              }
+              let rows2 = {
+                y: masculino,
+                label: "Masculino"
+              }
+
+              canva_usuarios.push(rows1, rows2)
+              // console.log(usuarios);
+              escribirCanva1()
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              console.log(textStatus);
+              console.log(jqXHR);
+              console.log(errorThrown);
+            },
+          });
+        }
+        }else{
+            var url = `/api/pacientes?filter[sede]=${sede}&limit=1000000&projection=-Sedes+-Encargados+-SedeUserInfos`
+            $.ajax({
+                  url: url,
+                  success: function (response) {
+                    console.log(response);
+                    // ESCRIBIR GRAFICA DE CHART_GENERO
+
+                    let femenino = 0
+                    let masculino = 0
+                    for (let i = 0; i < response.length; i++) {
+                      const genero = response[i].genero_nacimiento
+                      if (genero == "Femenino") {
+                        femenino++
+                      } else {
+                        masculino++
+                      }
+                    }
+
+                    let rows1 = {
+                      y: femenino,
+                      exploded: true,
+                      label: "Femenino",
+                    }
+                    let rows2 = {
+                      y: masculino,
+                      label: "Masculino"
+                    }
+
+                    canva_usuarios.push(rows1, rows2)
+                    // console.log(usuarios);
+                    escribirCanva1()
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus);
+                    console.log(jqXHR);
+                    console.log(errorThrown);
+                  },
+                });
+        }   
+
+
+}
+
+  // CITAS DEL DÍA ?filter[cita_start_timestamp][$gt]=${maximo}&filter[cita_start_timestamp][$lt]=${max}&filter[Profesional]=${user_id}`
+
+  var canva_citas = []
+  var citas = ""
+  let fecha_5_despues = moment().add(5, 'days')
+  let maximo = moment(hoy).unix()
+  let ayer = moment().subtract(1, 'days')
+  let fecha_5_antes = moment().subtract(5, 'days')
+  let minimo = moment(ayer).unix()
+
+  let min = moment().startOf("day").format("X");
+  let max = moment().endOf("day").format("X");
+
+
+  // console.log(maximo);
+  // console.log(hoy);
+  // console.log(minimo);
+
+  function ordenar(a, b) {
+    return a - b
+  };
+
+
+  let orden = []
+  let canva_efectividad = []
+
+
+  $.ajax({
+    url: `/api/citas?filter[cita_start_timestamp][$gt]=${min}&filter[cita_start_timestamp][$lt]=${max}&filter[Profesional]=${user_id}&limit=1000`,
+    success: function (response) {
+      console.log(response);
+
+      // const nuevo_orden = response.sort((a, b) => {
+      //   return moment(b.response).diff(a.response)
+      // });
+
+      let datos_a_ordenar = response
+
+      datos_a_ordenar.sort(function compare(a, b) {
+        var dateA = new Date(a.cita_start_timestamp);
+        var dateB = new Date(b.cita_start_timestamp);
+        return dateA - dateB;
+      });
+      // console.log(datos_a_ordenar);
+
+      // console.log(response);
+
+      for (let i = 0; i < response.length; i++) {
+        const cita = response[i];
+        
+        const paciente = cita.Paciente
+        let cita_hora = cita.cita_start_timestamp
+        const _sedeNombre = cita.Sede.nombre;
+        const _nombreServicio = cita.Servicio.nombre;
+        for (const p in paciente) {
+          if (paciente.hasOwnProperty(p)) {
+            const element = paciente[p];
+            
+            if (cita.estado == "Programada" || cita.estado == "Reprogramada") {
+              
+              if(_sedeNombre === '2020'){
+                console.log("Servicio: ", _nombreServicio)
+                  if("prueba 1" === _nombreServicio){
+                    $('#tabla_citas').append(`
+                      
+                      <tr style='background-color: ${cita.color}; color: white'>
+                        <td> ${element.tipo_id} </td>
+                        <td> ${element.username} </td>
+                        <td> ${element.nombre}, ${element.apellido} </td>
+                        <td>
+                          ${moment.unix(cita.cita_start_timestamp).format('h:mm a')} </td>
+                        <td>
+                          <a 
+                            class="waves-effect green darken-1 waves-light btn AtenderPaciente" data-idU=${element._id} data-citaId=${cita._id} data-primeraVez=${cita.closePrimeraVez} data-nombre=${_nombreServicio}><i class="material-icons">person</i>
+                            <span style="position: relative;bottom: 5px;">Atender</span>
+                          </a>
+                        </td>
+                      </tr>`)
+                  } else if ("prueba 2" === _nombreServicio){
+                    $('#tabla_citas').append(`
+                      <tr style='background-color: ${cita.color}; color: white'>
+                        <td> ${element.tipo_id} </td>
+                        <td> ${element.username} </td>
+                        <td> ${element.nombre}, ${element.apellido} </td>
+                        <td>
+                          ${moment.unix(cita.cita_start_timestamp).format('h:mm a')} </td>
+                        <td>
+                          <a 
+                            class="waves-effect green darken-1 waves-light btn antenderCitaSesion" data-citaId=${cita._id} data-primeraVez=${cita.closePrimeraVez}><i class="material-icons">person</i>
+                            <spans style="position: relative;bottom: 5px;">Atender</span>
+                          </a>
+                        </td>
+                    </tr>`)                          
+                  }
+              }else {
+                $('#tabla_citas').append(`
+                <tr style='background-color: ${cita.color}; color: white'>
+                  <td> ${element.tipo_id} </td>
+                        <td> ${element.username} </td>
+                  <td> ${element.nombre}, ${element.apellido} </td>
+                  <td>
+                    ${moment.unix(cita.cita_start_timestamp).format('h:mm a')} </td>
+                  <td>
+                    <a href="/citas/atender?cita=${cita._id}"
+                      class="waves-effect green darken-1 waves-light btn"><i class="material-icons">person</i>
+                      <spans style="position: relative;bottom: 5px;">Atender</span>
+                    </a>
+                    <a id="cancelar_cita" cita_id="${cita._id}"
+                      class="waves-effect red darken-1 waves-light btn cancelar_cita"><i
+                        class="material-icons">close</i>
+                    </a>
+                  </td>
+                </tr>`)
+              }              
+            } else if (cita.estado == "Cancelada" || cita.estado == 'CasoFallido' ) {
+              $('#tabla_citas').append(`
+            <tr style='background-color: ${cita.color}; color: white' class="tableCitas">
+              <td> ${element.tipo_id} </td>
+              <td> ${element.username} </td>
+              <td> ${element.nombre}, ${element.apellido} </td>
+              <td class="tooltipped" data-position="right">
+                ${moment.unix(cita.cita_start_timestamp).format('h:mm a')} </td>
+              <td>
+                <a href="/citas/atender?cita=${cita._id}" disabled
+                  class="waves-effect green darken-1 waves-light btn"><i class="material-icons">person</i>
+                  <spans style="position: relative;bottom: 5px;">Atender</span>
+                </a>
+                <a id="cancelar_cita" cita_id="${cita._id}" disabled
+                  class="waves-effect red darken-1 waves-light btn cancelar_cita"><i class="material-icons">close</i>
+                </a>
+              </td>
+            </tr>`)
+            }
+          }
+        }
+
+      }
+      $('.cancelar_cita').click(function () {
+        const cita_id = $(this).attr('cita_id');
+        const urlEnvio = `/api/citas/${cita_id}`
+        const methodEnvio = 'PATCH'
+        editarCita = {
+          estado: 'Cancelada',
+          color: '#d21807'
+        }
+        $.ajax({
+          url: urlEnvio,
+          method: methodEnvio,
+          dataType: 'json',
+          contentType: 'application/json',
+          data: JSON.stringify(editarCita),
+          success: function () {
+            Materialize.toast('Cita cancelada con éxito.', 4000, 'rounded green')
+            location.reload()
+          },
+          error: function (a, b, c) {
+            Materialize.toast(
+              'Hubo un error al cancelar la cita. Verifica e inténtalo de nuevo.',
+              4000, 'rounded red');
+          }
+        })
+      })
+      $('.casoFallido').click(function(){
+        $('#OcultarTextCaso').show()
+      })
+      $('.cerraTextCaso').click(function(){
+        $('#OcultarTextCaso').hide()
+      })
+      $('.EnviarCasoFallido').click(function(){
+         let argumento = $('#MotivoCasoFallido').val()
+         let Profesional = $('#user_id').val()
+         let Paciente = $("#idDelUsuario").val() || null;
+         let fechaSystem = new Date()
+         let Sede = $('#sede').val()
+         if(argumento == ""){
+           alert("Tienes Que Llenar el campo de texto")
+           return
+         }
+         var body = {
+          argumento,
+          Profesional,
+          Paciente,
+          fechaSystem,
+          Sede
+         }
+         $.ajax({
+           url:'/api/casoFallido',
+           method: 'POST',
+           dataType: 'json',
+           contentType: 'application/json',
+           data: JSON.stringify(body),
+           success: function (r) {
+              console.log(r)   
+              Materialize.toast(
+                    'Caso fallido con exito.',
+                    4000, 'rounded green');
+                    $.ajax({
+            url: `/api/citas/getCitasSedeProfePaciente/${Sede}/${Profesional}/${Paciente}`,
+            method: 'GET',
+            success: function (r) {
+            var fecha_hoy = moment(new Date()).format("YYYY-MM-DD")
+            for(i=0;i<r.length;i++){
+              var citas = r[i]  
+              if(fecha_hoy == moment(new Date(citas.start)).format("YYYY-MM-DD")){
+                console.log("La que se va a cancelar",citas)
+              editarCita = {
+                estado: 'CasoFallido',
+                color: 'silver'
+              }
+  
+              var urlEnvio = `/api/citas/${citas._id}`
+              var methodEnvio = 'PATCH'
+              $.ajax({
+                url: urlEnvio,
+                method: methodEnvio,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(editarCita),
+                success: function (r) {
+                    console.log(r)             
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                    Materialize.toast(
+                        'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                        4000, 'rounded red');
+                }
+               })
+
+              }else{
+                console.log("La que se va a borrar",citas)
+              var urlEnvio = `/api/citas/cancelarCitasU/${citas._id}`
+              var methodEnvio = 'DELETE'
+              $.ajax({
+                url: urlEnvio,
+                method: methodEnvio,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(editarCita),
+                success: function (r) {
+                    console.log(r)             
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                    Materialize.toast(
+                        'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                        4000, 'rounded red');
+                }
+               })
+              }
+            }
+            }         
+          })  
+
+                    $('.modal').modal('close');        
+            },   
+            error: function (a, b, c) {
+                console.log(a, b, c);
+                Materialize.toast(
+                    'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                    4000, 'rounded red');
+            } 
+         })
+         console.log(body)
+      })
+
+      $('.napeCita').click(function(){
+        let profesional = $('#user_id').val()
+        let idUser = $("#idDelUsuario").val() || null;
+        let sede = $('#sede').val()
+        var confirmacion = confirm("¿Quieres pasar a nape este caso?")
+        if(confirmacion == true){
+          $.ajax({
+            url: `/api/citas/getCitasSedeProfePaciente/${sede}/${profesional}/${idUser}`,
+            method: 'GET',
+            success: function (r) {
+            var fecha_hoy = moment(new Date()).format("YYYY-MM-DD")
+            for(i=0;i<r.length;i++){
+              var citas = r[i]  
+              if(fecha_hoy == moment(new Date(citas.start)).format("YYYY-MM-DD")){
+                console.log("La que se va a cancelar",citas)
+              editarCita = {
+                estado: 'Cancelada',
+                color: '#d21807'
+              }
+  
+              var urlEnvio = `/api/citas/${citas._id}`
+              var methodEnvio = 'PATCH'
+              $.ajax({
+                url: urlEnvio,
+                method: methodEnvio,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(editarCita),
+                success: function (r) {
+                    console.log(r)             
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                    Materialize.toast(
+                        'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                        4000, 'rounded red');
+                }
+               })
+
+              }else{
+              var urlEnvio = `/api/citas/cancelarCitasU/${citas._id}`
+              var methodEnvio = 'DELETE'
+              $.ajax({
+                url: urlEnvio,
+                method: methodEnvio,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(editarCita),
+                success: function (r) {
+                    console.log(r)             
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                    Materialize.toast(
+                        'Hubo un error en los datos proporcionados. Verifica e inténtalo de nuevo.',
+                        4000, 'rounded red');
+                }
+               })
+              }
+            }
+            }         
+          })                                 
+        }  
+      })
+      $('.antenderCita').click(function antenderCita(){
+        let cita_id = $("#IdCita").val();
+        let close = $("#idPrimeraVez").val();
+        let nombre_servicio = $("#nombreServi").val()
+          if(close === true){
+            location.href=`/citas/atender?cita=${cita_id}`
+          }else{
+            location.href=`/citas/formularioPrimeraVez?cita=${cita_id}`
+          }       
+      })
+      $('.antenderCitaSesion').click(function (){
+        let cita_id = $(this).attr("data-citaId");
+        let closePrimera = $(this).attr("data-primeraVez"); 
+        let nombre_servicio = $("#nombreServi").val()
+          if(closePrimera == 'true'){
+            location.href=`/citas/atender?cita=${cita_id}`
+          }else{
+            location.href=`/citas/sessionU?cita=${cita_id}`
+          }       
+      })
+      $('.AtenderPaciente').click( function(){
+          let idUser = $(this).attr("data-idU");
+          $("#idDelUsuario").val(idUser)
+          let cita_id = $(this).attr("data-citaId");
+          $("#IdCita").val(cita_id)
+          let closePrimera = $(this).attr("data-primeraVez"); 
+          $("#idPrimeraVez").val(closePrimera);
+          let _nombreServicio = $(this).attr("data-nombre");
+          $("#nombreServi").val(_nombreServicio)
+          let sede = $('#sede').val()
+          if(closePrimera == true){
+            location.href=`/citas/atender?cita=${cita_id}`
+          }else{
+                $('.modal').modal();
+                $("#modalInformeRemision").modal('open');
+                console.log(sede)
+                $.ajax({
+                method: 'GET',
+                url: `/api/pacientes/recepcionPacienteGet/${sede}/${idUser}`,
+                success: function (r) {
+                    console.log(">>>> Aqui tiene que recepcion: ", r)
+                  for(i=0;i<r.length;i++){
+                    datosRecepcion = r[i]
+                    var options = { year: "numeric", month: "long", day: "numeric", hour: "numeric", hour12:"false", minute: "numeric"};
+                    var fechaIncio = new Date(datosRecepcion.fechaSystem)
+                    datosRecepcion.fechaSystem =  fechaIncio.toLocaleString ("es-ES", options)
+                    $('#fechaRecep').val(datosRecepcion.fechaSystem)
+                    $('#casoRemi').val(datosRecepcion.caseRemition)
+                    $('#motiveConsulta').val(datosRecepcion.motiveConsulta)
+                    $('#anotacion_caso').val(datosRecepcion.anotacion1)
+                    $('#comprension_entrevistador').val(datosRecepcion.anotacion2)
+                    $('#acuerdo_intervencion').val(datosRecepcion.anotacion3)
+                    $('#observacion').val(datosRecepcion.observacion)
+                  }
+                }
+            })
+          }
+      })
+
+      // escribirCanva2()
+
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.log(textStatus);
+      console.log(jqXHR);
+      console.log(errorThrown);
+    },
+  });
+        // ESCRIBIR GRAFICA DE EFECTIVIDAD_DE_CITAS
+
+
+      if (sede != "") {
+      if(sede == '60049afed00d9b43a49e4da7'){
+        var profesianal = <%- JSON.stringify(user) %>;
+        if(profesianal.roles == "PG"){
+          let min = moment().startOf("day").format("X");
+          let max = moment().endOf("day").format("X");
+          $.ajax({
+          url: `/api/citas?filter[cita_start_timestamp][$gt]=${min}&filter[cita_start_timestamp][$lt]=${max}&filter[Profesional]=${user_id}&limit=1000`,
+          success: function (response) {
+            let programada = ""
+          let reprogramada = ""
+          let atendida = ""
+          let cancelada = ""
+          let casoFallido = ""
+
+          for (let i = 0; i < response.length; i++) {
+            const element = response[i];
+            if (element.estado == "Programada") {
+              programada++
+            } else if (element.estado == "Reprogramada") {
+              reprogramada++
+            } else if (element.estado == "Atendida") {
+              atendida++
+            } else if (element.estado == "Cancelada") {
+              cancelada++
+            }else if(element.estado == "CasoFallido"){
+              casoFallido++
+            }
+          }
+
+          if (programada == "") {
+            programada = 0
+          }
+          if (reprogramada == "") {
+            reprogramada = 0
+          }
+          if (atendida == "") {
+            atendida = 0
+          }
+          if (cancelada == "") {
+            cancelada = 0
+          }
+          let rows1 = {
+            y: programada,
+            exploded: true,
+            label: "Programada",
+          }
+          let rows2 = {
+            y: reprogramada,
+            label: "Reprogramada"
+          }
+          let rows3 = {
+            y: atendida,
+            label: "Atendida"
+          }
+          let rows4 = {
+            y: cancelada,
+            label: sede == '60049afed00d9b43a49e4da7' ? 'Nape' : 'Canceladas'
+          }
+          let rows5 = {
+            y: casoFallido,
+            label: "Caso Fallido"
+          }
+
+          // console.log(
+          //   programada,
+          //   reprogramada,
+          //   atendida,
+          //   cancelada
+          // );
+          canva_efectividad.push(rows1, rows2, rows3, rows4, rows5)
+          escribirCanva2()
+          }
+          })
+        }else if(profesianal.roles == "SP"){
+          $('#UniProfesional').change(function(){
+            canva_efectividad = []
+            let idPorfe = $(this).val()
+                  $.ajax({
+                      url: `/api/citas?filter[cita_start_timestamp][$gt]=${min}&filter[cita_start_timestamp][$lt]=${max}&filter[Profesional]=${idPorfe}&limit=1000`,
+                      success: function (response) {
+                      console.log(response)
+                      let programada = ""
+                      let reprogramada = ""
+                      let atendida = ""
+                      let cancelada = ""
+                      let casoFallido = ""
+
+                      for (let i = 0; i < response.length; i++) {
+                        const element = response[i];
+                        if (element.estado == "Programada") {
+                          programada++
+                        } else if (element.estado == "Reprogramada") {
+                          reprogramada++
+                        } else if (element.estado == "Atendida") {
+                          atendida++
+                        } else if (element.estado == "Cancelada") {
+                          cancelada++
+                        }else if(element.estado == "CasoFallido"){
+                          casoFallido++
+                        }
+                      }
+
+                      if (programada == "") {
+                        programada = 0
+                      }
+                      if (reprogramada == "") {
+                        reprogramada = 0
+                      }
+                      if (atendida == "") {
+                        atendida = 0
+                      }
+                      if (cancelada == "") {
+                        cancelada = 0
+                      }
+                      let rows1 = {
+                        y: programada,
+                        exploded: true,
+                        label: "Programada",
+                      }
+                      let rows2 = {
+                        y: reprogramada,
+                        label: "Reprogramada"
+                      }
+                      let rows3 = {
+                        y: atendida,
+                        label: "Atendida"
+                      }
+                      let rows4 = {
+                        y: cancelada,
+                        label: 'Nape'
+                      }
+                      let rows5 = {
+                        y: casoFallido,
+                        label: "Caso Fallido"
+                      }
+
+                      canva_efectividad.push(rows1, rows2, rows3, rows4, rows5)
+                      escribirCanva2()
+                    
+                      },
+                      error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus);
+                        console.log(jqXHR);
+                        console.log(errorThrown);
+                      },
+                    }); 
+                  });                         
+        }else {
+          let min = moment().startOf("day").format("X");
+          let max = moment().endOf("day").format("X");
+          let sede = $('#sede').val()
+          $.ajax({
+          url: `/api/citas?filter[cita_start_timestamp][$gt]=${min}&filter[cita_start_timestamp][$lt]=${max}&filter[Sede]=${sede}&limit=1000`,
+          success: function (response) {
+            let programada = ""
+          let reprogramada = ""
+          let atendida = ""
+          let cancelada = ""
+          let casoFallido = ""
+
+          for (let i = 0; i < response.length; i++) {
+            const element = response[i];
+            if (element.estado == "Programada") {
+              programada++
+            } else if (element.estado == "Reprogramada") {
+              reprogramada++
+            } else if (element.estado == "Atendida") {
+              atendida++
+            } else if (element.estado == "Cancelada") {
+              cancelada++
+            }else if(element.estado == "CasoFallido"){
+              casoFallido++
+            }
+          }
+
+          if (programada == "") {
+            programada = 0
+          }
+          if (reprogramada == "") {
+            reprogramada = 0
+          }
+          if (atendida == "") {
+            atendida = 0
+          }
+          if (cancelada == "") {
+            cancelada = 0
+          }
+          let rows1 = {
+            y: programada,
+            exploded: true,
+            label: "Programada",
+          }
+          let rows2 = {
+            y: reprogramada,
+            label: "Reprogramada"
+          }
+          let rows3 = {
+            y: atendida,
+            label: "Atendida"
+          }
+          let rows4 = {
+            y: cancelada,
+            label: sede == '60049afed00d9b43a49e4da7' ? 'Nape' : 'Canceladas'
+          }
+          let rows5 = {
+            y: casoFallido,
+            label: "Caso Fallido"
+          }
+
+          // console.log(
+          //   programada,
+          //   reprogramada,
+          //   atendida,
+          //   cancelada
+          // );
+          canva_efectividad.push(rows1, rows2, rows3, rows4, rows5)
+          escribirCanva2()
+          }
+          })
+        }
+      }else{
+        let min = moment().startOf("day").format("X");
+          let max = moment().endOf("day").format("X");
+          $.ajax({
+          url: `/api/citas?filter[cita_start_timestamp][$gt]=${min}&filter[cita_start_timestamp][$lt]=${max}&filter[Profesional]=${user_id}&limit=1000`,
+          success: function (response) {
+            let programada = ""
+          let reprogramada = ""
+          let atendida = ""
+          let cancelada = ""
+          let casoFallido = ""
+
+          for (let i = 0; i < response.length; i++) {
+            const element = response[i];
+            if (element.estado == "Programada") {
+              programada++
+            } else if (element.estado == "Reprogramada") {
+              reprogramada++
+            } else if (element.estado == "Atendida") {
+              atendida++
+            } else if (element.estado == "Cancelada") {
+              cancelada++
+            }else if(element.estado == "CasoFallido"){
+              casoFallido++
+            }
+          }
+
+          if (programada == "") {
+            programada = 0
+          }
+          if (reprogramada == "") {
+            reprogramada = 0
+          }
+          if (atendida == "") {
+            atendida = 0
+          }
+          if (cancelada == "") {
+            cancelada = 0
+          }
+          let rows1 = {
+            y: programada,
+            exploded: true,
+            label: "Programada",
+          }
+          let rows2 = {
+            y: reprogramada,
+            label: "Reprogramada"
+          }
+          let rows3 = {
+            y: atendida,
+            label: "Atendida"
+          }
+          let rows4 = {
+            y: cancelada,
+            label: 'Canceladas'
+          }
+          let rows5 = {
+            y: casoFallido,
+            label: "Caso Fallido"
+          }
+
+          // console.log(
+          //   programada,
+          //   reprogramada,
+          //   atendida,
+          //   cancelada
+          // );
+          canva_efectividad.push(rows1, rows2, rows3, rows4, rows5)
+          escribirCanva2()
+          }
+          })
+      }
+      }
+  var startDate = moment().startOf('month', hoy);
+
+  // Clone the value before .endOf()
+  var endDate = moment(startDate).endOf('month');
+
+  // just for demonstration:
+  // console.log(startDate.toDate());
+  // console.log(endDate.toDate());
+
+  // FILTRO PARA FECHAS ?filter[cita_start_timestamp][$gt]=${startDate}&filter[cita_start_timestamp][$lt]=${endDate}
+  let canva_estadistica_consulta = []
+
+  $.ajax({
+    url: `api/citas?filter[Profesional]=${user_id}&limit=1000`,
+    success: function (response) {
+      //console.log(response);
+      // ESCRIBIR GRAFICA DE ESTADISTICA DE CONSULTAS
+      let intervencion_clinica = ""
+      let intervencion_clinica_seguimiento = ""
+      let intervencion_infantil = ""
+      let intervencion_familiar = ""
+      let terapia_de_pareja = ""
+      let terapia_familiar = ""
+      let seguimiento_infantil = ""
+      let servicio_completo = ""
+
+      for (let i = 0; i < response.length; i++) {
+        const element = response[i];
+        const consulta = element.Servicio
+
+        //console.log(element);
+
+        if (consulta.nombre == "intervención clínica") {
+          intervencion_clinica++
+        } else if (consulta.nombre == "intervencion infantil") {
+          intervencion_infantil++
+        } else if (consulta.nombre == "intervención familiar   ") {
+          intervencion_familiar++
+        } else if (consulta.nombre == "terapia de pareja") {
+          terapia_de_pareja++
+        } else if (consulta.nombre == "intervencion clinica seguimiento") {
+          intervencion_clinica_seguimiento++
+        } else if (consulta.nombre == "TERAPIA INFANTIL SEG ") {
+          seguimiento_infantil++
+        } else if (consulta.nombre == "Servicio Completo #2") {
+          servicio_completo++
+        }
+      }
+
+      if (intervencion_clinica == "") {
+        intervencion_clinica = 0
+      } else if (intervencion_infantil == "") {
+        intervencion_infantil = 0
+      } else if (intervencion_familiar == "") {
+        intervencion_familiar = 0
+      } else if (terapia_de_pareja == "") {
+        terapia_de_pareja = 0
+      } else if (intervencion_clinica_seguimiento == "") {
+        intervencion_clinica_seguimiento = 0
+      } else if (seguimiento_infantil == "") {
+        seguimiento_infantil = 0
+      } else if (servicio_completo == "") {
+        servicio_completo = 0
+      }
+
+      // console.log(intervencion_clinica);
+      // console.log(intervencion_infantil);
+      // console.log(intervencion_familiar);
+      // console.log(terapia_de_pareja);
+      // console.log(intervencion_clinica_seguimiento);
+      // console.log(seguimiento_infantil);
+      // console.log(servicio_completo);
+
+      let rows1 = {
+        y: intervencion_clinica,
+        exploded: true,
+        label: "Intervención Clínica",
+      }
+      let rows2 = {
+        y: intervencion_infantil,
+        label: "Intervención Infantil"
+      }
+      let rows3 = {
+        y: intervencion_familiar,
+        label: "Intervención Familiar"
+      }
+      let rows4 = {
+        y: terapia_de_pareja,
+        label: "Terapia de Pareja"
+      }
+      let rows5 = {
+        y: intervencion_clinica_seguimiento,
+        label: "Intervención clinica seguimiento"
+      }
+      let rows6 = {
+        y: seguimiento_infantil,
+        label: "Terapia infantil seguimiento"
+      }
+      let rows7 = {
+        y: servicio_completo,
+        label: "Servicio completo"
+      }
+
+      canva_estadistica_consulta.push(rows1, rows2, rows3, rows4, rows5, rows6, rows7)
+      //console.log(rows1, rows2, rows3, rows4, rows5, rows6, rows7)
+      escribirCanva3()
+
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.log(textStatus);
+      console.log(jqXHR);
+      console.log(errorThrown);
+    },
+  });
+</script>
+
+<% include  view_distribution/bot2.ejs%>
