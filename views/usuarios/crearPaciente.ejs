@@ -85,9 +85,9 @@
                                     <legend for="genero" style="color: #999">Género</legend>                               
                                     <select id="genero" class="validate select browse-select">
                                         <option value="" disabled selected>Elige una opción</option>
-                                        <option value="Femenino">Femenino</option>
                                         <option value="Masculino">Masculino</option>
-                                        <option value="Intersexual">Intersexual</option>
+                                        <option value="Femenino">Femenino</option>   
+                                        <option value="Intersexual">Transgenero</option>
 
                                     </select>
                                 </div>
@@ -142,7 +142,7 @@
                                     <legend for="ocupacion" style="color: #999">Ocupación</legend>
                                      <select id="ocupacion" class="validate select browse-select">
                                         <option value="" disabled selected>Elige una opción Ocupación</option>
-                                        <option value="Desempleado(a)">Desempleado(a)</option>
+                                        <!-- <option value="Desempleado(a)">Desempleado(a)</option>
                                         <option value="Trabajador(a) Informal">Trabajador(a) Informal</option>
                                         <option value="Ama(o) de Casa">Ama(o) de Casa</option>
                                         <option value="Trabajador(a) Independiente">Trabajador(a) Independiente</option>
@@ -151,7 +151,7 @@
                                         <option value="Funcionario(a) Público(a)">Funcionario(a) Público(a)</option>
                                         <option value="Pensionado(a)">Pensionado(a)</option>
                                         <option value="Estudiante">Estudiante</option>
-                                        <option value="Estudiante USTA">Estudiante USTA</option>
+                                        <option value="Estudiante USTA">Estudiante USTA</option> -->
                                     </select>
                                 </div>
                             
@@ -168,6 +168,79 @@
                                     </select>
                                 </div>
                             </div><br>
+                            <div class="row">
+                                <div class="input-field col m6 s12">
+                                    
+                                    <input type="text" id="empresa_donde_labora">
+                                    <label for="empresaDL">Empresa Donde Labora <span style="color:red">*</span></label>
+                                </div>
+                                <div class="input-field col m6 s12">
+                                    
+                                    <input type="text"  id="empresa_cargo">
+                                    <label for="empresa_cargo">Cargo <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class=" col m6 s12">
+                                    <p>Oposición A La Presunción Legal De Donación</p>
+                                    <input type="radio" name="donacion" id="donacion_si" value="01">
+                                    <label for="donacion_si">si</label><br>
+                                    <input type="radio" name="donacion" id="donacion_no" value="02">
+                                    <label for="donacion_no">no</label><br>
+                                </div>
+                                <div class=" col m6 s12">
+                                    <p>Documento De Voluntad Anticipada:</p>
+                                      <input type="radio" id="anticipada_si" name="Anticipada" value="01" >
+                                      <label for="anticipada_si">si</label><br>
+                                      <input type="radio" id="anticipada_no" name="Anticipada" value="02" checked>
+                                      <label for="anticipada_no">no</label><br>
+                                </div>
+                                
+                            </div>
+                            <div class="row" id="toggleDocumetoIPS" style="display: none;">
+                                <div class="input-field col m4 s12">
+                                    <input type="text" id="Fecha_suscripcion" class="datepicker">
+                                    <label for="Fecha_suscripcion">Fecha de suscripción</label>
+                                </div>
+                                <div class=" col m4 s12">
+                                    <p>ips publica o ips privada</p>
+                                      <input type="radio" id="ipspublica" name="ipspp" value="publica">
+                                      <label for="ipspublica">Publica</label><br>
+                                      <input type="radio" id="ipsprivada" name="ipspp" value="privada">
+                                      <label for="ipsprivada">Privada</label><br>
+                                </div>
+                                <div class="input-field col m4 s12" id="togglepu" style="display: none;">
+                                    <legend for="selectepspu" style="color: #999">Ips Publica</legend>
+                                    <select id="selectepspu" class="validate select browse-select">
+                                       
+                                        <option value="" disabled selected>seleccione una opción</option>
+                                    </select>
+                                </div>
+                                <div class="input-field col m4 s12" id="togglepri" style="display: none;">
+                                    <legend for="selectepspri" style="color: #999">Ips privada</legend>
+                                    <select id="selectepspri" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción </option>
+                                
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="input-field col m12 s12" >
+                                    <select id="discapacidad" >
+                                        <option value="01">Discapacidad física </option>
+                                        <option value="02">Discapacidad visual </option>
+                                        <option value="03">Discapacidad auditiva </option>
+                                        <option value="04">Discapacidad intelectual  </option>
+                                        <option value="05">Discapacidad sicosocial (mental) </option>
+                                        <option value="06">Sordoceguera </option>
+                                        <option value="07">Discapacidad multiple  </option>
+                                        <option value="08">Sin discapacidad </option>
+                                    </select>
+                                    <label for="discapacidad">Discapacidad <span style="color:red">*</span></label>
+                                </div>
+                               
+                            </div>
                             <div class="row">
                                 <div class="input-field col m4 s12">
                                     <input id="email" type="email" class="validate">
@@ -405,12 +478,14 @@
                                     <legend style="color: #999">Pertenencia Étnica</legend>
                                     <select id="pertenencia_etnica" class="validate select browse-select">
                                         <option value="" disabled selected>Elige una opción</option>
-                                        <option value="Afrocolombiano">Afrocolombiano</option> Afrocolombiano
-                                        <option value="Raizal">Raizal</option> Raizal
-                                        <option value="Palenquero">Palenquero</option> Palenquero
-                                        <option value="Gitano">Gitano</option> Gitano
-                                        <option value="Indígena">Indígena</option> Indígena
-                                        <option value="No Aplica">No Aplica</option> No Aplica
+                                        <option value="01">Indígena</option>
+                                        <option value="02">ROM (Gitanos)</option>
+                                        <option value="03">Raizal (San Andres y providencia )</option>
+                                        <option value="04">Palenquero de Sab Basilio del Palenque</option>
+                                        <option value="05">Negro(a)</option>
+                                        <option value="06">Afrocolombiano(a)</option>
+                                        <option value="99">Ninguna</option>
+                                        <option value="No Aplica">No Aplica</option> 
                                     </select>
                                 </div>
                             </div>
@@ -588,7 +663,59 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
 <script>
- var locali=0;
+    const ipspublica = <%- JSON.stringify(IPS_P) %>
+
+    
+
+    $('input[type=radio][name=Anticipada]').change(function () {
+            if (this.value == '01') {
+                console.log('radio si')
+                $("#toggleDocumetoIPS").show(1000);          
+             }
+            else if (this.value == '02') {
+                  console.log('radio no')
+                  $("#toggleDocumetoIPS").hide(1000);
+
+
+            }
+        });
+        $('input[type=radio][name=ipspp]').change(function () {
+                if (this.value == 'publica') {
+                    console.log('radio publica')
+                    $("#togglepu").show(1000);
+                    $("#togglepri").hide(1000);
+                }
+                else if (this.value == 'privada') {
+                    console.log('radio privada')
+                    $("#togglepu").hide(1000);
+                    $("#togglepri").show(1000);
+
+                }
+            });
+            $('#selectepspu').html(`<option value="" disabled selected>Elige una opción </option>`);
+
+                for (let ips of ipspublica) {
+                    $('#selectepspu').append(`<option value="${ips["codigo"]}">${ips["nombre"]}</option>`);
+                    console.log(ips["nombre"]);
+                }
+                $('#selectepspu').material_select();
+            
+
+    const dataexel = <%- JSON.stringify(trabajos) %>;
+    //console.log(dataexel);
+    
+             
+        
+            $('#ocupacion').html(`<option value="" disabled selected>Elige una opción Ocupación</option>`);
+            
+            for(let trabajos of dataexel){
+                $('#ocupacion').append(`<option value="${trabajos['Descripción']}">${trabajos['Descripción']}</option>`);
+                //console.log(trabajos['Descripción']);
+            }
+            $('#ocupacion').material_select();
+    
+
+    var locali=0;
     var depart=0;
     var munici=0;
 
@@ -675,12 +802,12 @@
     });
     $('#identificacion').keyup(function() {
        let username = $('#identificacion').val()
-       console.log("Validando ")
+       //console.log("Validando ")
        $.ajax({
           method: 'GET',
           url: `/api/profesionales/validarId?filter[username]=${username}`,
           success: function (r) {
-              console.log(r)
+              //console.log(r)
               if(r==true){
                 Materialize.toast(`Ya Existe Un Usuario Creado Con Este Numero. ${username}`, 1000, 'rounded red')
               }else if(r == false){

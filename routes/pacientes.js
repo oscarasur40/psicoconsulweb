@@ -6,6 +6,18 @@ const HistoriaClinicaModel = require('../models/HistoriaClinicaModel')
 const RecepcionHistoria = require('../models/RecepcionPaciente')
 const CasoFallidoModel = require('../models/CasoFallidoModel')
 const RemisionModel = require('../models/RemisionModel')
+const XLSX = require('xlsx');
+
+function leerExcel(ruta){
+  const workbook = XLSX.readFile(ruta);
+  const workbooksheets = workbook.SheetNames;
+  const sheet = workbooksheets[0];
+  const dataexcel = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+  return dataexcel;
+}
+
+const data =  leerExcel('lib/EstructuraDetalladaCIIU_4AC.xlsx');
+const data_IPS_P = leerExcel('lib/IPS_PUBLICA.xlsx');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -69,7 +81,9 @@ router.get('/crear', function (req, res, next) {
     paises: require('../lib/Paises'),
     municipios: require('../lib/MunicipiosColombia'),
     provincia: require('../lib/ProvinciaEcuador'),
-    canton: require('../lib/CantonEcuador')
+    canton: require('../lib/CantonEcuador'),
+    trabajos: data,
+    IPS_P:data_IPS_P
   })
 })
 
