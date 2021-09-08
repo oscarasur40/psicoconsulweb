@@ -3,6 +3,7 @@
 const express = require('express')
 const router = express.Router()
 const create = require('./create')
+const buscarIpsPri = require('./getepspri')
 const getAll = require('./getAll')
 const getAllProfesional = require('./getAllProfesional')
 const updatePassword = require('./updatePassword')
@@ -30,7 +31,9 @@ const isLoggedAPI_SA_AS_PR_PA = require('../../mw/isLoggedAPI_SA_AS_PR_PA')
 const isLoggedAPI_SA_AS_PR = require('../../mw/isLoggedAPI_SA_AS_PR')
 
 /* GET home page. */
+
 router.post('/', isLoggedAPI_SA_AS_PR, create)
+router.get('/buscarips/',buscarIpsPri)
 router.get('/getAllProfesional/', isLoggedAPI_SA_AS_PR_PA, getAllProfesional)
 router.get('/getAllPacienteSup/:sede/:id', getAllPacienteSup)
 router.get('/', isLoggedAPI_SA_AS_PR_PA, getAll)

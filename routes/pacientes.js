@@ -7,17 +7,43 @@ const RecepcionHistoria = require('../models/RecepcionPaciente')
 const CasoFallidoModel = require('../models/CasoFallidoModel')
 const RemisionModel = require('../models/RemisionModel')
 const XLSX = require('xlsx');
-
+const fs = require("fs");
 function leerExcel(ruta){
   const workbook = XLSX.readFile(ruta);
   const workbooksheets = workbook.SheetNames;
   const sheet = workbooksheets[0];
   const dataexcel = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+
   return dataexcel;
+  
 }
+
+function filterByKeys(obj, keys = []) {
+  const filtered = []
+  keys.forEach(key => {
+    console.log(key);
+    for (const iterator of obj) {
+      if (iterator.hasOwnProperty(key)) {
+
+
+        filtered.push({
+          "id": iterator.codigo,
+          "text": iterator.nombre
+        })
+      }
+    }
+
+  })
+  return filtered
+}
+
+
+
 
 const data =  leerExcel('lib/EstructuraDetalladaCIIU_4AC.xlsx');
 const data_IPS_P = leerExcel('lib/IPS_PUBLICA.xlsx');
+//const data_IPS_PR = leerExcel('lib/IPS_PRIVADA.xlsx');
+//const data_IPS_PRI = JSON.stringify(filterByKeys(data_IPS_PR, ['codigo', 'nombre'])) ;
 
 /* GET home page. */
 router.get('/', function (req, res, next) {

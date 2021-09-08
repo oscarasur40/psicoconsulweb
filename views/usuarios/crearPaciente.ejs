@@ -198,28 +198,32 @@
                                 
                             </div>
                             <div class="row" id="toggleDocumetoIPS" style="display: none;">
-                                <div class="input-field col m4 s12">
+                                <div class="input-field col m6 s12">
                                     <input type="text" id="Fecha_suscripcion" class="datepicker">
                                     <label for="Fecha_suscripcion">Fecha de suscripción</label>
                                 </div>
-                                <div class=" col m4 s12">
+                                <div class=" col m6 s12">
                                     <p>ips publica o ips privada</p>
                                       <input type="radio" id="ipspublica" name="ipspp" value="publica">
                                       <label for="ipspublica">Publica</label><br>
                                       <input type="radio" id="ipsprivada" name="ipspp" value="privada">
                                       <label for="ipsprivada">Privada</label><br>
                                 </div>
-                                <div class="input-field col m4 s12" id="togglepu" style="display: none;">
+                                
+                            </div>
+
+                            <div class="row" >
+                                <div class="input-field col m12 s12" id="togglepu" style="display: none;">
                                     <legend for="selectepspu" style="color: #999">Ips Publica</legend>
-                                    <select id="selectepspu" class="validate select browse-select">
-                                       
-                                        <option value="" disabled selected>seleccione una opción</option>
+                                    <select id="selectepspu" style="width: 100%" class="js-example-basic-single js-states form-control">
+                                
+                                        <option value="" selected>seleccione una opción</option>
                                     </select>
                                 </div>
-                                <div class="input-field col m4 s12" id="togglepri" style="display: none;">
+                                <div class="input-field col m12 s12" id="togglepri" style="display: none;">
                                     <legend for="selectepspri" style="color: #999">Ips privada</legend>
-                                    <select id="selectepspri" class="validate select browse-select">
-                                        <option value="" disabled selected>Elige una opción </option>
+                                    <select lang="es" id="selectepspri"style="width: 100%" class="js-example-basic-single js-states form-control ">
+                                        
                                 
                                     </select>
                                 </div>
@@ -662,11 +666,80 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
+
+
 <script>
+
+    let epspri =0;
     const ipspublica = <%- JSON.stringify(IPS_P) %>
-
     
+    $('#selectepspri').select2({
+            language: "es",
+            ajax: {
+                url: 'http://localhost:3001/api/pacientes/buscarips',
+                dataType: 'json',
+                 delay: 500,
+                data: function (params) {
+                    return {
+                        term: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+                // parse the results into the format expected by Select2
+                // since we are using custom formatting functions we do not need to
+                // alter the remote JSON data, except to indicate that infinite
+                // scrolling can be used
+                params.page = params.page || 1;
 
+                return {
+                    results: data,
+                    pagination: {
+                        more: (params.page * 30) < data.length
+                    }
+                };
+            },
+            cache: true,
+            
+        },
+        placeholder: 'Buscar por ips',
+        minimumInputLength: 5,
+        templateResult: formatRepo,
+        templateSelection: formatRepoSelection
+                // AdditionalAJAX parameters go here; see the end of this chapter for the full code of this example
+            
+        });
+
+        function formatRepo(repo) {
+                if (repo.loading) {
+                    return repo.id;
+                }
+
+                var $container = $(
+                    "<div class='select2-result-repository clearfix'>" +
+                    "<div class='select2-result-repository__meta'>" +
+                    "<div class='select2-result-repository__text'></div>" +
+                    "<div class='select2-result-repository__id' ></div>" +
+                    "</div>" +
+                    "</div>"
+                );
+                
+                $container.find(".select2-result-repository__text").text(repo.text);
+                $container.find(".select2-result-repository__id").text(repo.id);
+                
+
+                return $container;
+            }
+
+            function formatRepoSelection(repo) {
+                return repo.text+": "+repo.id || repo.id ;
+            }
+
+            $("#selectepspri").change(function(){
+                epspri = $(this).val()
+                console.log(epspri);
+            });
+            
     $('input[type=radio][name=Anticipada]').change(function () {
             if (this.value == '01') {
                 console.log('radio si')
@@ -696,9 +769,9 @@
 
                 for (let ips of ipspublica) {
                     $('#selectepspu').append(`<option value="${ips["codigo"]}">${ips["nombre"]}</option>`);
-                    console.log(ips["nombre"]);
+                    //console.log(ips["nombre"]);
                 }
-                $('#selectepspu').material_select();
+                $('#selectepspu').select2();
             
 
     const dataexel = <%- JSON.stringify(trabajos) %>;
@@ -1201,6 +1274,15 @@
             const code = $('.iti__selected-dial-code').html();
             const phone = $('#phone').val();
 
+
+
+            const oposicion_donacion = $("input[name='rating1']" ).val() || "";
+            const documento_anticipada = $("input[name='Anticipada']").val() || "";
+            const Fecha_suscripcion = ($("#Fecha_suscripcion").val());
+            const selectepspu = ($("#selectepspu").val())
+            const selectepspri = ($("#selectepspri").val())
+            const discapacidad = ($("#discapacidad").val())
+
             const cell = $('#cell').val();
 
             const telefono = code.substring(4, 1) + phone;
@@ -1290,8 +1372,8 @@
             }
 
   
-
-
+            const empresa_labora = $('#empresaDL').val() || "";
+            const empresa_cargo = $('#empresa_cargo').val() || "";
 
             const zona = $('#zona').val();
             const direccion = $("#direccion").val() || "";
@@ -1301,6 +1383,7 @@
             const regimen_salud = $('#regimen_salud').val() || "";
             const pertenencia_etnica = $('#pertenencia_etnica').val() || "";
             const tipo_id = $('#tipo_id').val() || "";
+            const num_id = $('#identificacion').val() || "";
             const nacimiento_value = ($("#fecha_nacimiento").val())
                 .replace('Enero', 'Jan')
                 .replace('Abril', 'Apr')
@@ -1316,6 +1399,7 @@
             const Sedes = urlParams.get('sede');
 
             const body = {
+
                 primer_apellido,
                 segundo_apellido,
                 primer_nombre,
@@ -1329,6 +1413,14 @@
                 zona,
                 rh,
                 regimen_salud,
+                empresa_labora,
+                empresa_cargo,
+                oposicion_donacion,
+                documento_anticipada,
+                Fecha_suscripcion,
+                selectepspu,
+                selectepspri,
+                discapacidad,
                 eps,
                 pertenencia_etnica,
                 username,
