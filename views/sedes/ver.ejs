@@ -101,6 +101,10 @@
                                     <input id="nuevo_phone" name="phone" type="tel">
                                     <!-- <label for="phone">Teléfono: </label> -->
                                 </div>
+                                <div class="input-field col l12 s12">
+                                    <input id="nuevo_phone2" name="phone" type="tel">
+                                    <!-- <label for="phone">Teléfono: </label> -->
+                                </div>
                                 <div class="input-field col l12 s12 mt-5">
                                     <input id="nuevo_direccion" type="text" value="" class="validate">
                                     <label for="direccion">Dirección</label>
@@ -172,6 +176,15 @@
         separateDialCode: false,
         utilsScript: "https://cdnmetamedic.s3.amazonaws.com/js/intl-input/utils.js",
     });
+     var input2 = document.querySelector("#nuevo_phone2");
+        window.intlTelInput(input2, {
+
+            nationalMode: false,
+            placeholderNumberType: "MOBILE",
+            preferredCountries: ['co', 'gt'],
+            separateDialCode: false,
+            utilsScript: "https://cdnmetamedic.s3.amazonaws.com/js/intl-input/utils.js",
+        });
 
     $(document).on("click", ".select-wrapper", function (event) {
         event.stopPropagation();
@@ -204,6 +217,7 @@
 
                     $('#nuevo_nombre').val(response.nombre)
                     $('#nuevo_phone').val(response.telefono)
+                    $('#nuevo_phone2').val(response.telefono2)
                     $('#nuevo_direccion').val(response.direccion)
                     $('#sede_id').val(response._id)
                     $('#nuevo_representante_nombre').val(response.representante_nombre)

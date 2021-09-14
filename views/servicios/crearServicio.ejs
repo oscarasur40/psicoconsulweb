@@ -32,6 +32,7 @@
                                     <input id="cups" type="text">
                                     <label for="cups">CUPS: <span style="color:red">*</span></label>
                                 </div>
+                                
 
                                 <div class="input-field col m8 s12">
                                     <select id="Formulario" class="validate select browse-select">
@@ -43,6 +44,36 @@
                                     <input id="valor_consulta" type="number" min="0" step=".01" class="validate">
                                     <label for="valor_consulta">Valor de la consulta: <span
                                             style="color:red">*</span></label>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col m6 s12"> 
+                                        <select id="modalidad_consulta" class="validate select browse-select">
+                                            <option value="" disabled selected>Elige una opción</option>
+                                            <option value="01">Intramural</option>
+                                            <option value="02">Extramural unidad móvil</option>
+                                            <option value="03">Extramural domiciliaria</option>
+                                            <option value="04">Extramural jornada de salud</option>
+                                            <option value="05">extramural (atención prehospitalaria)</option>
+                                            <option value="06">Telemedicina interactiva</option>
+                                            <option value="07">Telemedicina no interactiva</option>
+                                            <option value="08">Telemedicina - Telexperticia</option>
+                                            <option value="09">Telemedicina - Telemonitoreo</option>
+                                        </select>
+                                        <label for="modalidad_consulta">Modalidad de Realizacón de Consulta</label>
+                                    </div>
+                                    <div class="input-field col m6 s12">
+                                        <select id="grupo_servicios" class="validate select browse-select">
+                                            <option value="" disabled selected>Elige una opción</option>
+                                            <option value="01">Consulta externa</option>
+                                            <option value="02">Apoyo diagnóstico y complementación terapéutica</option>
+                                            <option value="03">Internación</option>
+                                            <option value="04">Quirúrgico</option>
+                                            <option value="05">Atención inmediata</option>
+                                            
+                                        </select>
+                                        <label for="grupo_servicios">Grupo de Servicios</label>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -68,13 +99,15 @@
     $('input#input_text, textarea#textarea1').characterCounter();
 
     const sede_id = new URLSearchParams(window.location.search).get('sede');
+    const pais = <%- JSON.stringify(user) %>
+    console.log(pais)
     var cups = <%-JSON.stringify(cups)%>;
     var cupsauto = Object({});
     for (let i = 0; i < cups.length; i++) {
         const cup = cups[i];
-        cupsauto[(`${cup.codigo} | ${cup.nombre}`)] = null;
+        cupsauto[(`${cup.CODIGO} | ${cup.DESCRIPCION}`)] = null;
     }
-
+    
     $(document).on("click", ".select-wrapper", function (event) {
         event.stopPropagation();
     });
@@ -88,7 +121,7 @@
             method: 'GET',
             url: `/api/formularios?filter[Sede]=${sede_id}&limit=1000000&projection=nombre+preguntas`,
             success: function (response) {
-                console.log(response);
+                //console.log(response);
                 for (let i = 0; i < response.length; i++) {
                     const formulario = response[i];
                     $('#Formulario').append(
@@ -154,7 +187,8 @@
             const cups_nombre = cups[1]
             const Formulario = $('#Formulario').val()
             const valor_consulta = $('#valor_consulta').val()
-
+            const modalidad_consulta = $("#modalidad_consulta").val();
+            const grupo_servicios = $("#grupo_servicios").val();
 
             const body = {
                 Sede,
@@ -162,7 +196,9 @@
                 cups_codigo,
                 cups_nombre,
                 Formulario,
-                valor_consulta
+                valor_consulta,
+                modalidad_consulta,
+                grupo_servicios
             }
 
             console.log(body);

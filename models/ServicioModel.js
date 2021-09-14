@@ -77,7 +77,17 @@ const ServicioSchema = new Schema({
   valor_consulta: {
     type: Number,
     required: [true, 'Se debe asignar un valor de consulta al Servicio.']
+  },
+  modalidad_consulta: {
+    type: Number,
+    required: [true, 'Se debe asignar un valor de la modalidad de la consulta.']
+  },
+  grupo_servicios: {
+    type: Number,
+    required: [true, 'Se debe asignar un valor a el grupo de srvicios.']
   }
+
+
 }, {
   strict: true
 })

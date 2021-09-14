@@ -510,8 +510,12 @@ header h1{
                 <div class="col-md-7" style="font-family: Georgia, 'Times New Roman', Times, serif;">
                 <ul class="personal-info">
                   <li><span class="title">Numero Identifiación: </span><span class="text"><%= paciente.username %></span>
-                  <li><span class="title">Celular: </span><span class="text">
+                  <li><span class="title">Celular 1:</span><span class="text">
                   <a href=""><%= paciente.celular %></a></span></li>
+                  <li><span class="title">Celular 2: </span><span class="text">
+                      <a href="">
+                        <%= paciente.telefono %>
+                      </a></span></li>
                   <li><span class="title">Email: </span><span class="text">
                   <a href=""><%= paciente.email %></a></span></li>
                   <li><span class="title">Fecha Nacimiento: </span><span class="text"><%=paciente.yyyy_nacimiento%>-<%=paciente.mm_nacimiento%>-<%=paciente.dd_nacimiento%></span>
@@ -652,32 +656,26 @@ header h1{
                 </div>
 
                <div class="input-field col m2 s12">
-                <legend for="ocupacion" style="color: #999">Genero</legend>
+                <legend for="ocupacion" style="color: #999">Sexo Biológico</legend>
                   <select  id="genero" class="validate select browse-select">
                     <option value="" disabled>Elige una opción</option>
-                    <option value="Femenino" <%- paciente.genero_nacimiento == 'Femenino' ? 'selected' : '' %>>Femenino
+                    <option value="01" <%- paciente.genero_nacimiento=='01' ? 'selected' : '' %>>Masculino</option>
+                    <option value="02" <%- paciente.genero_nacimiento == '02' ? 'selected' : '' %>>Femenino
                     </option>
-                    <option value="Masculino" <%- paciente.genero_nacimiento == 'Masculino' ? 'selected' : '' %>>Masculino</option>
-                    <option value="Intersexual"  <%- paciente.genero_nacimiento == 'Intersexual' ? 'selected' : '' %>>Intersexual</option>
+                    
+                    <option value="03"  <%- paciente.genero_nacimiento == '03' ? 'selected' : '' %>>Indeterminado/Intersexual</option>
                   </select>
                 </div>
                 <div class="input-field col m3 s12">
-                  <legend for="ocupacion" style="color: #999">Identidad Sexual</legend>
+                  <legend for="ocupacion" style="color: #999">Identidad de Genero</legend>
                     <select  id="isex" class="validate select browse-select">
                         <option value="" disabled selected>Elige una opción</option>
-                        <option <%- paciente.identidad_sexual == 'Heterosexual' ? 'selected' : '' %> value="Heterosexual">Heterosexual</option>
-                        <option <%- paciente.identidad_sexual == 'Homosexual' ? 'selected' : '' %> value="Homosexual">Homosexual</option>
-                        <option <%- paciente.identidad_sexual == 'Bisexual' ? 'selected' : '' %> value="Bisexual">Bisexual</option>
-                        <option <%- paciente.identidad_sexual == 'Asexual' ? 'selected' : '' %> value="Asexual">Asexual</option>
-                        <option <%- paciente.identidad_sexual == 'Pansexual' ? 'selected' : '' %> value="Pansexual">Pansexual</option>
-                        <option <%- paciente.identidad_sexual == 'Transexual' ? 'selected' : '' %> value="Transexual">Transexual</option>
-                        <option <%- paciente.identidad_sexual == 'Intersexual' ? 'selected' : '' %> value="Intersexual">Intersexual</option>
-                        <option <%- paciente.identidad_sexual == 'Cisexual' ? 'selected' : '' %> value="Cisexual">Cisexual</option>
-                        <option <%- paciente.identidad_sexual == 'Bigénero' ? 'selected' : '' %> value="Bigénero">Bigénero</option>
-                        <option <%- paciente.identidad_sexual == 'Demigénero' ? 'selected' : '' %> value="Demigénero">Demigénero</option>
-                        <option <%- paciente.identidad_sexual == 'Agénero' ? 'selected' : '' %> value="Agénero">Agénero</option>
-                        <option <%- paciente.identidad_sexual == 'TercerSexo' ? 'selected' : '' %> value="TercerSexo">Tercer Sexo</option>
-                        <option <%- paciente.identidad_sexual == 'Génerofluido' ? 'selected' : '' %> value="Génerofluido">Género fluido</option>
+                        <option <%- paciente.identidad_sexual == '01' ? 'selected' : '' %> value="01">Masculino</option>
+                        <option <%- paciente.identidad_sexual == '02' ? 'selected' : '' %> value="02">Femenino</option>
+                        <option <%- paciente.identidad_sexual == '03' ? 'selected' : '' %> value="03">Transgénero</option>
+                        <option <%- paciente.identidad_sexual == '04' ? 'selected' : '' %> value="04">Neutro</option>
+                        <option <%- paciente.identidad_sexual == '05' ? 'selected' : '' %> value="05">No lo declara</option>
+                        
                     </select>
                 </div>
                 <div class="input-field col m3 s12">
@@ -709,20 +707,20 @@ header h1{
                   </select>
                   </div>
                  <div class="input-field col m3 s12">
-                  <!-- <input  id="ocupacion" type="text" class="validate" value="<%= paciente.ocupacion %>"> -->
+                  <!-- <input  id="ocupacion" type="text" class="validate" value="<%# paciente.ocupacion %>"> -->
                   <legend for="ocupacion" style="color: #999">Ocupación</legend>
                   <select id="ocupacion" class="validate select browse-select">
                     <option value="" disabled selected>Elige una opción</option>
-                    <option value="Desempleado(a)"<%- paciente.ocupacion == 'Desempleado(a)' ? 'selected' : '' %>>Desempleado(a)</option>
-                    <option value="Trabajador(a) Informal"<%- paciente.ocupacion == 'Trabajador(a) Informal' ? 'selected' : '' %>>Trabajador(a) Informal</option>
-                    <option value="Ama(o) de Casa"<%- paciente.ocupacion == 'Ama(o) de Casa' ? 'selected' : '' %>>Ama(o) de Casa</option>
-                    <option value="Trabajador(a) Independiente"<%- paciente.ocupacion == 'Trabajador(a) Independiente' ? 'selected' : '' %>>Trabajador(a) Independiente</option>
-                    <option value="Empleado(a)"<%- paciente.ocupacion == 'Empleado(a)' ? 'selected' : '' %>>Empleado(a)</option>
-                    <option value=" Empleado(a) USTA"<%- paciente.ocupacion == ' Empleado(a) USTA' ? 'selected' : '' %>> Empleado(a) USTA</option>
-                    <option value="Funcionario(a) Público(a)"<%- paciente.ocupacion == 'Funcionario(a) Público(a)' ? 'selected' : '' %>>Funcionario(a) Público(a)</option>
-                    <option value="Pensionado(a)"<%- paciente.ocupacion == 'Pensionado(a)' ? 'selected' : '' %>>Pensionado(a)</option>
-                    <option value="Estudiante"<%- paciente.ocupacion == 'Estudiante' ? 'selected' : '' %>>Estudiante</option>
-                    <option value="Estudiante USTA"<%- paciente.ocupacion == 'Estudiante USTA' ? 'selected' : '' %>>Estudiante USTA</option>
+                   <!--  <option value="Desempleado(a)"<%# paciente.ocupacion == 'Desempleado(a)' ? 'selected' : '' %>>Desempleado(a)</option>
+                    <option value="Trabajador(a) Informal"<%# paciente.ocupacion == 'Trabajador(a) Informal' ? 'selected' : '' %>>Trabajador(a) Informal</option>
+                    <option value="Ama(o) de Casa"<%# paciente.ocupacion == 'Ama(o) de Casa' ? 'selected' : '' %>>Ama(o) de Casa</option>
+                    <option value="Trabajador(a) Independiente"<%# paciente.ocupacion == 'Trabajador(a) Independiente' ? 'selected' : '' %>>Trabajador(a) Independiente</option>
+                    <option value="Empleado(a)"<%# paciente.ocupacion == 'Empleado(a)' ? 'selected' : '' %>>Empleado(a)</option>
+                    <option value=" Empleado(a) USTA"<%# paciente.ocupacion == ' Empleado(a) USTA' ? 'selected' : '' %>> Empleado(a) USTA</option>
+                    <option value="Funcionario(a) Público(a)"<%# paciente.ocupacion == 'Funcionario(a) Público(a)' ? 'selected' : '' %>>Funcionario(a) Público(a)</option>
+                    <option value="Pensionado(a)"<%# paciente.ocupacion == 'Pensionado(a)' ? 'selected' : '' %>>Pensionado(a)</option>
+                    <option value="Estudiante"<%# paciente.ocupacion == 'Estudiante' ? 'selected' : '' %>>Estudiante</option>
+                    <option value="Estudiante USTA"<%# paciente.ocupacion == 'Estudiante USTA' ? 'selected' : '' %>>Estudiante USTA</option> -->
                 </select>
                 </div>
 
@@ -1009,7 +1007,7 @@ header h1{
                                         })
                                         for (let i = 0; i < eps.length; i++) {
                                             const epsi = eps[i]; %>
-                                            <option <%- paciente.eps == epsi.code  ? 'selected' : '' %> value="<%= epsi.code %>"><%= epsi.name %></option>
+                                            <option <%- paciente.eps == epsi.code  ? 'selected' : '' %> value="<%= epsi.code %>"><%= epsi.code %>: <%= epsi.name %></option>
                                         <% } %>
                                     </select>
                                 </div>
@@ -1017,12 +1015,17 @@ header h1{
                                   <legend for="ocupacion" style="color: #999">Pertenencia Étnica</legend>
                                     <select   id="pertenencia_etnica" class="validate select browse-select">
                                         <option value="" disabled selected>Elige una opción</option>
-                                        <option <%- paciente.pertenencia_etnica == 'Afrocolombiano' ? 'selected' : '' %> value="Afrocolombiano">Afrocolombiano</option> Afrocolombiano
-                                        <option <%- paciente.pertenencia_etnica == 'Raizal' ? 'selected' : '' %> value="Raizal">Raizal</option> Raizal
-                                        <option <%- paciente.pertenencia_etnica == 'Palenquero' ? 'selected' : '' %> value="Palenquero">Palenquero</option> Palenquero
-                                        <option <%- paciente.pertenencia_etnica == 'Gitano' ? 'selected' : '' %> value="Gitano">Gitano</option> Gitano
-                                        <option <%- paciente.pertenencia_etnica == 'Indígena' ? 'selected' : '' %> value="Indígena">Indígena</option> Indígena
-                                        <option <%- paciente.pertenencia_etnica == 'No Aplica' ? 'selected' : '' %> value="No Aplica">No Aplica</option> No Aplica
+                                        <option <%- paciente.pertenencia_etnica=='01' ? 'selected' : '' %> value="01">Indígena</option> Indígena
+                                        <option <%- paciente.pertenencia_etnica=='02' ? 'selected' : '' %> value="02">ROM(Gitanos)</option> Gitanos
+                                        <option <%- paciente.pertenencia_etnica=='03' ? 'selected' : '' %> value="03">Raizal (San Andrés y Providencia)</option> Raizal (San Andrés y Providencia)
+                                        <option <%- paciente.pertenencia_etnica=='04' ? 'selected' : '' %> value="04">Palenquero de San Basilio de Palenque</option>Palenquero de San Basilio de Palenque
+                                        <option <%- paciente.pertenencia_etnica=='05' ? 'selected' : '' %> value="05">Negro(a) </option> Negro(a)
+                                        <option <%- paciente.pertenencia_etnica=='06' ? 'selected' : '' %> value="06">Afrocolombiano</option> Afrocolombiano
+                                        <option <%- paciente.pertenencia_etnica=='99' ? 'selected' : '' %> value="99">Ninguna de las Anteriores</option> Afrocolombiano Ninguna de las Anteriores
+                                        
+                                        
+                                        
+                                        
                                     </select>
                                 </div>
                             </div><br>
@@ -3395,6 +3398,24 @@ header h1{
             // $('#identificacion').val('');
             $('#comp_identificacion').characterCounter();
         })
+
+
+
+
+        const dataexel = <%- JSON.stringify(trabajos) %>;
+      //console.log(dataexel);
+
+        console.log(dataexel);
+
+      $('#ocupacion').html(`<option value="" disabled selected>Elige una opción Ocupación</option>`);
+
+      for (let trabajos of dataexel) {
+        $('#ocupacion').append(`<option value="${trabajos['Descripción']}">${trabajos['Descripción']}</option>`);
+        //console.log(trabajos['Descripción']);
+      }
+      $('#ocupacion').material_select();
+
+
       function saveData () {
             const url = '/api/pacientes/update';
             const method = 'PATCH'
@@ -3577,7 +3598,12 @@ header h1{
                 permisosUsers_editarInfo
             }
                 
-
+            /*
+            /////////////////////////////////////////////////////////////////////////////
+            ////////////////////////// ACTUALIZAR DPACIENTE /////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////
+            */
+            
 
             $.ajax({
                 method: method,

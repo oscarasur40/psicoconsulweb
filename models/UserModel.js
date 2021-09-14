@@ -92,6 +92,11 @@ const UserSchema = new Schema({
     required: false,
     default: ''
   },
+  ocupacionDescripcion: {
+    type: String,
+    required: false,
+    default: ''
+  },
   direccion: {
     type: String,
     required: false,
@@ -122,6 +127,78 @@ const UserSchema = new Schema({
       message: 'Revisa el formato del Email.'
     }
   },
+  ///////////////nuevos datos/////////////////////
+  empresa_labora: {
+    type: String,
+    required: false,
+    default: ''
+  },
+  empresa_cargo: {
+    type: String,
+    required: false,
+    default: ''
+  },
+  oposicion_donacion: {
+    type: String,
+    required: false,
+    default: 0
+  },
+  documento_anticipada: {
+    type: String,
+    required: false,
+    default: 0
+  },
+  Fecha_suscripcion: {
+    type: String,
+    required: false,
+    default: ""
+  },
+  selectepspu: {
+    type: Number,
+    required: false,
+    default: 0
+  },
+  selectepspri: {
+    type: Number,
+    required: false,
+    default: 0
+  },
+  discapacidad: {
+    type: String,
+    required: false,
+    default: ""
+  },
+  acompanante_nombre2: {
+    type: String,
+    required: false,
+    default: ""
+  },
+  acompanante_tipo_identificacion2: {
+    type: String,
+    required: false,
+    default: ""
+  },
+  acompanante_parentezco2: {
+    type: String,
+    required: false,
+    default: ""
+  },
+  acompanante_parentezco_otro2: {
+    type: String,
+    required: false,
+    default: ""
+  },
+  acompanante_telefono2: {
+    type: String,
+    required: false,
+    default: ""
+  },
+  acompanante_correo2: {
+    type: String,
+    required: false,
+    default: ""
+  },
+ 
   Sedes: [{
     type: Schema.Types.ObjectId,
     ref: 'Sede',
@@ -206,6 +283,10 @@ const UserSchema = new Schema({
     type: String,
     required: false
   },
+  municipio_nombre: {
+    type: String,
+    required: false
+  },
   canton: {
     type: String,
     required: false
@@ -230,7 +311,15 @@ const UserSchema = new Schema({
     type: String,
     required: false
   },
+  eps_nombre: {
+    type: String,
+    required: false
+  },
   pertenencia_etnica: {
+    type: String,
+    required: false
+  },
+  comunidad_pertenece: {
     type: String,
     required: false
   },

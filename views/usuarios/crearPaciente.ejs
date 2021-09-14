@@ -33,7 +33,7 @@
                                     <label>Tipo de Identifiación: <span style="color:red">*</span></label>
                                 </div>
                                 <div class="input-field col m4 s12">
-                                    <input id="identificacion" type="text" class="validate">
+                                    <input maxlength="20" minlength="3" id="identificacion" type="text" class="validate">
                                     <label for="identificacion">Número de Identificación <span style="color:red">*</span></label>
                                 </div>
                                   
@@ -50,19 +50,19 @@
                                 <input id="user_id" type="hidden" value="<%= user._id%>" class="validate">
 
                                 <div class="input-field col m6 s12">
-                                    <input id="primer_nombre" type="text" class="validate">
+                                    <input id="primer_nombre" type="text" class="validate" maxlength="60" minlength="2">
                                     <label for="primer_nombre">Primer Nombre <span style="color:red">*</span></label>
                                 </div>
                                 <div class="input-field col m6 s12">
-                                    <input id="segundo_nombre" type="text" class="validate">
+                                    <input id="segundo_nombre" type="text" class="validate" maxlength="60" minlength="2">
                                     <label for="segundo_nombre">Segundo Nombre</label>
                                 </div>
                                 <div class="input-field col m6 s12">
-                                    <input id="primer_apellido" type="text" class="validate">
+                                    <input id="primer_apellido" type="text" class="validate" maxlength="60" minlength="2">
                                     <label for="primer_apellido">Primer Apellido <span style="color:red">*</span></label>
                                 </div>
                                 <div class="input-field col m6 s12">
-                                    <input id="segundo_apellido" type="text" class="validate">
+                                    <input id="segundo_apellido" type="text" class="validate" maxlength="60" minlength="2">
                                     <label for="segundo_apellido">Segundo Apellido <span style="color:red">*</span></label>
                                 </div>
                             </div>
@@ -82,32 +82,25 @@
                                
                                 
                                 <div class="input-field col m2 s12">    
-                                    <legend for="genero" style="color: #999">Género</legend>                               
+                                    <legend for="genero" style="color: #999">Sexo Biológico</legend>                               
                                     <select id="genero" class="validate select browse-select">
                                         <option value="" disabled selected>Elige una opción</option>
-                                        <option value="Masculino">Masculino</option>
-                                        <option value="Femenino">Femenino</option>   
-                                        <option value="Intersexual">Transgenero</option>
+                                        <option value="01">Hombre</option>
+                                        <option value="02">Mujer</option>   
+                                        <option value="03">Indeterminado / intersexual</option>
 
                                     </select>
                                 </div>
                                 <div class="input-field col m3 s12">
-                                    <legend for="isex" style="color: #999">Identidad Sexual</legend>
+                                    <legend for="isex" style="color: #999">Identidad de Género</legend>
                                     <select name="sexo" id='isex' class='mi-selector'>
                                         <option value="" disabled selected>Elige una opción Identidad Sexual</option>
-                                        <option value="Heterosexual">Heterosexual</option>
-                                        <option value="Homosexual">Homosexual</option>
-                                        <option value="Bisexual">Bisexual</option>
-                                        <option value="Asexual">Asexual</option>
-                                        <option value="Pansexual">Pansexual</option>
-                                        <option value="Transexual">Transexual</option>
-                                        <option value="Intersexual">Intersexual</option>
-                                        <option value="Cisexual">Cisexual</option>
-                                        <option value="Bigénero">Bigénero</option>
-                                        <option value="Demigénero">Demigénero</option>
-                                        <option value="Agénero">Agénero</option>
-                                        <option value="TercerSexo">Tercer Sexo</option>
-                                        <option value="Génerofluido">Género fluido</option>
+                                        <option value="01">Masculino</option>
+                                        <option value="02">Femenino</option>
+                                        <option value="03">Transgénero</option>
+                                        <option value="04">Neutro</option>
+                                        <option value="05">No lo declara</option>
+                                        
                                     </select>                          
                                 </div>
                                 <div class="input-field col m3 s12">
@@ -140,8 +133,8 @@
                                 </div>
                                 <div class="input-field col m3 s12">
                                     <legend for="ocupacion" style="color: #999">Ocupación</legend>
-                                     <select id="ocupacion" class="validate select browse-select">
-                                        <option value="" disabled selected>Elige una opción Ocupación</option>
+                                     <select aria-placeholder="Elige una opción Ocupación" id="ocupacion" class="validate select browse-select">
+                                        <!--<option value="" disabled selected>Elige una opción Ocupación</option>-->
                                         <!-- <option value="Desempleado(a)">Desempleado(a)</option>
                                         <option value="Trabajador(a) Informal">Trabajador(a) Informal</option>
                                         <option value="Ama(o) de Casa">Ama(o) de Casa</option>
@@ -172,12 +165,12 @@
                                 <div class="input-field col m6 s12">
                                     
                                     <input type="text" id="empresa_donde_labora">
-                                    <label for="empresaDL">Empresa Donde Labora <span style="color:red">*</span></label>
+                                    <label for="empresaDL">Empresa Donde Labora </label>
                                 </div>
                                 <div class="input-field col m6 s12">
                                     
                                     <input type="text"  id="empresa_cargo">
-                                    <label for="empresa_cargo">Cargo <span style="color:red">*</span></label>
+                                    <label for="empresa_cargo">Cargo </span></label>
                                 </div>
                             </div>
                             <div class="row">
@@ -188,11 +181,11 @@
                                     <input type="radio" name="donacion" id="donacion_no" value="02">
                                     <label for="donacion_no">no</label><br>
                                 </div>
-                                <div class=" col m6 s12">
+                                <div class=" col m6 s12" >
                                     <p>Documento De Voluntad Anticipada:</p>
                                       <input type="radio" id="anticipada_si" name="Anticipada" value="01" >
                                       <label for="anticipada_si">si</label><br>
-                                      <input type="radio" id="anticipada_no" name="Anticipada" value="02" checked>
+                                      <input type="radio" id="anticipada_no" name="Anticipada" value="02">
                                       <label for="anticipada_no">no</label><br>
                                 </div>
                                 
@@ -267,7 +260,7 @@
                     </li> 
                     
                     <li>
-                        <div class="collapsible-header active"><i class="material-icons">dehaze</i> Dirección
+                        <div class="collapsible-header "><i class="material-icons">dehaze</i> Dirección
                         </div>
                         <div class="collapsible-body">
                             <div class="row">
@@ -281,7 +274,7 @@
                                        
                                         for (let i = 0; i < paises.length; i++) {
                                             const pais = paises[i]; %>
-                                            <option value="<%= pais.name %>"><%= pais.name %></option>
+                                            <option value="<%= pais.code %>"><%= pais.name %></option>
                                         <% } %>
                                     </select>
                                     <label for="pais">Pais <span style="color:red">*</span></label>
@@ -402,9 +395,8 @@
                                 <div class="input-field col m2 s12" style="    margin-top: 51px;">
                                     <select id="zona" class="validate select browse-select">
                                         <option value="" disabled selected>Elige una opción</option>
-                                        <option value="rural">Rural</option>
-                                        <option value="urbana">Urbana</option>
-                                        <option value="Otro">Otro</option>
+                                        <option value="01">Urbana</option>
+                                        <option value="02">Rural</option>                                     
                                     </select>
                                     <label>Zona</label>
                                 </div>
@@ -425,12 +417,12 @@
                     </li>
                     
                     <li id="ocultar_datos_afi">
-                        <div class="collapsible-header active"  ><i class="material-icons" >dehaze</i>Datos de afiliación</div>
+                        <div class="collapsible-header " ><i class="material-icons" >dehaze</i>Datos de afiliación</div>
                         <div class="collapsible-body">
                             <div class="row"  >
-                                <div class="input-field col m6 s12" >
+                                <div class="input-field col m6 s12" style="width: 50%;">
                                     <legend style="color: #999">RH</legend>
-                                    <select id="rh"   class="validate select browse-select">
+                                    <select id="rh" class="validate select browse-select" style="width: 100%;">
                                         <option value="" disabled selected>Elige una opción</option>
                                         <option value="A+">A+</option>
                                         <option value="A-">A-</option>
@@ -442,9 +434,9 @@
                                         <option value="AB-">AB-</option>
                                     </select>
                                 </div>
-                                <div class="input-field col m6 s12">
+                                <div class="input-field col m6 s12" style="width: 50%;">
                                     <legend style="color: #999">Régimen de Salud</legend>
-                                    <select id="regimen_salud" class="validate select browse-select">
+                                    <select id="regimen_salud" class="validate select browse-select" style="width: 100%;">
                                         <option value="" disabled selected>Elige una opción</option>
                                         <option value="1">Contributivo</option>
                                         <option value="2">Subsidiado</option>
@@ -457,42 +449,50 @@
                                         <option value="9">Especial</option>
                                     </select>
                                 </div>
-                                <div class="input-field col m6 s12">
-                                    <legend style="color: #999">Régimen de Salud</legend>
-                                      <select id="eps"
-                                        class="validate select browse-select membresia_precio_calc ">
-                                        <option value="" disabled selected>Elige una opción</option>
-                                        <% 
-                                        eps.sort(function (a, b) {
-                                            if (a.name > b.name) {
-                                                return 1
-                                            } else if (a.name < b.name) {
-                                                return -1
-                                            } else {
-                                                return 0
-                                            }
-                                        })
-                                        for (let i = 0; i < eps.length; i++) {
-                                            const epsi = eps[i]; %>
-                                            <option value="<%= epsi.code %>"><%= epsi.name %></option>
-                                        <% } %>
-                                    </select>
-                                </div>
-                                <div class="input-field col m6 s12">
-                                    <legend style="color: #999">Pertenencia Étnica</legend>
-                                    <select id="pertenencia_etnica" class="validate select browse-select">
-                                        <option value="" disabled selected>Elige una opción</option>
-                                        <option value="01">Indígena</option>
-                                        <option value="02">ROM (Gitanos)</option>
-                                        <option value="03">Raizal (San Andres y providencia )</option>
-                                        <option value="04">Palenquero de Sab Basilio del Palenque</option>
-                                        <option value="05">Negro(a)</option>
-                                        <option value="06">Afrocolombiano(a)</option>
-                                        <option value="99">Ninguna</option>
-                                        <option value="No Aplica">No Aplica</option> 
-                                    </select>
-                                </div>
                             </div>
+                                <div class="row">
+                                    <div class="input-field col m6 s12" style="width: 50%;">
+                                        <legend style="color: #999">EPS</legend>
+                                        <select id="eps" style="width: 100%;"
+                                            class="validate select browse-select membresia_precio_calc ">
+                                            <option value="" disabled selected>Elige una opción</option>
+                                            <% 
+                                            eps.sort(function (a, b) {
+                                                if (a.name > b.name) {
+                                                    return 1
+                                                } else if (a.name < b.name) {
+                                                    return -1
+                                                } else {
+                                                    return 0
+                                                }
+                                            }) 
+                                            for (let i = 0; i < eps.length; i++) {
+                                                const epsi = eps[i]; %>
+                                                <option value="<%= epsi.code %>"><%= epsi.name %></option>
+                                            <% } %>
+                                        </select>
+                                    </div>
+                                    <div class="input-field col m6 s12" style="width: 50%;">
+                                        <legend style="color: #999">Pertenencia Étnica</legend>
+                                        <select id="pertenencia_etnica" class="validate select browse-select" style="width: 100%;">
+                                            <option value="" disabled selected>Elige una opción</option>
+                                            <option value="01">Indígena</option>
+                                            <option value="02">ROM (Gitanos)</option>
+                                            <option value="03">Raizal (San Andres y providencia )</option>
+                                            <option value="04">Palenquero de San Basilio del Palenque</option>
+                                            <option value="05">Negro(a)</option>
+                                            <option value="06">Afrocolombiano(a)</option>
+                                            <option value="99">Ninguna de las Anteriores</option> 
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" style="display: none;" id="mostrarcomunidad">
+                                    <div class="input-firld col m12 s12" style="width: 50%;">
+                                        <input type="text" id="comunidadetnica" placeholder="Comunidad a la que Pertenece">
+                                    </div>
+                                
+                                </div>
+                                
                         </div>
                     </li>
                     <li>
@@ -501,10 +501,10 @@
                                 historia = user.Sedes[h].nombre === '2020' ? 1 : 0  %>
                             <% } %>
                             <% if(historia == 1) { %>
-                                <div class="collapsible-header active"><i class="material-icons">dehaze</i> Datos de contacto
+                                <div class="collapsible-header "><i class="material-icons">dehaze</i> Datos de contacto
                                 </div>
                             <% } else { %>
-                                <div class="collapsible-header active"><i class="material-icons">dehaze</i> datos acompañante menor de 18 y mayor de 60 años
+                                <div class="collapsible-header "><i class="material-icons">dehaze</i> datos acompañante menor de 18 y mayor de 60 años
                                 </div>
                         <% }  %>
 
@@ -547,7 +547,7 @@
                                
 
                                 <div class="input-field col m4 s12">
-                                    <input id="comp_identificacion" type="text" class="validate">
+                                    <input id="comp_identificacion" type="number" class="validate">
                                     <label for="comp_identificacion">Número de Identificación <span style="color:red">*</span></label>
                                 </div>
                             </div>
@@ -600,8 +600,117 @@
                             
                         </div>
                     </li> 
+
+                    <%#  ///////////////////////////////////////////////////////////////////////////////////////%>
+                    <%# //////////////////////////////////Datos de Acompañante 2////////////////////////////////%>
+                    <%# ////////////////////////////////////////////////////////////////////////////////////////%>
                     <li>
-                        <div class="collapsible-header active"><i class="material-icons">dehaze</i> Permisos  </div>
+                        <% let historia3 = 0
+                            for (let h = 0; h < user.Sedes.length; h++) {
+                                historia3 = user.Sedes[h].nombre === '2020' ? 1 : 0  %>
+                            <% } %>
+                            <% if(historia3 == 1) { %>
+                                <div class="collapsible-header "><i class="material-icons">dehaze</i> Datos de contacto
+                                </div>
+                            <% } else { %>
+                                <div class="collapsible-header "><i class="material-icons">dehaze</i> datos acompañante 2
+                                </div>
+                        <% }  %>
+
+                        <div class="collapsible-body">
+                            
+                            <div class="row">
+                                <% if (user.Sedes !== '60049afed00d9b43a49e4da7') { %>
+                                    <div class="input-field col m4 s12">
+                                        <select id="tipo_id_acompanate2" class="validate select browse-select">
+                                            <option value="" disabled selected>Elige una opción</option>
+                                            <option value="CC">Cédula De Ciudadanía</option>
+                                            <option value="CE">Cédula De Extranjería</option>
+                                            <option value="PA">Pasaporte</option>
+                                            <option value="PE">Permiso Especial De Permanencia</option>
+                                            
+                                        </select>
+                                        <label for="tipo_id_acompanate2">Tipo de Identifiación: <span style="color:red">*</span></label>
+                                    </div>
+
+                               <% }
+                               else  {  %>
+                                <div class="input-field col m4 s12">
+                                    <select id="tipo_id_acompanate2" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="CC">Cédula De Ciudadanía</option>
+                                        <option value="CE">Cédula De Extranjería</option>
+                                        <option value="CD">Carné Diplomático</option>
+                                        <option value="PA">Pasaporte</option>
+                                        <option value="PE">Permiso Especial De Permanencia</option>
+                                        <option value="RC">Registro Civil</option>
+                                        <option value="TI">Tarjeta De Identidad</option>
+                                        <option value="CN">Certificado De Nacido Vivo</option>
+                                        <option value="AS">Adulto Sin Identificar</option>
+                                        <option value="MS">Menor Sin Identificar</option>
+                                    </select>
+                                    <label for="tipo_id_acompanate2">Tipo de Identifiación: <span style="color:red">*</span></label>
+                                </div>
+
+                               <% } %>
+                               
+
+                                <div class="input-field col m4 s12">
+                                    <input id="comp_identificacion2" type="number" class="validate">
+                                    <label for="comp_identificacion2">Número de Identificación <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <input id="user_id2" type="hidden" value="<%= user._id%>" class="validate">
+
+                                <div class="input-field col m6 s12">
+                                    <input id="comp_Nombrecompleto2" type="text" class="validate">
+                                    <label for="comp_Nombrecompleto2">Nombre Completo <span style="color:red">*</span></label>
+                                </div>
+                                <% if (user.Sedes !== '60049afed00d9b43a49e4da7') { %>
+                                <div class="input-field col m3 s12">
+                                    
+                                    <select id="comp_Parentesco2" class="validate select browse-select">
+                                        <option value="" disabled selected>Elige una opción</option>
+                                        <option value="PA">padre - madre</option>
+                                        <option value="HI">hijo - hija</option>
+                                        <option value="ES">Esposo - esposa</option>
+                                        <option value="AB">abuelo - abuela</option>
+                                        <option value="TI">tio - tia</option>
+                                        <option value="CU">cuidador - cuidadora</option>
+                                        <option value="TL">tutor legal</option>
+                                        <option value="OT">Otro </option>
+                                        
+         
+                                    </select>
+                                   
+                                  
+                                    <label for="comp_Parentesco2">Parentezco <span style="color:red">*</span></label>
+  
+                                </div>
+                                <div class="input-field col m3 s12" id="input_otro2">
+                                <input type="text" id="otro2" placeholder="Otro" >
+                                <label for="input_otro2">Otro <span style="color:red">*</span></label>
+                                </div>
+                                <% } %>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col m3 s12">
+                                    <input id="comp_telefono2" type="number" class="validate">
+                                    <label for="comp_telefono2">Telefono <span style="color:red">*</span></label>
+                                </div>
+
+                                <div class="input-field col m4 s12">
+                                    <input id="comp_email2" type="email" class="validate">
+                                    <label for="comp_email2">Email <span style="color:red">*</span></label>
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                    </li> 
+                    <li>
+                        <div class="collapsible-header "><i class="material-icons">dehaze</i> Permisos  </div>
                         <div class="collapsible-body">
                             
                             <div class="row">
@@ -630,10 +739,10 @@
                                         <input type="checkbox" class="form-check-input" id="anexar_documentos">
                                         <label class="form-check-label" for="anexar_documentos">Anexar documentos</label>
                                     </div>
-                                    <div class="form-check">
+                                    <%# <div class="form-check">
                                         <input type="checkbox" class="form-check-input" id="autoReportCondition">
                                         <label class="form-check-label" for="autoReportCondition">Autoreporte de condiciones de salud</label>
-                                    </div>
+                                    </div> %>
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" id="editDataIfno">
                                         <label class="form-check-label" for="editDataIfno">Editar datos del paciente</label>
@@ -747,7 +856,11 @@
              }
             else if (this.value == '02') {
                   console.log('radio no')
+                    
                   $("#toggleDocumetoIPS").hide(1000);
+                  $("#togglepu").hide(1000);
+                  $("#togglepri").hide();
+                  //limpiar campos ips fecha
 
 
             }
@@ -773,19 +886,40 @@
                 }
                 $('#selectepspu').select2();
             
-
-    const dataexel = <%- JSON.stringify(trabajos) %>;
-    //console.log(dataexel);
-    
-             
         
-            $('#ocupacion').html(`<option value="" disabled selected>Elige una opción Ocupación</option>`);
-            
-            for(let trabajos of dataexel){
-                $('#ocupacion').append(`<option value="${trabajos['Descripción']}">${trabajos['Descripción']}</option>`);
-                //console.log(trabajos['Descripción']);
+        //llenar el selec de trabajos con clase y descripcion
+        const dataexel = <%- JSON.stringify(trabajos) %>;
+        const datostrabajos = []
+        for (const trabajos of dataexel) {
+            delete trabajos['Grupo']
+            delete trabajos['División']
+
+            datostrabajos.push({ clase: trabajos['Clase'], descripcion: trabajos['Descripción'] })
+
+        }
+        const resulttrabajos = datostrabajos.filter(trabajo => trabajo.clase !== undefined);
+
+
+        $('#ocupacion').html(`<option value="" disabled >Elige una opción Ocupación</option>`);
+
+        resulttrabajos.map(function (trabajo) {
+            $('#ocupacion').append(`<option value="${trabajo['clase']}">${trabajo['clase']}: ${trabajo['descripcion']}</option>`);
+
+        })
+
+        $('#ocupacion').material_select();
+
+
+        //pertenencia etnica 
+        $("#pertenencia_etnica").change(function(){
+            let etnia = this.value;
+            console.log(etnia)
+            if (etnia !== "99") {
+                $("#mostrarcomunidad").show();
+            }else{
+                $("#mostrarcomunidad").hide();
             }
-            $('#ocupacion').material_select();
+        })
     
 
     var locali=0;
@@ -933,6 +1067,17 @@
             $('#input_otro').hide();
          }
     });
+
+    //oculatar o mostrar otro acompañante
+    $('#input_otro2').hide();
+         $("#comp_Parentesco2").change(function (e) {
+             let value = String($(this).val())
+             if (value === "OT") {
+                 $('#input_otro2').show();
+             } else {
+                 $('#input_otro2').hide();
+             }
+         });
   
    
 
@@ -991,7 +1136,7 @@
                 
                 
               }
-              else if(pais==="Colombia"){
+              else if(pais==="CO"){
                   depart=1;
                   locali=0;
                   munici=0;
@@ -1014,7 +1159,7 @@
               
                 
 	          }
-              else if(pais=="Ecuador"){   
+              else if(pais=="EC"){   
              $('.provincia').show();
              
              $('#canton_select').show();
@@ -1149,6 +1294,7 @@
             var a = moment();
             var b = moment(valueBirth);
             var age = moment.duration(a.diff(b));
+            //var age = a.diff(b, 'years', false);
             var years = age.years();
             if(years > 0){
                 if (years < 6) { 
@@ -1257,6 +1403,9 @@
             $('#comp_identificacion').characterCounter();
         })
         
+       
+            
+            
 
         $('#enviar_data').click(function () {
             const url = '/api/pacientes';
@@ -1274,11 +1423,19 @@
             const code = $('.iti__selected-dial-code').html();
             const phone = $('#phone').val();
 
+            //select
+            var $input_get__select = $('#Fecha_suscripcion').pickadate(),
+                picker_get__select = $input_get__select.pickadate('picker')
+            
+  
+                
+                
+            
 
 
-            const oposicion_donacion = $("input[name='rating1']" ).val() || "";
+            const oposicion_donacion = Number($("input[name='rating1']").val() || "");
             const documento_anticipada = $("input[name='Anticipada']").val() || "";
-            const Fecha_suscripcion = ($("#Fecha_suscripcion").val());
+            const Fecha_suscripcion =  picker_get__select.get('select', 'yyyy-mm-dd')
             const selectepspu = ($("#selectepspu").val())
             const selectepspri = ($("#selectepspri").val())
             const discapacidad = ($("#discapacidad").val())
@@ -1293,10 +1450,12 @@
             const escolaridad = $("#escolaridad").val() || "";
             const estado_civil = $("#estado_civil").val() || "";
             const ocupacion = $("#ocupacion").val() || "";
+            const ocupacionDescripcion = $('select[id="ocupacion"] option:selected').text() || "";
             const pais = $('#pais').val();
             const canton = $('#canton').val();
             const provincia = $('#provincia').val();
 
+            //datos de acompañante 
             const acompanante_nombre = $("#comp_Nombrecompleto").val() || "";
             const acompanante_tipo_identificacion = $("#tipo_id_acompanate").val() || "DNI";
             const acompanante_identificacion = $("#comp_identificacion").val() || "";
@@ -1304,8 +1463,16 @@
             const acompanante_parentezco_otro = $("#otro").val() || "";
             const acompanante_telefono = $("#comp_telefono").val() || "";
             const acompanante_correo = $("#comp_email").val() || "prueba@gmail.com";
-           
 
+            //datos de acompañante 2
+           
+            const acompanante_nombre2 = $("#comp_Nombrecompleto2").val() || "";
+            const acompanante_tipo_identificacion2 = $("#tipo_id_acompanate2").val() || "DNI";
+            const acompanante_identificacion2 = $("#comp_identificacion2").val() || "";
+            const acompanante_parentezco2 = $("#comp_Parentesco2").val() || "DNI";
+            const acompanante_parentezco_otro2 = $("#otro2").val() || "";
+            const acompanante_telefono2 = $("#comp_telefono2").val() || "";
+            const acompanante_correo2 = $("#comp_email2").val() || "prueba@gmail.com";
             
             let permisosUsers_CreateCitas = 0, permisosUsers_DescargaCertificado = 0, 
                 permisosUsers_DescargaRemisiones = 0, permisosUsers_DescargaHistorialClinico = 0, 
@@ -1348,6 +1515,7 @@
             var departamento="";
             var municipio="";
             var localidad
+            const municipio_nombre ="";
             if(depart==0){
               departamento = $('input.departamento1').val();
             }
@@ -1357,10 +1525,12 @@
 
 
             if(munici==0){
-              municipio = $('input.municipio1').val();
+              municipio = $('#municipio').val();
+                municipio_nombre = $('select[id="municipio"] option:selected').text() || "";
             }
             else{
-              municipio = $('select.municipiosSelect2').val();
+              municipio = $('#municipio').val();
+              municipio_nombre = $('select[id="municipio"] option:selected').text() || "";
             }
 
 
@@ -1372,16 +1542,19 @@
             }
 
   
-            const empresa_labora = $('#empresaDL').val() || "";
+            const empresa_labora = $('#empresa_donde_labora').val() || "";
             const empresa_cargo = $('#empresa_cargo').val() || "";
+            //const empresa_donde_labora = $("#empresa_donde_labora").val() || "";
 
             const zona = $('#zona').val();
             const direccion = $("#direccion").val() || "";
             const estrato = $("#estrato").val() || "";
             const rh = $('#rh').val() || "";
             const eps = $('#eps').val() || "";
+            const eps_nombre = $('select[id="eps"] option:selected').text() || ""; 
             const regimen_salud = $('#regimen_salud').val() || "";
             const pertenencia_etnica = $('#pertenencia_etnica').val() || "";
+            const comunidad_pertenece = $("#comunidadetnica").val() || "";
             const tipo_id = $('#tipo_id').val() || "";
             const num_id = $('#identificacion').val() || "";
             const nacimiento_value = ($("#fecha_nacimiento").val())
@@ -1390,10 +1563,10 @@
                 .replace('Agosto', 'Aug')
                 .replace('Diciembre', 'Dec') ||
                 '1 Jan, 2000';
-            const nacimiento_arr = (moment(nacimiento_value).format('DD,MM,YYYY')).split(',');
-            const dd_nacimiento = nacimiento_arr[0];
+            const nacimiento_arr = (moment(nacimiento_value).format('YYYY,MM,DD')).split(',');
+            const dd_nacimiento = nacimiento_arr[2];
             const mm_nacimiento = nacimiento_arr[1];
-            const yyyy_nacimiento = nacimiento_arr[2];
+            const yyyy_nacimiento = nacimiento_arr[0];
             const ts_nacimiento = moment(nacimiento_value).unix()
             const urlParams = new URLSearchParams(window.location.search);
             const Sedes = urlParams.get('sede');
@@ -1409,12 +1582,14 @@
                 provincia,
                 canton,
                 municipio,
+                municipio_nombre,
                 localidad,
-                zona,
+                zona,//utc
                 rh,
                 regimen_salud,
                 empresa_labora,
                 empresa_cargo,
+                //empresa_donde_labora,
                 oposicion_donacion,
                 documento_anticipada,
                 Fecha_suscripcion,
@@ -1422,7 +1597,9 @@
                 selectepspri,
                 discapacidad,
                 eps,
+                eps_nombre,
                 pertenencia_etnica,
+                comunidad_pertenece,
                 username,
                 tipo_id,
                 password,
@@ -1438,6 +1615,7 @@
                 estado_civil,
                 ocupacion,
                 direccion,
+                ocupacionDescripcion,
                 estrato,
                 telefono,
                 celular,
@@ -1450,6 +1628,14 @@
                 acompanante_parentezco_otro,
                 acompanante_telefono,
                 acompanante_correo,
+                //acomapañante 2
+                acompanante_nombre2,
+                acompanante_tipo_identificacion2,
+                acompanante_identificacion2,
+                acompanante_parentezco2,
+                acompanante_parentezco_otro2,
+                acompanante_telefono2,
+                acompanante_correo2,
                 permisosUsers_FirmaConsentimiento,
                 permisosUsers_CreateCitas,
                 permisosUsers_DescargaCertificado,
@@ -1487,7 +1673,7 @@
                         `Hubo un error en los datos proporcionados.<br>Verificar e Intentar de nuevo.<br>${htmlErrors}`,
                         10000, 'rounded red');
                 }
-            })
+            }) 
 
         })
     })

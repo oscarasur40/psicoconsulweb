@@ -50,7 +50,7 @@ router.get('/crear', function (req, res, next) {
   res.render('servicios/crearServicio', {
     title: 'Crear Servicio',
     user: req.user,
-    cups: require('../lib/CUPS')
+    cups: require('../lib/Cups_2021_RESOLUCION_2238_ 20')
   })
 })
 

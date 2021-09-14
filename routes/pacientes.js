@@ -182,7 +182,8 @@ router.get('/ver', function (req, res) {
                         moment: require('moment'),
                         recepcion: reception,
                         casoFallido: casoFallidi,
-                        remision: remition
+                        remision: remition,
+                        trabajos: data
                       })
                     }
                   })

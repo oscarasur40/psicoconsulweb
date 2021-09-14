@@ -590,7 +590,7 @@
 <% include  ../../view_distribution/sidebar-left.ejs%>
 <%
     const formulario = HistoriaClinica.formulario
-    const servicio = HistoriaClinica.Servicio
+    const servicio = HistoriaClinica.Cita.Servicio
     const paciente = HistoriaClinica.Paciente[0]
     const profesional = Cita.Profesional
     const HC_datos = HistoriaClinica.datos_formulario 
@@ -765,6 +765,105 @@ if(sede_id == '60049afed00d9b43a49e4da7'){ %>
                             </div>
                         </div>
                     </li>
+
+
+
+                            <li>
+                                <div class="collapsible-header active"><i class="material-icons">assignment</i>Datos de Consulta</div>
+                                <div class="collapsible-body">
+                                    <div class="row">
+                                        <div class="input-field col s6 m12">
+                                            <input type="text" id="realizacion_consulta" disabled value="<%= servicio.modalidad_consulta %>">
+                                            <span class="helper-text" data-error="correcto" data-success="incorrecto">Modalidad de Consulta</span>
+                                            
+                                        </div>
+                                        <div class="input-field col s6 m12">
+                                            <input type="text" id="grupo_servicios" disabled value="<%= servicio.grupo_servicios %>">
+                                            <span class="helper-text" data-error="correcto" data-success="incorrecto">Grupo de Servicios</span>
+                                        </div>
+                                        <div class="input-field col s6 m12">
+                                            <select  id="entorno_atencion">
+                                                <option value="" disabled>seleccione una opcion</option>
+                                                <option value="01">Hogar</option>
+                                                <option value="02">Comunitario</option>
+                                                <option value="03">Escolar</option>
+                                                <option value="04">Laboral</option>
+                                                <option value="05">Institucional</option>
+                                            </select>
+                                            <label >Entorno donde se Realiza la Atención</label>
+                                        </div>
+                                        <div class="input-field col s6 m12">
+                                            <select id="entorno_atencion">
+                                                <option value="" disabled>seleccione una opcion</option>
+                                                <option value="01">Demanda espontanea</option>
+                                                <option value="02">Derivado de consulta externa</option>
+                                                <option value="03">Derivado de urgencias</option>
+                                                <option value="04">Derivado de hospitalización</option>
+                                                <option value="05">Derivado de sala de cirugía</option>
+                                                <option value="06">Derivado de sala de partos</option>
+                                                <option value="07">recien nacido en la institución</option>
+                                                <option value="08">Recien nacido en otra institución</option>
+                                                <option value="09">Derivado o referido de hospitalización domiciliaria</option>
+                                                <option value="10">Derivado de atención domiciliaria</option>
+                                                <option value="11">Derivado de telemedicina</option>
+                                                <option value="12">Derivado de jornada de salud</option>
+                                                <option value="13">Referido de otra institución</option>
+                                                <option value="14">Contrareferido de otra institución</option>
+                                            </select>
+                                            <label>Via de Ingreso al Servisio de Salud</label>
+                                        </div>
+                                        <div class="input-field col s6 m12">
+                                            <select id="causa_atencion">
+                                                <option value="" disabled>seleccione una opcion</option>
+                                                <option value="21">Accidente de trabajo</option>
+                                                <option value="22">Accidente en el hogar</option>
+                                                <option value="23">Accidente de tránsito de orígen común</option>
+                                                <option value="24">Accidente de tránsito de orígen laboral</option>
+                                                <option value="25">Accidente en el entorno educativo</option>
+                                                <option value="26">Otro tipo de accidente</option>
+                                                <option value="27">Eventro catastrófico de orígen natural</option>
+                                                <option value="28">Lesión por agresión</option>
+                                                <option value="29">Lesión auto infligida</option>
+                                                <option value="30">Sospecha de violencia física</option>
+                                                <option value="31">Sospecha de violencia psicológica</option>
+                                                <option value="32">Sospecha de violencia sexual</option>
+                                                <option value="33">Sospecha de negligencia y abandono</option>
+                                                <option value="34">IVE relacionado con peligro a la salud o la vida de la mujer</option>
+                                                <option value="35">IVE por malformación congénita incompatible con la vida</option>
+                                                <option value="36">IVE por violencia sexual, incesto o por inseminación artificial o trasfusión de ovulo fecundado no consentida</option>
+                                                <option value="37">Evento adverso en salud</option>
+                                                <option value="38">Enfermedad general</option>
+                                                <option value="39">Enfermedad laboral</option>
+                                                <option value="40">Promoción y mantenimiento de la salud - intervenciones individuales</option>
+                                                <option value="41">Intervención colectiva</option>
+                                                <option value="42">Atención de población materno perinatal</option>
+                                                <option value="43">Seguridad y salud en el trabajo</option>
+                                                <option value="44">Otros eventos catastroficos</option>
+                                                <option value="45">Accidente de mina antipersonal - MAP</option>
+                                                <option value="46">Accidente de artefacto explosivo improvisado - AEI</option>
+                                                <option value="47">Accidente de munición sin explotar - MUSE</option>
+                                                <option value="48">Otra victima de conflicto armado Colombiano</option>
+                                                <option value="49">Riesgo ambiental</option>
+                                            </select>
+                                            <label for="">Causa que Motiva la Atención</label>
+                                        </div>
+
+                                        <div class="input-field col s6 m12">
+                                            <select id="entorno_atencion">
+                                                <option value="" disabled>Calsificación de triage</option>
+                                                <option value="01">Triaje I</option>
+                                                <option value="02">Triaje II</option>
+                                                <option value="03">Triaje III</option>
+                                                <option value="04">Triaje IV</option>
+                                                <option value="05">Triaje V</option>
+                                            </select>
+                                            <label>Triage</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+
                     <li>
                         <div class="collapsible-header active"><i class="material-icons">assignment</i>
                            Firma Consentimiento
@@ -1222,6 +1321,7 @@ if(sede_id == '60049afed00d9b43a49e4da7'){ %>
                             </div>
                             
                         </li><br>
+
 
                     <% } %>
                     <% }  else if (HC_datos){ %>
@@ -2473,8 +2573,9 @@ if(sede_id == '60049afed00d9b43a49e4da7'){ %>
                                 </div>
                             </span></div>
                         </li>
+                        
                         <li>
-                            <div class="collapsible-header"><i class="material-icons">filter_drama</i>Diagnóstico</div>
+                            <div class="collapsible-header"><i class="material-icons">filter_drama</i>Diagnóstico1</div>
                             <div class="collapsible-body"><span>
                                 <div class="row">
                                     <div class="input-field col s6">    
@@ -2668,7 +2769,7 @@ if(sede_id == '60049afed00d9b43a49e4da7'){ %>
                     </li>
                     <li>
                         <div class="collapsible-header active"><i class="material-icons">dehaze</i>
-                            <i class="material-icons">save</i> Diagnóstico
+                            <i class="material-icons">save</i> Diagnóstico2
                         </div>
                             <div class="collapsible-body">
                                <% if(datos_selectores){ %>
@@ -2747,6 +2848,41 @@ if(sede_id == '60049afed00d9b43a49e4da7'){ %>
                                                 <option value="08">Detección de alteraciones de agudeza visual</option>
                                                 <option value="09">Detección de enfermedad profesional</option>
                                                 <option value="10">No aplica</option>
+                                                <option value="11">Valoración integral para la promoción y mantenimiento</option>
+                                                <option value="12">Detección temprana de enfermedad general</option>
+                                                <option value="13">Detección temprana de enfermedad laboral</option>
+                                                <option value="14">Protección especificaDiagnóstica</option>
+                                                <option value="15">Diagnostico</option>
+                                                <option value="16">Tratamiento</option>
+                                                <option value="17">Rehabilitación</option>
+                                                <option value="18">Paliación</option>
+                                                <option value="19">Planificación familiar y anticoncepción</option>
+                                                <option value="20">Promoción y apoyo a la lactancia materna</option>
+                                                <option value="21">Atención básica de orientación familiar</option>
+                                                <option value="22">Atención basica para el cuidado preconcepcional</option>
+                                                <option value="23">Atención para el cuidado prenatal</option>
+                                                <option value="24">Interrupción voluntaria de embarazo</option>
+                                                <option value="25">Atención del parto y el puerperio</option>
+                                                <option value="26">Atención para el cuidado del recien nacido</option>
+                                                <option value="27">Atención para el seguimiento del recien nacido</option>
+                                                <option value="28">Preparación para la maternidad y la paternidad</option>
+                                                <option value="29">Promoción de actividad fisica</option>
+                                                <option value="30">Promoción de la cesación del tabaquismo</option>
+                                                <option value="31">Prevención del consumo de sustancias psicoactivas</option>
+                                                <option value="32">Promoción de la alimentación saludable</option>
+                                                <option value="33">Promoción para el ejercicio de los derechos sexuales y derechos reproductivos</option>
+                                                <option value="34">Promoción para el desarrollo de habilidades para la vida</option>
+                                                <option value="35">Promoción para la construcción de estrategias de afrontamiento frente a sucesos vitales</option>
+                                                <option value="36">Promoción de la sana convivencia y tejido social</option>
+                                                <option value="37">Promoción de un ambiente seguro y de cuidado y protección del ambiente</option>
+                                                <option value="38">Promoción del empoderamiento para el ejercicio del derecho a la salud</option>
+                                                <option value="39">Promoción para la adopción de practicas de crianza y cuidado para la salud</option>
+                                                <option value="40">Promoción de la capacidad de agencia y cuidado de la salud</option>
+                                                <option value="41">Desarrollo de las habilidades cognitivas</option>
+                                                <option value="42">Intervención colectiva</option>
+                                                <option value="43">Modificación de la estetica corporal (fines esteticos)</option>
+                                                <option value="44">Otra</option>
+
                                             </select>
                                             <label for="FinalidadComercial">Finalidad De La Consulta</label>
                                         </div>                                    
@@ -2802,6 +2938,50 @@ if(sede_id == '60049afed00d9b43a49e4da7'){ %>
                                         <%- include('../../formularios/campos/cie10.ejs', campo) %>
                                     </div>
                                 </div> -->
+
+                                <div class="row">
+                                    <div class="input-field col s6">
+                                        <select id="tipoDiagnosticoComercial" class="validate select browse-select">
+                                            <option value="" disabled selected>Elige una opción</option>
+                                            <option value="1">Procedimiento en salud </option>
+                                            <option value="2">medicamento con registro sanitario </option>
+                                            <option value="3">Medicamento vital no disponible</option>
+                                            <option value="4">Preparación magistral </option>
+                                            <option value="5">Medicamento con uso no incluido en el registro sanitario (listado UNIRS) </option>
+                                            <option value="6">Dsipositivo médico </option>
+                                            <option value="7">Componentes sanguineos </option>
+                                            <option value="8">Fluidos orgánicos </option>
+                                            <option value="9">Órganos </option>
+                                            <option value="10">Tejidos </option>
+                                            <option value="11">Células </option>
+                                            <option value="12">Producto de soporte nutricional </option>
+                                            <option value="13">Servicio complementario </option>
+                                           
+                                        </select>
+                                        <label for="tipoDiagnosticoComercial">Tipo de tecnología en salud</label>
+                                    </div>
+
+                                    <div class="input-field col s6">
+                                        <input type="number" id="codigo_tec_salud">
+                                        <label for="codigo_tec_salud">Codigo de tecnología en salud</label>
+                                    
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s4">
+                                        <input type="number" id="codigo_tec_salud" value="<%= servicio.cups_codigo %>" disabled>
+                                        <label for="codigo_cups">Codigo CUPS</label>
+                                    
+                                    </div>
+                                    <div class="input-field col s4">
+                                        <input type="text" id="codigo_tec_salud" value=" <%= servicio.cups_nombre %>" disabled>
+                                        <label for="codigo_nombre">Nombre codigo</label>
+                                    
+                                    </div>
+                                        
+                                </div>
+
                              </div>
                     </li>
                     <li>
