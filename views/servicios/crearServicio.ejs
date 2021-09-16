@@ -105,6 +105,15 @@
     var cupsauto = Object({});
     for (let i = 0; i < cups.length; i++) {
         const cup = cups[i];
+        if (cup.CODIGO.length <= 5) {
+            continue;
+        }
+        if (cup.CODIGO == "Excluye:") {
+            continue;
+        }
+        if (cup.CODIGO == "Incluye:") {
+            continue;
+        }
         cupsauto[(`${cup.CODIGO} | ${cup.DESCRIPCION}`)] = null;
     }
     

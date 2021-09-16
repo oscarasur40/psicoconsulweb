@@ -19,6 +19,7 @@
               <th>Valor</th>
               <th><i class="material-icons">people</i></th>
               <th><i class="material-icons">settings</i></th>
+              <th><i class="material-icons">repeat</i></th>
             </tr>
           </thead>
           <tbody id="tabla_usuarios">
@@ -33,18 +34,28 @@
 <% include  ../view_distribution/sidebar-right.ejs%>
 <% include  ../view_distribution/bot1.ejs%>
 <script>
-  $(document).ready(function () {
+  $(document).ready(function () { 
+     
+
+  })
+
+   
     const urlParams = new URLSearchParams(window.location.search);
     const sede = urlParams.get('sede');
     const projectionURI = '-Sede -creador'
     // -Formulario.nombre+Profesionales._id+cups_codigo+cups_nombre+nombre+valor_consulta
     $('.dropdown-trigger').dropdown();
     const url = `/api/servicios?filter[Sede]=${sede}&limit=1000&projection=${projectionURI}`
+     
+    $(document).ready(function(){
+
+
+   
 
     $.ajax({
       url: url,
       success: function (response) {
-        console.log(response)
+        
         for (let i = 0; i < response.length; i++) {
           const servicio = response[i];
           $('#tabla_usuarios').append(`
@@ -57,13 +68,56 @@
                         <td> ${servicio.Profesionales.length} </td>
                         <td>
                         <a href="/servicios/profesionales?sede=${sede}&servicio=${servicio._id}" class="waves-effect green darken-1 waves-light btn"><i class="material-icons left">person</i>Profesionales</a>
+                        </td>
+                        <td>
+                         <div class="switch">
+                            <label>
+                              <input type="checkbox" data-id="${servicio._id}" value="${servicio._id}" class="servicio" ${servicio.mostrar_servicio ? 'checked' : ''}>
+                                ${servicio.mostrar_servicio ?'Desactivar' : 'Activar'}
+                              
+                              <span class="lever"></span>
+                            </label>
+                          </div>
+                        </td>
                     </tr>`)
+                   
         }
         $('.tooltipped').tooltip({
           delay: 50
         })
+
+
+        $(".switch").find("input[type=checkbox]").change(function () {
+          let checked = $(this).prop('checked');
+          let valor = $(this).val();
+          let id = $(this).data('id');
+          console.log(checked, valor, id);
+          $.ajax({
+            url: `/api/servicios/cambiar?id=${id}&mostrar_servicio=${checked}`,
+            success:function(response){
+              console.log(response);
+            }
+          })
+        })
+        
       }
+
     });
-  })
+    
+    
+     $(".switch").find("input[type=checkbox]").change(function () {
+      let checked =  $(this).prop('checked');
+      let valor = $(this).val();
+      let id = $(this).data('id');
+      console.log(checked,valor,id);
+      
+    }) 
+
+   
+  
+   })
+  
 </script>
+
 <% include  ../view_distribution/bot2.ejs%>
+

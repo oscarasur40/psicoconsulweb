@@ -42,6 +42,11 @@ const ServicioSchema = new Schema({
     type: String,
     required: false
   },
+  mostrar_servicio: {
+    type: Boolean,
+    required: true,
+    default:true
+  },
   /** Formulario que utilizará el servicio. */
   Formulario: {
     type: Schema.Types.ObjectId,

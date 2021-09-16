@@ -752,12 +752,17 @@ ul { padding-left: 20px; }
         /* Obtener Asignar Servicio y Valor de Consulta y Profesionales del Servicio. */
         $.ajax({
             method: 'GET',
-            url: `/api/servicios?filter[Sede]=${sede_id}&limit=1000000&projection=valor_consulta+nombre+Profesionales+cups_codigo`,
+            url: `/api/servicios?filter[Sede]=${sede_id}&limit=1000000&projection=valor_consulta+nombre+Profesionales+cups_codigo+mostrar_servicio`,
             success: function (r) {
                 //console.log(189, r)
                 AJAXServicios = r;
                 for (let s = 0; s < AJAXServicios.length; s++) {
+                    
                     const servicio = AJAXServicios[s];
+                    if (servicio.mostrar_servicio === false) {
+
+                        continue;
+                    }
                     ServiciosToAutoComplete[`${s} | ${servicio.nombre}`] = null
                     $('#servicios').append(
                         `<option value="${s}">${s} | ${servicio.nombre}</option>`)

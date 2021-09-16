@@ -23,6 +23,7 @@
                             <th>Nombre de Usuario</th>
                             <th>Rango de Edad</th>
                             <th>Email</th>
+                            <th><i class="material-icons">message</i></th>
                             <th><i class="material-icons">settings</i></th>
                         </tr>
                     </thead>
@@ -82,10 +83,16 @@
                         <td> ${user.username} </td>
                         <td> ${user.rango_edad} </td>
                         <td> ${user.email} </td>
+                         <td> 
+                            <a href="https://wa.me/${user.telefono}" target="_blank">
+                            <img width="42"  height="32" src="/static/whatsapp2.jpeg" alt="whatsapp">    
+                            </a>
+                        </td>
                         <td>
                             <a href="/pacientes/ver?id=${user._id}" class="waves-effect blue darken-1 waves-light btn"><i
                                 class="material-icons left">remove_red_eye</i>Ver</a>
-                        </td>
+                         </td>
+                       
                     </tr>`)
                 // <a href="/users/ver?id=${user._id}" class="waves-effect amber darken-1 waves-light btn"><i
                 //         class="material-icons left">edit</i>Editar</a>
